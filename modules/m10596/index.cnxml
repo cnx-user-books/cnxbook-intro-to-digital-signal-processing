@@ -1,0 +1,166 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>The Complex Plane</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>348d7e59-cadb-48f1-a2ad-9976f40b3147</md:uuid>
+</metadata>
+
+  
+  <content>
+    <section id="main">
+      <title>Complex Plane</title>
+      
+      <para id="p_main">
+	The <term>complex plane</term> provides a way to express
+	complex numbers graphically.  Any complex number can be
+	expressed as a point on the complex plane.  Before looking
+	over the rest of this module, one should be very familiar with
+	complex numbers.  Please refer to the <link document="m0081" strength="3">complex number</link> module for an explanation
+	or review of these numbers.
+	
+	<definition id="cplane_def">
+	  <term>Complex Plane</term>
+	  <meaning id="idp8404320">
+	    A two-dimensional graph where the horizontal axis maps the
+	    real part and the vertical axis maps the imaginary part of
+	    any complex number or function.
+	  </meaning>
+	</definition>
+      </para>
+
+      <figure id="cmplxplane">
+	<title>Complex Plane</title>
+	<media id="idp7945664" alt=""><image src="../../media/cplane2.png" mime-type="image/png"/></media>
+	<caption>
+	  Plot of the complex number, <m:math><m:ci>z</m:ci></m:math>,
+	  as a point on the complex plane.
+	</caption>
+      </figure>
+      
+      <section id="rect">
+	<title>Rectangular Coordinates</title>
+
+	<para id="p_main2">
+	  Similar to the Cartesian plane, the complex plane allows one
+	  to plot ordered pairs of the form
+	  <m:math>
+	    <m:apply>
+	      <m:interval closure="open">
+		<m:ci>a</m:ci>
+		<m:ci>b</m:ci>
+	      </m:interval>
+	    </m:apply>
+	  </m:math>, where <m:math><m:ci>a</m:ci></m:math> and
+	  <m:math><m:ci>b</m:ci></m:math> are real numbers that describe
+	  a unique complex number through the following general form:
+
+	  <equation id="eq_cnum">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:ci>z</m:ci>
+		<m:apply>
+		  <m:plus/>
+		  <m:ci>a</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:ci>b</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+
+	  This form is referred to as the <term>rectangular
+	    coordinate</term>.
+
+	</para>
+      </section>
+
+      <section id="pform">
+	<title>Polar Form</title>
+
+	<para id="p_subsec">
+	  The complex plane can also be used to plot complex numbers
+	  that are in <term>polar form</term>.  Rather than using
+	  <m:math><m:ci>a</m:ci></m:math> and
+	  <m:math><m:ci>b</m:ci></m:math>, the polar coordinates use 
+	  <m:math><m:ci>r</m:ci></m:math> and
+	  <m:math><m:ci>θ</m:ci></m:math> in their ordered pairs. 
+	  The <m:math><m:ci>r</m:ci></m:math> is the distance
+	  from the origin to the complex number and
+	  <m:math><m:ci>θ</m:ci></m:math> is the angle of the
+	  complex number relative to the positive, real axis.  Look at
+	  the figure above to see these variables displayed on the
+	  complex plane.  The general form for polar numbers is as
+	  follows:
+
+	  <m:math>
+	    <m:apply>
+	      <m:times/>
+		<m:cn>r</m:cn>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:times/>
+		      <m:imaginaryi/>
+		      <m:ci>θ</m:ci>
+		  </m:apply>
+		</m:apply>
+	    </m:apply>
+	  </m:math>
+
+	</para> 
+	
+	<para id="p_main3">
+	  As a reminder, the following equations show the conversion
+	  between polar and rectangle coordinates:
+
+	  <equation id="eq1">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:ci>r</m:ci>
+		<m:apply>
+		  <m:root/>
+		  <m:apply>
+		    <m:plus/>
+		    <m:apply>
+		      <m:power/>
+		      <m:ci>a</m:ci>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		    <m:apply>
+		      <m:power/>
+		      <m:ci>b</m:ci>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+
+	  <equation id="eq2">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:ci>θ</m:ci>
+		<m:apply>
+		  <m:arctan/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:ci>b</m:ci>
+		    <m:ci>a</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+	  
+	</para>
+      </section>
+      
+    </section>
+    
+  </content>
+</document>

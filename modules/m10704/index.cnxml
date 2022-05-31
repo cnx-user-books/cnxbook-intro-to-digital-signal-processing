@@ -1,0 +1,670 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Design of Linear-Phase FIR Filters by General Interpolation</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>73894875-23d5-4b10-8eb2-aaa30816aa41</md:uuid>
+</metadata>
+
+  <content>
+    <section id="geninterp">
+      <title>DESIGN OF FIR FILTERS BY GENERAL INTERPOLATION</title>
+      <para id="genint1">
+	If the desired interpolation points are not uniformly spaced
+	between <m:math><m:cn>0</m:cn></m:math> and
+	<m:math><m:pi/></m:math> then we can not use the DFT.  We must
+	take a different approach.  Recall that for a Type I FIR
+	filter,
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci>A</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:plus/>
+	      <m:apply>
+		<m:ci type="fn">h</m:ci>
+		<m:ci>M</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:cn>2</m:cn>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar><m:ci>n</m:ci></m:bvar>
+		  <m:lowlimit><m:cn>0</m:cn></m:lowlimit>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>M</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:uplimit>
+		  <m:apply>
+		    <m:times/>
+		  <m:apply>
+		    <m:ci type="fn">h</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		    <m:apply>
+		      <m:cos/>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>M</m:ci>
+			  <m:ci>n</m:ci>
+			</m:apply>
+			<m:ci>ω</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	For convenience, it is common to write this as
+
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci>A</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:sum/>
+	      <m:bvar><m:ci>n</m:ci></m:bvar>
+	      <m:lowlimit><m:cn>0</m:cn></m:lowlimit>
+	      <m:uplimit><m:ci>M</m:ci></m:uplimit>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn">a</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:cos/>
+		  <m:apply>
+		    <m:times/>
+		    <m:ci>n</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math> where 
+
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">h</m:ci>
+	      <m:ci>M</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:ci type="fn">a</m:ci>
+	      <m:cn>0</m:cn>
+	    </m:apply>
+	  </m:apply>
+	</m:math> and
+	<m:math>
+	  <m:apply>
+	    <m:forall/>
+	    <m:bvar><m:ci>n</m:ci></m:bvar>
+	    <m:condition>
+	      <m:apply>
+		<m:leq/>
+		<m:cn>1</m:cn>
+		<m:ci>n</m:ci>
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>N</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+	      </m:apply>
+	    </m:condition>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">h</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:divide/>
+		<m:apply>
+		  <m:ci type="fn">a</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>M</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:cn>2</m:cn>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>.  Note that there are 
+
+	<m:math>
+	  <m:apply>
+	    <m:plus/>
+	    <m:ci>M</m:ci>
+	    <m:cn>1</m:cn>
+	  </m:apply>
+	</m:math> parameters.  Suppose it is desired that
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">A</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math> interpolates a set of specified values: 
+	<m:math display="block">
+	  <m:apply>
+	    <m:forall/>
+	    <m:bvar><m:ci>k</m:ci></m:bvar>
+	    <m:condition>
+	      <m:apply>
+		<m:leq/>
+		<m:cn>0</m:cn>
+		<m:ci>k</m:ci>
+		<m:ci>M</m:ci>
+	      </m:apply>
+	    </m:condition>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">A</m:ci>
+		<m:ci><m:msub>
+		    <m:mi>ω</m:mi>
+		    <m:mi>k</m:mi>
+		  </m:msub></m:ci>
+	      </m:apply>
+	      <m:ci><m:msub>
+		  <m:mi>A</m:mi>
+		  <m:mi>k</m:mi>
+		</m:msub></m:ci>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	To obtain a Type I FIR filter satisfying these interpolation
+	equations, one can set up a linear system of equations.  
+	<m:math display="block">
+	  <m:apply>
+	    <m:forall/>
+	    <m:bvar><m:ci>k</m:ci></m:bvar>
+	    <m:condition>
+	      <m:apply>
+		<m:leq/>
+		<m:cn>0</m:cn>
+		<m:ci>k</m:ci>
+		<m:ci>M</m:ci>
+	      </m:apply>
+	    </m:condition>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar><m:ci>n</m:ci></m:bvar>
+		<m:lowlimit><m:cn>0</m:cn></m:lowlimit>
+		<m:uplimit><m:ci>M</m:ci></m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn">a</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:cos/>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>n</m:ci>
+		      <m:ci><m:msub>
+			  <m:mi>ω</m:mi>
+			  <m:mi>k</m:mi>
+			</m:msub></m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:ci><m:msub>
+		  <m:mi>A</m:mi>
+		  <m:mi>k</m:mi>
+		</m:msub></m:ci>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	In matrix form, we have 
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:times/>
+	      <m:matrix>
+		<m:matrixrow>
+		  <m:cn>1</m:cn>
+		  <m:apply>
+		    <m:cos/>
+		    <m:ci><m:msub>
+			<m:mi>ω</m:mi>
+			<m:mn>0</m:mn>
+		      </m:msub></m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:cos/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:ci><m:msub>
+			  <m:mi>ω</m:mi>
+			  <m:mn>0</m:mn>
+			</m:msub></m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:ci>…</m:ci>
+		  <m:apply>
+		    <m:cos/>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>M</m:ci>
+		      <m:ci><m:msub>
+			  <m:mi>ω</m:mi>
+			  <m:mn>0</m:mn>
+			</m:msub></m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:matrixrow>
+		<m:matrixrow>
+		  <m:cn>1</m:cn>
+		  <m:apply>
+		    <m:cos/>
+		    <m:ci><m:msub>
+			<m:mi>ω</m:mi>
+			<m:mn>1</m:mn>
+		      </m:msub></m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:cos/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:ci><m:msub>
+			  <m:mi>ω</m:mi>
+			  <m:mn>1</m:mn>
+			</m:msub></m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:ci>…</m:ci>
+		  <m:apply>
+		    <m:cos/>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>M</m:ci>
+		      <m:ci><m:msub>
+			  <m:mi>ω</m:mi>
+			  <m:mn>1</m:mn>
+			</m:msub></m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:matrixrow>
+		<m:matrixrow>
+		  <m:ci>⋮</m:ci>
+		</m:matrixrow>
+		<m:matrixrow>
+		  <m:cn>1</m:cn>
+		  <m:apply>
+		  <m:cos/>
+		    <m:ci><m:msub>
+			<m:mi>ω</m:mi>
+			<m:mi>M</m:mi>
+		      </m:msub></m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:cos/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:ci><m:msub>
+			  <m:mi>ω</m:mi>
+			  <m:mi>M</m:mi>
+			</m:msub></m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:ci>…</m:ci>
+		  <m:apply>
+		    <m:cos/>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>M</m:ci>
+		      <m:ci><m:msub>
+			  <m:mi>ω</m:mi>
+			  <m:mi>M</m:mi>
+			</m:msub></m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:matrixrow>
+	      </m:matrix>
+	      <m:vector>
+		<m:apply>
+		  <m:ci type="fn">a</m:ci>
+		  <m:cn>0</m:cn>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">a</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+		<m:ci>⋮</m:ci>
+		<m:apply>
+		  <m:ci type="fn">a</m:ci>
+		  <m:ci>M</m:ci>
+		</m:apply>
+	      </m:vector>
+	    </m:apply>
+	    <m:vector>
+	      <m:apply>
+		<m:ci type="fn">A</m:ci>
+		<m:cn>0</m:cn>
+	      </m:apply>
+		<m:apply>
+		<m:ci type="fn">A</m:ci>
+		<m:cn>1</m:cn>
+	      </m:apply>
+	      <m:ci>⋮</m:ci>
+	      <m:apply>
+		<m:ci type="fn">A</m:ci>
+		<m:ci>M</m:ci>
+	      </m:apply>
+	    </m:vector>
+	  </m:apply>
+	</m:math>
+
+	Once 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">a</m:ci>
+	    <m:ci>n</m:ci>
+	  </m:apply>
+	</m:math> is found, the filter 
+
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">h</m:ci>
+	    <m:ci>n</m:ci>
+	  </m:apply>
+	</m:math> is formed as
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:set>
+	      <m:apply>
+		<m:ci type="fn">h</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:set>
+	    <m:apply>
+	      <m:times/>
+	      <m:cn type="rational">1<m:sep/>2</m:cn>
+	      <m:set>
+		<m:apply>
+		  <m:ci type="fn">a</m:ci>
+		  <m:ci>M</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">a</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>M</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:apply>
+		<m:ci>…</m:ci>
+		<m:apply>
+		  <m:ci type="fn">a</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:cn>2</m:cn>
+		  <m:apply>
+		    <m:ci type="fn">a</m:ci>
+		    <m:cn>0</m:cn>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">a</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+		<m:ci>…</m:ci>
+		<m:apply>
+		  <m:ci type="fn">a</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>M</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">a</m:ci>
+		  <m:ci>M</m:ci>
+		</m:apply>
+	      </m:set>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+      </para>
+    </section>
+
+    <section id="geninterpex">
+      <title>EXAMPLE</title>
+      <para id="genex">
+	In the following example, we design a length 19 Type I FIR.
+	Then
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci>M</m:ci>
+	    <m:cn>9</m:cn>
+	  </m:apply>
+	</m:math> and we have 10 parameters.  We can therefore have 10
+	interpolation equations.  We choose: 
+
+	<equation id="eqn1">
+	  <m:math>
+	    <m:apply>
+	      <m:forall/>
+	      <m:bvar><m:ci>k</m:ci></m:bvar>
+	      <m:condition>
+		<m:apply>
+		  <m:eq/>
+		  <m:ci><m:msub>
+		      <m:mi>ω</m:mi>
+		      <m:mi>k</m:mi>
+		    </m:msub></m:ci>
+		  <m:set>
+		    <m:cn>0</m:cn>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>0.1</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>0.2</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>0.3</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		  </m:set>
+		</m:apply>
+	      </m:condition>
+	      <m:condition>
+		<m:apply>
+		  <m:leq/>
+		  <m:cn>0</m:cn>
+		  <m:ci>k</m:ci>
+		  <m:cn>3</m:cn>
+		</m:apply>
+	      </m:condition>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn">A</m:ci>
+		  <m:ci><m:msub>
+		      <m:mi>ω</m:mi>
+		      <m:mi>k</m:mi>
+		    </m:msub></m:ci>
+		</m:apply>
+		<m:cn>1</m:cn>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	<equation id="eqn2">
+	  <m:math>
+	    <m:apply>
+	      <m:forall/>
+	      <m:bvar><m:ci>k</m:ci></m:bvar>
+	      <m:condition>
+		<m:apply>
+		  <m:eq/>
+		  <m:ci><m:msub>
+		      <m:mi>ω</m:mi>
+		      <m:mi>k</m:mi>
+		    </m:msub></m:ci>
+		  <m:set>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>0.5</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>0.6</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>0.7</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>0.8</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>0.8</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>1.0</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		  </m:set>
+		</m:apply>
+	      </m:condition>
+	      <m:condition>
+		<m:apply>
+		  <m:leq/>
+		  <m:cn>4</m:cn>
+		  <m:ci>k</m:ci>
+		  <m:cn>9</m:cn>
+		</m:apply>
+	      </m:condition>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn">A</m:ci>
+		  <m:ci><m:msub>
+		      <m:mi>ω</m:mi>
+		      <m:mi>k</m:mi>
+		    </m:msub></m:ci>
+		</m:apply>
+		<m:cn>0</m:cn>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	To solve this interpolation problem in Matlab, note that the
+	matrix can be generated by a single multiplication of a column
+	vector and a row vector.  This is done with the command
+
+	<code>C = cos(wk*[0:M]);</code>
+
+	where <code>wk</code> is a column vector containing
+	the frequency points.  To solve the linear system of
+	equations, we can use the Matlab backslash command.
+      </para>
+
+      <code display="block" id="idm692336">
+
+	N = 19;
+	M = (N-1)/2;
+	wk = [0 .1 .2 .3 .5 .6 .7 .8 .9 1]'*pi;
+	Ak = [1 1 1 1 0 0 0 0 0 0]';
+	C = cos(wk*[0:M]);
+	a = C/Ak;
+	h = (1/2)*[a([M:-1:1]+1); 2*a([0]+1); a(1:M]+1)];
+
+	[A,w] = firamp(h,1);
+	plot(w/pi,A,wk/pi,Ak,'o')
+	title('A(\omega)')
+	xlabel('\omega/\pi')
+
+      </code>
+
+      <figure id="geninterpexfig">
+	<media id="idp10212640" alt=""><image src="../../media/genint.png" mime-type="image/png"/></media>
+      </figure>
+
+      <para id="exlast">
+	The general interpolation problem is much more flexible than
+	the uniform interpolation problem that the DFT solves.  For
+	example, by leaving a gap between the pass-band and stop-band
+	as in this example, the ripple near the band edge is reduced
+	(but the transition between the pass- and stop-bands is not as
+	sharp).  The general interpolation problem also arises as a
+	subproblem in the design of optimal minimax (or Chebyshev) FIR
+	filters.
+      </para>
+    </section>
+
+    <section id="pro-con">
+      <title>LINEAR-PHASE FIR FILTERS: PROS AND CONS</title>
+      <para id="p-c">
+	FIR digital filters have several desirable properties.
+	<list id="prolist">
+	  <item>They can have exactly linear phase.</item>
+	  <item>They can not be unstable.</item>
+	  <item>
+	    There are several very effective methods for designing
+	    linear-phase FIR digital filters.</item>
+	</list>
+
+	On the other hand,
+	<list id="conlist">
+	  <item>Linear-phase filters can have long delay between input
+	    and output.</item>  
+	  <item>
+	    If the phase need not be linear, then IIR filters can be
+	    more efficient.</item>
+	</list>
+      </para>
+    </section>
+  </content>
+  
+</document>

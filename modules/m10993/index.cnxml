@@ -1,0 +1,874 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Discrete-Time Processing of CT Signals</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>6a1cfcc8-d923-4a1b-81c2-715b472812f5</md:uuid>
+</metadata>
+
+  <content>
+    <section id="sec1">
+      <title>DT Processing of CT Signals</title>
+
+      <figure id="fig1">
+	<title>DSP System</title>
+	<media id="idm1187568" alt=""><image src="../../media/sec9_fig1.png" mime-type="image/png"/></media>
+      </figure>      
+      
+      <section id="sub1_s1">
+	<title>Analysis</title>
+	<para id="p1_s1">
+	  
+	  <equation id="eq1">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn"><m:msub>
+		      <m:mi>Y</m:mi>
+		      <m:mi>c</m:mi>
+		    </m:msub></m:ci>
+		  <m:ci>Ω</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn"><m:msub>
+			<m:mi>H</m:mi>
+			<m:mi>LP</m:mi>
+		      </m:msub></m:ci>
+		    <m:ci>Ω</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn">Y</m:ci>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>Ω</m:ci>
+		      <m:ci>T</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+
+	  where we know that 
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">Y</m:ci>
+		<m:ci>ω</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn">X</m:ci>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">G</m:ci>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	  and 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">G</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math> is the frequency response of the DT LTI system.
+	  Also, remember that 
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:equivalent/>
+	      <m:ci>ω</m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:ci>Ω</m:ci>
+		<m:ci>T</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  So, 	  
+	  
+	  <equation id="eq2">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn"><m:msub>
+		      <m:mi>Y</m:mi>
+		      <m:mi>c</m:mi>
+		    </m:msub></m:ci>
+		  <m:ci>Ω</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn"><m:msub>
+			<m:mi>H</m:mi>
+			<m:mi>LP</m:mi>
+		      </m:msub></m:ci>
+		    <m:ci>Ω</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn">G</m:ci>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>Ω</m:ci>
+		      <m:ci>T</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn">X</m:ci>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>Ω</m:ci>
+		      <m:ci>T</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+	  
+	  where 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn"><m:msub>
+		  <m:mi>Y</m:mi>
+		  <m:mi>c</m:mi>
+		</m:msub></m:ci>
+	      <m:ci>Ω</m:ci>
+	    </m:apply>
+	  </m:math> and 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn"><m:msub>
+		  <m:mi>H</m:mi>
+		  <m:mi>LP</m:mi>
+		</m:msub></m:ci>
+	      <m:ci>Ω</m:ci>
+	    </m:apply>
+	  </m:math> are CTFTs and 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">G</m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:ci>Ω</m:ci>
+		<m:ci>T</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> and 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">X</m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:ci>Ω</m:ci>
+		<m:ci>T</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> are DTFTs.
+	  
+	  
+	  <note type="Recall" id="idm98208"><label>Recall</label>
+	    
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn">X</m:ci>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		    <m:ci>T</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:sum/>
+		    <m:bvar>
+		      <m:ci>k</m:ci>
+		    </m:bvar>
+		    <m:uplimit>
+		      <m:infinity/>
+		    </m:uplimit>
+		    <m:lowlimit>
+		      <m:apply>
+			<m:minus/>
+			<m:infinity/>
+		      </m:apply>
+		    </m:lowlimit>
+		    <m:apply>
+		      <m:ci type="fn"><m:msub>
+			  <m:mi>X</m:mi>
+			  <m:mi>c</m:mi>
+			</m:msub></m:ci>
+		      <m:apply>
+			<m:divide/>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>ω</m:ci>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>2</m:cn>
+			    <m:pi/>
+			    <m:ci>k</m:ci>
+			  </m:apply>
+			</m:apply>
+			<m:ci>T</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	    
+	    OR
+	    
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn">X</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:ci>Ω</m:ci>
+		    <m:ci>T</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		    <m:ci>T</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:sum/>
+		    <m:bvar>
+		      <m:ci>k</m:ci>
+		    </m:bvar>
+		    <m:uplimit>
+		      <m:infinity/>
+		    </m:uplimit>
+		    <m:lowlimit>
+		      <m:apply>
+			<m:minus/>
+			<m:infinity/>
+		      </m:apply>
+		    </m:lowlimit>
+		    <m:apply>
+		      <m:ci type="fn">
+			<m:msub>
+			  <m:mi>X</m:mi>
+			  <m:mi>c</m:mi>
+			</m:msub>
+		      </m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>Ω</m:ci>
+			<m:apply>
+			  <m:times/>
+			  <m:ci>k</m:ci>
+			  <m:ci><m:msub>
+			      <m:mi>Ω</m:mi>
+			      <m:mi>s</m:mi>
+			    </m:msub></m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </note>
+
+	  Therefore our final output signal, 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn"><m:msub>
+		  <m:mi>Y</m:mi>
+		  <m:mi>c</m:mi>
+		</m:msub></m:ci>
+	      <m:ci>Ω</m:ci>
+	    </m:apply>
+	  </m:math>, will be:
+
+	  <equation id="eq4">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn"><m:msub>
+		      <m:mi>Y</m:mi>
+		      <m:mi>c</m:mi>
+		    </m:msub></m:ci>
+		  <m:ci>Ω</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn"><m:msub>
+			<m:mi>H</m:mi>
+			<m:mi>LP</m:mi>
+		      </m:msub></m:ci>
+		    <m:ci>Ω</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn">G</m:ci>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>Ω</m:ci>
+		      <m:ci>T</m:ci>
+		    </m:apply>
+		  </m:apply>		  
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>T</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar>
+			<m:ci>k</m:ci>
+		      </m:bvar>
+		      <m:uplimit>
+			<m:infinity/>
+		      </m:uplimit>
+		      <m:lowlimit>
+			<m:apply>
+			  <m:minus/>
+			  <m:infinity/>
+			</m:apply>
+		      </m:lowlimit>
+		      <m:apply>
+			<m:ci type="fn"><m:msub>
+			    <m:mi>X</m:mi>
+			    <m:mi>c</m:mi>
+			  </m:msub></m:ci>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>Ω</m:ci>
+			  <m:apply>
+			    <m:times/>
+			    <m:ci>k</m:ci>
+			    <m:ci><m:msub>
+				<m:mi>Ω</m:mi>
+				<m:mi>s</m:mi>
+			      </m:msub></m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>  
+	 
+	  Now, if 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn"><m:msub>
+		  <m:mi>X</m:mi>
+		  <m:mi>c</m:mi>
+		</m:msub></m:ci>
+	      <m:ci>Ω</m:ci>
+	    </m:apply>
+	  </m:math> is bandlimited to 
+	  
+	  <m:math>
+	    <m:interval>
+	      <m:apply>
+		<m:minus/>
+		<m:apply>
+		  <m:divide/>
+		  <m:ci><m:msub>
+		      <m:mi>Ω</m:mi>
+		      <m:mi>s</m:mi>
+		    </m:msub></m:ci>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:divide/>
+		<m:ci><m:msub>
+		    <m:mi>Ω</m:mi>
+		    <m:mi>s</m:mi>
+		  </m:msub></m:ci>
+		<m:cn>2</m:cn>
+	      </m:apply>
+	    </m:interval>
+	  </m:math>
+	  and we use the usual lowpass reconstruction filter in the
+	  D/A, <link target-id="fig2" strength="3"/>:
+	</para>   
+	
+	<figure id="fig2">
+	  <media id="idm8256976" alt=""><image src="sec9_fig2.png" mime-type="image/png"/></media>
+	</figure> 
+	
+	<para id="p2_s1">
+	  Then,
+
+	  <equation id="eq5">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn"><m:msub>
+		      <m:mi>Y</m:mi>
+		      <m:mi>c</m:mi>
+		    </m:msub></m:ci>
+		  <m:ci>Ω</m:ci>
+		</m:apply>
+		<m:piecewise>
+		  <m:piece>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:ci type="fn">G</m:ci>
+			<m:apply>
+			  <m:times/>
+			  <m:ci>Ω</m:ci>
+			  <m:ci>T</m:ci>
+			</m:apply>
+		      </m:apply>		
+		      <m:apply>
+			<m:ci type="fn"><m:msub>
+			    <m:mi>X</m:mi>
+			    <m:mi>c</m:mi>
+			  </m:msub></m:ci>
+			<m:ci>Ω</m:ci>		    
+		      </m:apply>
+		    </m:apply>		
+		    <m:apply>
+		      <m:lt/>
+		      <m:apply>
+			<m:abs/>
+			<m:ci>Ω</m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:divide/>
+			<m:ci><m:msub>
+			    <m:mi>Ω</m:mi>
+			    <m:mi>s</m:mi>
+			  </m:msub></m:ci>
+			<m:cn>2</m:cn>
+		      </m:apply>
+		    </m:apply>
+		  </m:piece>
+		  <m:otherwise>
+		    <m:cn>0</m:cn>
+		  </m:otherwise>
+		</m:piecewise>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+	</para>
+      </section>
+
+      <section id="sub2_s1">
+	<title>Summary</title>
+	<para id="p1_s2s1">
+	  For bandlimited signals sampled at or above the Nyquist
+	  rate, we can relate the input and output of the DSP system
+	  by:
+
+	  <equation id="eq6">
+	   <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn"><m:msub>
+		      <m:mi>Y</m:mi>
+		      <m:mi>c</m:mi>
+		    </m:msub></m:ci>
+		  <m:ci>Ω</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn"><m:msub>
+			<m:mi>G</m:mi>
+			<m:mi>eff</m:mi>
+		      </m:msub></m:ci>
+		    <m:ci>Ω</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn"><m:msub>
+			<m:mi>X</m:mi>
+			<m:mi>c</m:mi>
+		      </m:msub></m:ci>
+		    <m:ci>Ω</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+
+	  where 
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn"><m:msub>
+		    <m:mi>G</m:mi>
+		    <m:mi>eff</m:mi>
+		  </m:msub></m:ci>
+		<m:ci>Ω</m:ci>
+	      </m:apply>
+	      <m:piecewise>
+		<m:piece>
+		  <m:apply>
+		    <m:ci type="fn">G</m:ci>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>Ω</m:ci>
+		      <m:ci>T</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:lt/>
+		    <m:apply>
+		      <m:abs/>
+		      <m:ci>Ω</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:divide/>
+		      <m:ci><m:msub>
+			  <m:mi>Ω</m:mi>
+			  <m:mi>s</m:mi>
+			</m:msub></m:ci>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		  </m:apply>
+		</m:piece>
+		<m:otherwise>
+		  <m:cn>0</m:cn>
+		</m:otherwise>
+	      </m:piecewise>
+	    </m:apply>
+	  </m:math>
+	</para>
+
+	<figure id="fig3">
+	  <media id="idp346192" alt=""><image src="../../media/sec9_fig3.png" mime-type="image/png"/></media>
+	</figure> 
+
+	<section id="subsec">
+	  <title>Note</title>
+	  <para id="p3_s2s1">
+	    
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn"><m:msub>
+		    <m:mi>G</m:mi>
+		    <m:mi>eff</m:mi>
+		  </m:msub></m:ci>
+		<m:ci>Ω</m:ci>
+	      </m:apply>
+	    </m:math> is LTI if and only if the following two
+	    conditions are satisfied:
+
+	    <list id="list1" list-type="enumerated">
+	      <item>
+		<m:math>
+		  <m:apply>
+		    <m:ci type="fn">G</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:math> is LTI (in DT).
+	      </item>
+
+	      <item>
+		<m:math>
+		  <m:apply>
+		    <m:ci type="fn"><m:msub>
+			<m:mi>X</m:mi>
+			<m:mi>c</m:mi>
+		      </m:msub></m:ci>
+		    <m:ci>T</m:ci>
+		  </m:apply>
+		</m:math> is bandlimited and sampling rate equal to or
+		greater than Nyquist.  For example, if we had a simple
+		pulse described by 
+		
+		<m:math display="block">
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn"><m:msub>
+			  <m:mi>X</m:mi>
+			  <m:mi>c</m:mi>
+			</m:msub></m:ci>
+		      <m:ci>t</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:ci type="fn">u</m:ci>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>t</m:ci>
+			  <m:ci><m:msub>
+			      <m:mi>T</m:mi>
+			      <m:mn>0</m:mn>
+			    </m:msub></m:ci>
+			</m:apply>
+		      </m:apply>
+		      <m:apply>
+			<m:ci type="fn">u</m:ci>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>t</m:ci>
+			  <m:ci><m:msub>
+			      <m:mi>T</m:mi>
+			      <m:mn>1</m:mn>
+			    </m:msub></m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+		
+		where 
+		<m:math>
+		  <m:apply>
+		    <m:gt/>
+		    <m:ci><m:msub>
+			<m:mi>T</m:mi>
+			<m:mn>1</m:mn>
+		      </m:msub></m:ci>
+		    <m:ci><m:msub>
+			<m:mi>T</m:mi>
+			<m:mn>0</m:mn>
+		      </m:msub></m:ci>
+		  </m:apply>
+		</m:math>.  If the sampling period 
+		
+		<m:math>
+		  <m:apply>
+		    <m:gt/>
+		    <m:ci>T</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci><m:msub>
+			  <m:mi>T</m:mi>
+			  <m:mn>1</m:mn>
+			</m:msub></m:ci>
+		      <m:ci><m:msub>
+			  <m:mi>T</m:mi>
+			  <m:mn>0</m:mn>
+			</m:msub></m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:math>, 
+		then some samples might "miss" the pulse while others
+		might not be "missed."  This is what we term
+		<term>time-varying behavior</term>.
+	      </item>
+	    </list>
+	  </para>
+	</section>
+      </section>
+      
+      <example id="eg1">
+	
+	<figure id="fig4">
+	  <media id="idp947360" alt=""><image src="../../media/sec9_fig4.png" mime-type="image/png"/></media>
+	</figure>
+	
+	<para id="p1_eg1">
+	  If 
+	  <m:math>
+	    <m:apply>
+	      <m:gt/>
+	      <m:apply>
+		<m:divide/>
+		<m:apply>
+		  <m:times/>
+		  <m:cn>2</m:cn>
+		  <m:pi/>
+		</m:apply>
+		<m:ci>T</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:cn>2</m:cn>
+		<m:ci>B</m:ci>
+	      </m:apply>		
+	    </m:apply>
+	  </m:math> and 
+	  <m:math>
+	    <m:apply>
+	      <m:lt/>
+	      <m:ci><m:msub>
+		<m:mi>ω</m:mi>
+		<m:mn>1</m:mn>
+	      </m:msub></m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:ci>B</m:ci>
+		<m:ci>T</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>, determine and sketch 
+	  
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn"><m:msub>
+		  <m:mi>Y</m:mi>
+		  <m:mi>c</m:mi>
+		</m:msub></m:ci>
+	      <m:ci>Ω</m:ci>
+	    </m:apply>
+	  </m:math> using <link target-id="fig4" strength="3"/>.
+
+	</para>
+      </example>
+    </section>
+
+    <section id="sec2">
+      <title>Application: 60Hz Noise Removal</title>
+      
+      <figure id="fig5">
+	<media id="idm1346768" alt=""><image src="../../media/sec9_fig5.png" mime-type="image/png"/></media>
+      </figure> 
+      
+      <para id="p1_s2">
+	Unfortunately, in real-world situations electrodes also pick
+	up ambient 60 Hz signals from lights, computers,
+	<foreign>etc.</foreign>. In fact, usually this "60 Hz noise"
+	is much greater in amplitude than the EKG signal shown in
+	<link target-id="fig5" strength="3"/>.  <link target-id="fig6" strength="3"/> shows the EKG signal; it is barely noticeable
+	as it has become overwhelmed by noise.
+      </para>
+      
+      <figure id="fig6">
+	<media id="idm8210192" alt=""><image src="../../media/sec9_fig6.png" mime-type="image/png"/></media>
+	<caption>
+	  Our EKG signal, 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">y</m:ci>
+	      <m:ci>t</m:ci>
+	    </m:apply>
+	  </m:math>, is overwhelmed by noise.
+	</caption>	  
+      </figure> 
+      
+      <section id="sub1_last">
+	<title>DSP Solution</title>
+	
+	<figure id="fig7">
+	  <media id="idp254672" alt=""><image src="../../media/sec9_fig7.png" mime-type="image/png"/></media>
+	</figure> 
+
+	<figure id="fig7b">
+	  <media id="idp30464" alt=""><image src="sec9_fig7b.png" mime-type="image/png"/></media>
+	</figure> 
+	
+      </section>
+
+      <section id="sub2_last">
+	<title>Sampling Period/Rate</title>
+	<para id="p1_sl">
+	  First we must note that 
+	  <m:math>
+	    <m:apply>
+	      <m:abs/>
+	      <m:apply>
+		<m:ci type="fn">Y</m:ci>
+		<m:ci>Ω</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> is <term>bandlimited</term> to ±60 Hz.
+	  Therefore, the minimum rate should be 120 Hz.  In order to
+	  get the best results we should set 
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci><m:msub>
+		  <m:mi>f</m:mi>
+		  <m:mi>s</m:mi>
+		</m:msub></m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:ci>240</m:ci>
+		<m:ci>Hz</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>.
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci><m:msub>
+		  <m:mi>Ω</m:mi>
+		  <m:mi>s</m:mi>
+		</m:msub></m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:cn>2</m:cn>
+		<m:pi/>
+		<m:apply>
+		  <m:times/>
+		  <m:cn>240</m:cn>
+		  <m:apply>
+		    <m:divide/>
+		    <m:ci>rad</m:ci>
+		    <m:ci>s</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	</para>
+	
+	<figure id="fig8">
+	  <media id="idm2666976" alt=""><image src="sec9_fig8.png" mime-type="image/png"/></media>
+	</figure> 
+	
+      </section>
+      
+      <section id="sub3_last">
+	<title>Digital Filter</title>
+	<para id="p1_sub3l">
+	  Therefore, we want to design a digital filter that will
+	  remove the 60Hz component and preserve the rest.
+	</para>
+	
+	<figure id="fig9">
+	  <media id="idm9708816" alt=""><image src="../../media/sec9_figL.png" mime-type="image/png"/></media>
+	</figure> 
+	
+      </section>
+
+    </section>
+
+  </content>  
+</document>

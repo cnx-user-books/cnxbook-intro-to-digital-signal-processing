@@ -1,0 +1,687 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML">
+
+  <title>Amplitude Quantization</title>
+
+  <metadata xmlns:md="http://cnx.rice.edu/mdml">
+  <md:content-id>m0051</md:content-id>
+  <md:title>Amplitude Quantization</md:title>
+  <md:abstract>Analog-to-digital conversion.</md:abstract>
+  <md:uuid>bf483620-7240-4f43-8551-d95696257711</md:uuid>
+</metadata>
+
+<content>
+      <para id="one"> 
+	The Sampling Theorem says that if we sample a bandlimited
+	signal
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">s</m:ci>
+	    <m:ci>t</m:ci>
+	  </m:apply>
+	</m:math>
+	fast enough, it can be recovered without error from its
+	samples  
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">s</m:ci>
+	    <m:apply>
+	      <m:times/>
+	      <m:ci>n</m:ci>
+	      <m:ci>
+		<m:msub>
+		  <m:mi>T</m:mi>
+		  <m:mi>s</m:mi>
+		</m:msub>
+	      </m:ci>
+	    </m:apply>
+	  </m:apply>
+	</m:math>, 
+ 
+	<m:math>
+	  <m:apply>
+	    <m:in/>
+	    <m:ci>n</m:ci> 
+	    <m:set>
+	      <m:ci>…</m:ci>
+	      <m:cn>-1</m:cn>
+	      <m:cn>0</m:cn>
+	      <m:cn>1</m:cn>
+	      <m:ci>…</m:ci>
+	    </m:set>
+	  </m:apply>
+	</m:math>.
+	Sampling is only the first phase of acquiring data into a
+	computer: Computational processing further requires that the
+	samples be <term>quantized</term>: analog values are converted
+	into 
+	<link document="m0001" target-id="digital" strength="2">digital</link> 	
+	form. In short, we will have performed <term>analog-to-digital
+	(A/D) conversion</term>.
+      </para>
+
+      
+      <figure id="figure_1" orient="vertical"><subfigure id="figure_2">
+	  <media id="id1166406030424" alt="">
+            <image src="../../media/sys8.png" mime-type="image/png"/>
+            <image for="pdf" src="../../media/sys8.eps" mime-type="application/postscript"/>
+          </media>
+	</subfigure>
+	<subfigure id="figure_3">
+	  <media id="id1166412402125" alt="">
+            <image src="../../media/sig44.png" mime-type="image/png"/>
+            <image for="pdf" src="../../media/sig44.eps" mime-type="application/postscript"/>
+          </media>
+	</subfigure>
+	
+      <caption>A three-bit A/D converter assigns voltage in the range 
+	  <m:math>
+	    <m:interval> 
+	      <m:cn>-1</m:cn> 
+	      <m:cn>1</m:cn>
+	    </m:interval>
+	  </m:math> 
+	  to one of eight integers between 0 and 7.  For example, all
+	  inputs having values lying between 0.5 and 0.75 are assigned
+	  the integer value six and, upon conversion back to an analog
+	  value, they all become 0.625.  The width of a single
+	  quantization interval
+	  <m:math>
+	    <m:ci>Δ</m:ci>
+	  </m:math>
+	  equals
+	  <m:math>
+	    <m:apply>
+	      <m:divide/>
+	      <m:cn>2</m:cn>
+	      <m:apply>
+		<m:power/>
+		<m:cn>2</m:cn>
+		<m:ci>B</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>.  
+	  The bottom panel shows a signal going through the
+	  analog-to-digital converter, where <m:math><m:ci>B</m:ci></m:math> is
+	  the number of bits used in the A/D conversion process (3 in
+	  the case depicted here).  First it is sampled, then
+	  amplitude-quantized to three bits.  Note how the sampled
+	  signal waveform becomes distorted after amplitude
+	  quantization.  For example the two signal values between 0.5
+	  and 0.75 become 0.625.  This distortion is irreversible; it
+	  can be reduced (but not eliminated) by using more bits in
+	  the A/D converter.
+	</caption></figure><para id="two">
+	A phenomenon reminiscent of the errors incurred in
+	representing numbers on a computer prevents signal amplitudes
+	from being converted with no error into a binary number
+	representation. In analog-to-digital conversion, the signal is
+	assumed to lie within a predefined range. Assuming we can
+	scale the signal without affecting the information it
+	expresses, we'll define this range to be
+	<m:math>
+	  <m:interval>
+	    <m:apply>
+	      <m:minus/>
+	      <m:cn>1</m:cn>
+	    </m:apply>
+	    <m:cn>1</m:cn>
+	  </m:interval>
+	</m:math>.
+	Furthermore, the A/D converter assigns amplitude values in
+	this range to a set of integers. A
+	<m:math>
+	  <m:ci>B</m:ci>
+	</m:math>-bit 
+	converter produces one of the integers   
+	<m:math>
+	  <m:set>
+	    <m:cn>0</m:cn>
+	    <m:cn>1</m:cn>
+	    <m:ci>…</m:ci>
+	    <m:apply>
+	      <m:minus/>
+	      <m:apply>
+		<m:power/>
+		<m:cn>2</m:cn>
+		<m:ci>B</m:ci>
+	      </m:apply>
+	      <m:cn>1</m:cn>
+	    </m:apply>
+	  </m:set>
+	</m:math>
+	for each sampled input.  
+	<link target-id="figure_1" strength="2"/> 	
+	shows how a three-bit A/D converter assigns input values to
+	the integers.
+ 
+	We define a <term>quantization interval</term> to be the range
+	of values assigned to the same integer. Thus, for our example
+	three-bit A/D converter, the quantization interval
+	<m:math>
+	  <m:ci>Δ</m:ci>
+	</m:math>
+	is  
+	<m:math>
+	  <m:cn>0.25</m:cn>
+	</m:math>; 
+	in general, it is   
+	<m:math>
+	  <m:apply>
+	    <m:divide/>
+	    <m:cn>2</m:cn>
+	    <m:apply>
+	      <m:power/>
+	      <m:cn>2</m:cn>
+	      <m:ci>B</m:ci>
+	    </m:apply>
+	  </m:apply>
+	</m:math>.
+      </para>
+
+
+
+      <exercise id="exer1">
+	<problem id="id6453897">
+	  <para id="exer1a">
+	    Recalling the plot of average daily highs in 
+	    <link document="m10350" target-id="i4" strength="2">this
+	    frequency domain problem</link>, 
+	    why is this plot so jagged?  Interpret this effect in
+	    terms of analog-to-digital conversion.
+	  </para>
+	</problem>
+	<solution id="id1166404478406">
+	  <para id="exer1b">
+	    The plotted temperatures were quantized to the nearest
+	    degree. Thus, the high temperature's amplitude was
+	    quantized as a form of A/D conversion.
+	  </para>
+	</solution>
+      </exercise>
+
+
+
+      <para id="ad_error">
+	Because values lying anywhere within a quantization interval
+	are assigned the same value for computer processing,
+	<emphasis>the original amplitude value cannot be recovered
+	without error</emphasis>. Typically, the D/A converter, the
+	device that converts integers to amplitudes, assigns an
+	amplitude equal to the value lying halfway in the quantization
+	interval. The integer 6 would be assigned to the amplitude
+	0.625 in this scheme. The error introduced by converting a
+	signal from analog to digital form by sampling and amplitude
+	quantization then back again would be half the quantization
+	interval for each amplitude value. Thus, the so-called
+	<emphasis>A/D</emphasis> error equals half the width of a
+	quantization interval:
+	<m:math>
+	  <m:apply>
+	    <m:divide/>
+	    <m:cn>1</m:cn>
+	    <m:apply>
+	      <m:power/>
+	      <m:cn>2</m:cn>
+	      <m:ci>B</m:ci>
+	    </m:apply>
+	  </m:apply>
+	</m:math>.
+	As we have fixed the input-amplitude range, the more bits
+	available in the A/D converter, the smaller the quantization
+	error.
+      </para>
+      
+      <para id="amplitude_quantization_error">
+	To analyze the amplitude quantization error more deeply, we
+	need to compute the <term>signal-to-noise</term> ratio, which
+	equals the ratio of the signal power and the quantization
+	error power.  Assuming the signal is a sinusoid, the signal
+	power is the square of the rms amplitude:
+	<m:math>
+	  <m:apply>
+	    <m:eq/> 
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">power</m:ci>
+		<m:ci>s</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:power/>
+		<m:apply>
+		  <m:divide/>
+		  <m:cn>1</m:cn>
+		  <m:apply>
+		    <m:root/>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		</m:apply>
+		<m:cn>2</m:cn>
+	      </m:apply>
+	    </m:apply>
+	    <m:apply>
+	      <m:divide/>
+	      <m:cn>1</m:cn>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:apply>
+	</m:math>.  
+	The 
+	<link target-id="figure_4" strength="1">illustration</link> 
+	details a single quantization interval.
+ 
+
+      <figure id="figure_4">
+	<media id="id1166407987480" alt="">
+          <image src="../../media/sys30.png" mime-type="image/png"/>
+          <image for="pdf" src="../../media/sys30.eps" mime-type="application/postscript"/>
+        </media>
+	<caption>	  
+	  A single quantization interval is shown, along with a
+	  typical signal's value before amplitude quantization
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">s</m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:ci>n</m:ci>
+		<m:ci>
+		  <m:msub>
+		    <m:mi>T</m:mi>
+		    <m:mi>s</m:mi>
+		  </m:msub>
+		</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> 
+	  and after 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">Q</m:ci>
+	      <m:apply>
+		<m:ci type="fn">s</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:ci>n</m:ci>
+		  <m:ci>
+		    <m:msub>
+		      <m:mi>T</m:mi>
+		      <m:mi>s</m:mi>
+		    </m:msub>
+		  </m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>.
+
+	  <m:math>
+	    <m:ci>ε</m:ci>
+	  </m:math> 
+	  denotes the error thus incurred.
+	</caption>
+      </figure>
+
+      
+	Its width is <m:math><m:ci>Δ</m:ci></m:math> and the
+	quantization error is denoted by
+	<m:math><m:ci>ε</m:ci></m:math>.  To find the power in
+	the quantization error, we note that no matter into which
+	quantization interval the signal's value falls, the error will
+	have the same characteristics.  To calculate the rms value, we
+	must square the error and average it over the interval.	
+
+	<equation id="rms_error">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">rms</m:ci>
+		<m:ci>ε</m:ci>
+	      </m:apply>	  
+	      <m:apply>
+		<m:root/>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:cn>1</m:cn>
+		    <m:ci>Δ</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:int/>
+		    <m:bvar>
+		      <m:ci>ε</m:ci>
+		    </m:bvar>
+		    <m:lowlimit>
+		      <m:apply>
+			<m:minus/>
+			<m:apply>
+			  <m:divide/>
+			  <m:ci>Δ</m:ci>
+			  <m:cn>2</m:cn>
+			</m:apply>
+		      </m:apply>
+		    </m:lowlimit>
+		    <m:uplimit>
+		      <m:apply>
+			<m:divide/>	
+			<m:ci>Δ</m:ci>
+			<m:cn>2</m:cn>
+		      </m:apply>
+		    </m:uplimit>
+		    <m:apply>
+		      <m:power/>
+		      <m:ci>ε</m:ci>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:power/>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>Δ</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:cn>12</m:cn>
+		</m:apply>
+		<m:apply>
+		  <m:divide/>
+		  <m:cn>1</m:cn>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	Since the quantization interval width for a
+	<m:math><m:ci>B</m:ci></m:math>-bit converter equals
+	<m:math>
+	  <m:apply>
+	    <m:eq/> 
+	    <m:apply>
+	      <m:divide/>
+	      <m:cn>2</m:cn>
+	      <m:apply>
+		<m:power/>
+		<m:cn>2</m:cn>
+		<m:ci>B</m:ci>
+	      </m:apply>
+	    </m:apply>
+	    <m:apply>
+	      <m:power/>
+	      <m:cn>2</m:cn>
+	      <m:apply>
+		<m:minus/>
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>B</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>, 	
+	we find that the signal-to-noise ratio for the
+	analog-to-digital conversion process equals
+
+	<equation id="snrad">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:eq/>
+		  <m:ci>SNR</m:ci>
+		  <m:apply>
+		    <m:divide/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:cn>1</m:cn>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:power/>
+			<m:cn>2</m:cn>
+			<m:apply>
+			  <m:minus/>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>2</m:cn>
+			    <m:apply>
+			      <m:minus/>
+			      <m:ci>B</m:ci>
+			      <m:cn>1</m:cn>
+			    </m:apply>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		      <m:cn>12</m:cn>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:cn>3</m:cn>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:power/>
+		    <m:cn>2</m:cn>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:ci>B</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:times/>
+		  <m:cn>6</m:cn>
+		  <m:ci>B</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:cn>10</m:cn>
+		  <m:apply>
+		    <m:log/>
+		    <m:logbase>
+		      <m:cn>10</m:cn>
+		    </m:logbase>
+		    <m:cn>1.5</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	    <m:ci> dB</m:ci>
+	  </m:math> 
+	</equation>
+
+	Thus, every bit increase in the A/D converter yields a 6 dB
+	increase in the signal-to-noise ratio.
+       The constant term
+       <m:math>
+         <m:apply><m:times/>
+           <m:cn>10</m:cn>
+           <m:apply><m:log/><m:logbase><m:cn>10</m:cn></m:logbase>
+             <m:cn>1.5</m:cn>
+           </m:apply>
+         </m:apply>
+       </m:math>
+      equals 1.76.
+      </para>
+
+
+
+      <exercise id="exer1.5">
+	<problem id="id1166409250644">
+	  <para id="exer1.5a">
+	    This derivation assumed the signal's amplitude lay in the
+	    range
+	    <m:math>
+	      <m:interval closure="closed">
+		<m:cn>-1</m:cn>
+		<m:cn>1</m:cn>
+	      </m:interval>
+	    </m:math>.
+	    What would the amplitude quantization signal-to-noise
+	    ratio be if it lay in the range
+	    <m:math>
+	      <m:interval closure="closed">
+		<m:apply><m:minus/>
+		  <m:ci>A</m:ci>
+		</m:apply>
+		<m:ci>A</m:ci>
+	      </m:interval>
+	    </m:math>?
+	  </para>
+	</problem>
+	<solution id="id1166406097988">
+	  <para id="exer1.5b">
+	    The signal-to-noise ratio does not depend on the signal
+	    amplitude. With an A/D range of
+	    <m:math>
+	      <m:interval closure="closed">
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>A</m:ci>
+		</m:apply>
+		<m:ci>A</m:ci>
+	      </m:interval>
+	    </m:math>, 
+	    the quantization interval
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:ci>Δ</m:ci>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:ci>A</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:power/>
+		    <m:cn>2</m:cn>
+		    <m:ci>B</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	    and the signal's rms value (again assuming it is a
+	    sinusoid) is
+	    <m:math>
+	      <m:apply>
+		<m:divide/>
+		<m:ci>A</m:ci>
+		<m:apply>
+		  <m:root/>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	    </m:math>.
+	  </para>
+	</solution>
+      </exercise>
+
+
+      <exercise id="exer2">
+	<problem id="id1517360">
+	  <para id="exer2a">
+	    How many bits would be required in the A/D converter to
+	    ensure that the maximum amplitude quantization error was
+	    less than 60 db smaller than the signal's peak value?
+	  </para>
+	</problem>
+	<solution id="id1166408210414">
+	  <para id="exer2b">
+	    Solving   
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:power/>
+		  <m:cn>2</m:cn>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>B</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:cn>.001</m:cn>
+	      </m:apply>
+	    </m:math>
+	    results in   
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:ci>B</m:ci> 
+		<m:cn>10</m:cn>
+	      </m:apply>	      
+	    </m:math>
+	    bits.
+	  </para>
+	</solution>
+      </exercise>
+
+
+
+      <exercise id="exer3">
+	<problem id="id6292782">
+	  <para id="exer3a">
+	    Music on a CD is stored to 16-bit accuracy.  To what
+	    signal-to-noise ratio does this correspond?
+	  </para>
+	</problem>
+	<solution id="id1166407542906">
+	  <para id="exer3b">
+	    A 16-bit A/D converter yields a SNR of
+            <m:math display="inline">
+              <m:apply><m:eq/>
+                <m:apply><m:plus/>
+                  <m:apply><m:times/>
+                    <m:cn>6</m:cn> <m:cn>16</m:cn>
+                  </m:apply>
+                  <m:apply><m:times/>
+                    <m:cn>10</m:cn>
+                    <m:apply><m:log/>
+		      <m:logbase>
+		        <m:cn>10</m:cn>
+		      </m:logbase>
+                      <m:cn>1.5</m:cn>
+                    </m:apply>
+                  </m:apply>
+                </m:apply>
+                <m:cn>97.8</m:cn>
+              </m:apply>
+             </m:math> dB.
+	  </para>
+	</solution>
+      </exercise>
+
+
+      <para id="four">	
+	Once we have acquired signals with an A/D converter, we can
+	process them using digital hardware or software. It can be
+	shown that if the computer processing is linear, the result of
+	sampling, computer processing, and unsampling is equivalent to
+	some analog linear system. Why go to all the bother if the
+	same function can be accomplished using analog techniques?
+	Knowing when digital processing excels and when it does not is
+	an important issue.
+      </para>
+
+  </content>
+</document>

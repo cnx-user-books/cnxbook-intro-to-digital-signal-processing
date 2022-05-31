@@ -1,0 +1,2069 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>The DFT: Frequency Domain with a Computer Analysis</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>c0e44757-a8ec-4366-af97-50208642af2e</md:uuid>
+</metadata>
+
+  <content>
+    <section id="sec1">
+      <title>Introduction</title>
+      <para id="p1">
+	We just covered ideal (and non-ideal) (time) <link document="m10994" strength="3">sampling of CT signals</link>.
+	This enabled DT signal processing solutions for CT
+	applications (<link target-id="fig1" strength="3"/>):
+      </para>
+
+      <figure id="fig1">
+	<media id="idp9026416" alt=""><image src="../../media/sec8_fig1.png" mime-type="image/png"/></media>
+      </figure>
+      
+      <para id="p2">
+	Much of the theoretical analysis of such systems relied on
+	frequency domain representations.  How do we carry out these
+	frequency domain analysis on the computer?  Recall the
+	following relationships:
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:ci type="fn" class="discrete">x</m:ci>
+	    <m:ci>n</m:ci>
+	  </m:apply>
+	  <m:mover>
+	    <m:mo>↔</m:mo>
+	    <m:mi>DTFT</m:mi>
+	  </m:mover>
+	  <m:apply>
+	    <m:ci type="fn">X</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math>
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:ci type="fn">x</m:ci>
+	    <m:ci>t</m:ci>
+	  </m:apply>
+	  <m:mover>
+	    <m:mo>↔</m:mo>
+	    <m:mi>CTFT</m:mi>
+	  </m:mover>
+	  <m:apply>
+	    <m:ci type="fn">X</m:ci>
+	    <m:ci>Ω</m:ci>
+	  </m:apply>
+	</m:math>
+
+	where <m:math><m:ci>ω</m:ci></m:math> and
+	<m:math><m:ci>Ω</m:ci></m:math> are continuous frequency
+	variables.
+      </para>
+
+      <section id="s1_sub1">
+	<title>Sampling DTFT</title>
+
+	<para id="p3">
+	  Consider the DTFT of a discrete-time (DT) signal 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">x</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math>.  Assume 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">x</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math> is of finite duration <m:math><m:ci>N</m:ci>
+	  </m:math> (<foreign>i.e.</foreign>, an
+	  <m:math><m:ci>N</m:ci></m:math>-point signal).
+
+	  <equation id="eq1">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn">X</m:ci>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar>
+		    <m:ci>n</m:ci>
+		  </m:bvar>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:cn>0</m:cn>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">x</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:minus/>
+			  <m:imaginaryi/>
+			</m:apply>
+			<m:ci>ω</m:ci>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+	  
+	  where 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">X</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math> 
+	  is the continuous function that is indexed by the
+	  real-valued parameter 
+	  
+	  <m:math>
+	    <m:apply>
+	      <m:leq/>
+	      <m:apply>
+		<m:minus/>
+		<m:pi/>
+	      </m:apply>
+	      <m:ci>ω</m:ci>
+	      <m:pi/>
+	    </m:apply>
+	  </m:math>.  The other function, 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">x</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math>, is a discrete function that is indexed by
+	  integers.  
+	</para>
+
+	<para id="p4">
+	  We want to work with 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">X</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math>
+	  on a computer.  Why not just <emphasis>sample</emphasis> 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">X</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math>?
+
+	  <equation id="eq2">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">X</m:ci>
+		  <m:ci>k</m:ci>
+		</m:apply>	      
+		<m:apply>
+		  <m:ci type="fn">X</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar>
+		    <m:ci>n</m:ci>
+		  </m:bvar>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:cn>0</m:cn>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">x</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:minus/>
+			  <m:imaginaryi/>
+			</m:apply>
+			<m:cn>2</m:cn>
+			<m:pi/>
+			<m:apply>
+			  <m:divide/>
+			  <m:ci>k</m:ci>
+			  <m:ci>N</m:ci>
+			</m:apply>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+
+	  In <link target-id="eq2" strength="3"/> we sampled at 
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>ω</m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:pi/>
+		  </m:apply>
+		  <m:ci>N</m:ci>
+		</m:apply>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> where 
+	  
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>k</m:ci>
+	      <m:set>
+		<m:cn>0</m:cn>
+		<m:cn>1</m:cn>
+		<m:ci>…</m:ci>
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>N</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+	      </m:set>
+	    </m:apply>
+	  </m:math> and 
+
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">X</m:ci>
+	      <m:ci>k</m:ci>
+	    </m:apply>
+	  </m:math>
+	  for 
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>k</m:ci>
+	      <m:set>
+		<m:cn>0</m:cn>
+		<m:ci>…</m:ci>
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>N</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+	      </m:set>
+	    </m:apply>
+	  </m:math>
+	  is called the <term>Discrete Fourier Transform (DFT)</term> of 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">x</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math>.
+	</para>
+
+	<example id="eg1">
+	  <figure id="fig2">
+	    <title>Finite Duration DT Signal</title>
+	    <media id="idp8697440" alt=""><image src="sec8_fig2.png" mime-type="image/png"/></media>
+	  </figure>
+
+	  <para id="p1_eg1">
+	    The DTFT of the image in <link target-id="fig2" strength="3"/> is written as follows:
+
+	    <equation id="eq3">
+	      <m:math>
+		<m:apply>
+		  <m:eq/>
+		  <m:apply>
+		    <m:ci type="fn">X</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>	
+		  <m:apply>
+		    <m:sum/>
+		    <m:bvar>
+		      <m:ci>n</m:ci>
+		    </m:bvar>
+		    <m:uplimit>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>N</m:ci>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		    </m:uplimit>
+		    <m:lowlimit>
+		      <m:cn>0</m:cn>
+		    </m:lowlimit>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:ci type="fn" class="discrete">x</m:ci>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:exp/>
+			<m:apply>
+			  <m:times/>
+			  <m:apply>
+			    <m:minus/>
+			    <m:imaginaryi/>
+			  </m:apply>
+			  <m:ci>ω</m:ci>
+			  <m:ci>n</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:math>
+	    </equation>
+	    
+	    where <m:math><m:ci>ω</m:ci></m:math> is any 
+	    <m:math>
+	      <m:apply>
+		<m:times/>
+		<m:cn>2</m:cn>
+		<m:pi/>
+	      </m:apply>
+	    </m:math>-interval, for example 
+	    <m:math>
+	      <m:apply>
+		<m:leq/>
+		<m:apply>
+		  <m:minus/>
+		  <m:pi/>
+		</m:apply>
+		<m:ci>ω</m:ci>
+		<m:pi/>
+	      </m:apply>
+	    </m:math>.
+	  </para>
+	  
+	  <figure id="fig3">
+	    <title>Sample X(ω)</title>
+	    <media id="idp1910816" alt=""><image src="sec8_fig3.png" mime-type="image/png"/></media>
+	  </figure>
+	  
+	  <para id="p2_eg1">
+	    where again we sampled at 
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:ci>ω</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		    <m:ci>N</m:ci>
+		  </m:apply>
+		  <m:ci>k</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:math> where 
+	    
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:ci>k</m:ci>
+		<m:set>
+		  <m:cn>0</m:cn>
+		  <m:cn>1</m:cn>
+		  <m:ci>…</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>M</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:set>
+	      </m:apply>
+	    </m:math>.  For example, we take 
+
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:ci>M</m:ci>
+		<m:cn>10</m:cn>
+	      </m:apply>
+	    </m:math>.  In the <link target-id="sub1_sec2" strength="3">following section</link> we will discuss in
+	    more detail how we should choose
+	    <m:math><m:ci>M</m:ci></m:math>, the number of samples in
+	    the
+	    <m:math>
+	      <m:apply>
+		<m:times/>
+		<m:cn>2</m:cn>
+		<m:pi/>
+	      </m:apply>
+	    </m:math> interval.
+	  </para>
+
+	  <para id="p3_eg2">
+	    (This is precisely how we would plot 
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn">X</m:ci>
+		<m:ci>ω</m:ci>
+	      </m:apply>
+	    </m:math> in Matlab.)
+	  </para>
+	</example>
+
+	<section id="sub1_sec2">
+	  <title>Choosing M</title>
+	  
+	  <section id="cas1">
+	    <title>Case 1</title>
+	    <para id="p1_c1">
+	      Given <m:math><m:ci>N</m:ci></m:math> (length of 
+	      <m:math>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:math>), choose 
+	      <m:math>
+		<m:apply>
+		  <m:ci><m:mo>≫</m:mo></m:ci>
+		  <m:ci>M</m:ci>
+		  <m:ci>N</m:ci>
+		</m:apply>
+	      </m:math> to obtain a dense sampling of the DTFT (<link target-id="fig4" strength="3"/>):
+	    </para>
+
+	    <figure id="fig4">
+	      <media id="idp9014960" alt=""><image src="../../media/sec8_fig4.png" mime-type="image/png"/></media>
+	    </figure>
+
+	  </section>
+
+	  <section id="cas2">
+	    <title>Case 2</title>
+	    <para id="p1_c2">
+	      Choose <m:math><m:ci>M</m:ci></m:math> as small as
+	      possible (to minimize the amount of computation).	      
+	    </para>
+
+	    <para id="p2_c2">
+	      In general, we require 
+	      <m:math>
+		<m:apply>
+		  <m:geq/>
+		  <m:ci>M</m:ci>
+		  <m:ci>N</m:ci>
+		</m:apply>
+	      </m:math>
+	      in order to represent all information in 
+	      
+	      <m:math display="block">
+		<m:apply>
+		  <m:forall/>
+		  <m:bvar>
+		    <m:ci>n</m:ci>
+		  </m:bvar>
+		  <m:condition>
+		    <m:apply>
+		      <m:eq/>
+		      <m:ci>n</m:ci>
+		      <m:set>
+			<m:cn>0</m:cn>
+			<m:ci>…</m:ci>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>N</m:ci>
+			  <m:cn>1</m:cn>
+			</m:apply>
+		      </m:set>
+		    </m:apply>
+		  </m:condition>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:math>
+	   
+	      Let's concentrate on 
+	      <m:math>
+		<m:apply>
+		  <m:eq/>
+		  <m:ci>M</m:ci>
+		  <m:ci>N</m:ci>
+		</m:apply>
+	      </m:math>:
+	      
+	      <m:math display="block">
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:mover>
+		  <m:mo>↔</m:mo>
+		  <m:mi>DFT</m:mi>
+		</m:mover>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">X</m:ci>
+		  <m:ci>k</m:ci>
+		</m:apply>
+	      </m:math>
+	      
+	      for
+	      <m:math>
+		<m:apply>
+		  <m:eq/>
+		  <m:ci>n</m:ci>
+		  <m:set>
+		    <m:cn>0</m:cn>
+		    <m:ci>…</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:set>
+		</m:apply>
+	      </m:math> and  
+	       <m:math>
+		<m:apply>
+		  <m:eq/>
+		  <m:ci>k</m:ci>
+		  <m:set>
+		    <m:cn>0</m:cn>
+		    <m:ci>…</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:set>
+		</m:apply>
+	      </m:math>
+
+	      <m:math display="block">
+		<m:ci>numbers</m:ci>
+		<m:mo>↔</m:mo>
+		<m:ci>N  numbers</m:ci>
+	      </m:math>
+
+	    </para>
+	  </section>
+	</section>
+      </section>
+    </section>
+
+    <section id="sec2">
+      <title>Discrete Fourier Transform (DFT)</title>
+      <para id="p1_sec2">
+	Define
+
+	<equation id="eq4">
+	  <m:math>
+	    <m:apply>
+	      <m:equivalent/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">X</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn">X</m:ci>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:pi/>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		  <m:ci>N</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	where 
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci>N</m:ci>
+	    <m:apply>
+	      <m:ci type="fn">length</m:ci>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">x</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math> and 
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci>k</m:ci>
+	    <m:set>
+	      <m:cn>0</m:cn>
+	      <m:ci>…</m:ci>
+	      <m:apply>
+		<m:minus/>
+		<m:ci>N</m:ci>
+		<m:cn>1</m:cn>
+	      </m:apply>
+	    </m:set>
+	  </m:apply>
+	</m:math>.  In this case, 
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci>M</m:ci>
+	    <m:ci>N</m:ci>
+	  </m:apply>
+	</m:math>.  
+
+	<equation id="eq5">
+	    <title>DFT</title>
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">X</m:ci>
+		  <m:ci>k</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar>
+		    <m:ci>n</m:ci>
+		  </m:bvar>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:cn>0</m:cn>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">x</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:minus/>
+			  <m:imaginaryi/>
+			</m:apply>
+			<m:cn>2</m:cn>
+			<m:pi/>
+			<m:apply>
+			  <m:divide/>
+			  <m:ci>k</m:ci>
+			  <m:ci>N</m:ci>
+			</m:apply>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+	  
+	  <equation id="eq6">
+	    <title>Inverse DFT (IDFT)</title>
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:cn>1</m:cn>
+		    <m:ci>N</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:sum/>
+		    <m:bvar>
+		      <m:ci>k</m:ci>
+		    </m:bvar>
+		    <m:uplimit>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>N</m:ci>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		    </m:uplimit>
+		    <m:lowlimit>
+		      <m:cn>0</m:cn>
+		    </m:lowlimit>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:ci type="fn" class="discrete">X</m:ci>
+			<m:ci>k</m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:exp/>
+			<m:apply>
+			  <m:times/>
+			  <m:imaginaryi/>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			  <m:apply>
+			    <m:divide/>
+			    <m:ci>k</m:ci>
+			    <m:ci>N</m:ci>
+			  </m:apply>
+			  <m:ci>n</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+
+      </para>
+
+      <section id="s3_sub1">
+	<title>Interpretation</title>
+	<para id="p1_s3s1">
+	  Represent 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">x</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math> in terms of a sum of
+	  <m:math><m:ci>N</m:ci></m:math> <link document="m10060" strength="2">complex sinusoids</link> of amplitudes 
+	   <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">X</m:ci>
+	      <m:ci>k</m:ci>
+	    </m:apply>
+	  </m:math> and frequencies
+	   
+	  <m:math display="block">
+	    <m:apply>
+	      <m:forall/>
+	      <m:bvar>
+		<m:ci>k</m:ci>
+	      </m:bvar>
+	      <m:condition>
+		<m:apply>
+		  <m:in/>
+		  <m:ci>k</m:ci>
+		  <m:set>
+		    <m:cn>0</m:cn>
+		    <m:ci>…</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:set>
+		</m:apply>
+	      </m:condition>
+	      <m:apply>
+		<m:eq/>
+		<m:ci><m:msub>
+		    <m:mi>ω</m:mi>
+		    <m:mi>k</m:mi>
+		  </m:msub></m:ci>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:pi/>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		  <m:ci>N</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	  
+	  <note type="Think" id="idp923936"><label>Think</label>
+	    Fourier Series with fundamental frequency 
+	    <m:math>
+	      <m:apply>
+		<m:divide/>
+		<m:apply>
+		  <m:times/>
+		  <m:cn>2</m:cn>
+		  <m:pi/>
+		</m:apply>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	    </m:math>
+	  </note>
+	</para>
+
+	<section id="rem1">
+	  <title>Remark 1</title>
+	  <para id="p1_r1">
+	    IDFT treats 
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">x</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:math> 
+	    as though it were <m:math><m:ci>N</m:ci></m:math>-periodic.
+
+	    <equation id="eq7">
+	      <m:math>
+		<m:apply>
+		  <m:eq/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:cn>1</m:cn>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar>
+			<m:ci>k</m:ci>
+		      </m:bvar>
+		      <m:uplimit>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>N</m:ci>
+			  <m:cn>1</m:cn>
+			</m:apply>
+		      </m:uplimit>
+		      <m:lowlimit>
+			<m:cn>0</m:cn>
+		      </m:lowlimit>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">X</m:ci>
+			  <m:ci>k</m:ci>
+			</m:apply>
+			<m:apply>
+			  <m:exp/>
+			  <m:apply>
+			    <m:times/>
+			    <m:imaginaryi/>
+			    <m:cn>2</m:cn>
+			    <m:pi/>
+			    <m:apply>
+			      <m:divide/>
+			      <m:ci>k</m:ci>
+			      <m:ci>N</m:ci>
+			    </m:apply>
+			    <m:ci>n</m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:math>
+	    </equation>
+	    where 
+	    <m:math>
+	      <m:apply>
+		<m:in/>
+		<m:ci>n</m:ci>
+		<m:set>
+		  <m:cn>0</m:cn>
+		  <m:ci>…</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:set>
+	      </m:apply>
+	    </m:math>
+	  </para>
+
+	  <exercise id="exer1">
+	    <problem id="idp7891856">
+	      <para id="prob_1">
+		What about other values of
+		<m:math><m:ci>n</m:ci></m:math>?
+	      </para>
+	    </problem>
+	    <solution id="idp8416224">
+	      <para id="sol_1">
+		
+		<m:math display="block">
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">x</m:ci>
+		      <m:apply>
+			<m:plus/>
+			<m:ci>n</m:ci>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:ci>???</m:ci>
+		  </m:apply>
+		</m:math>
+
+	      </para>
+	    </solution>
+	  </exercise>
+
+	</section>
+
+	<section id="rem2">
+	  <title>Remark 2</title>
+	  <para id="p1_r2">
+	    Proof that the IDFT inverts the DFT for 
+	    <m:math>
+	      <m:apply>
+		<m:in/>
+		<m:ci>n</m:ci>
+		<m:set>
+		  <m:cn>0</m:cn>
+		  <m:ci>…</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:set>
+	      </m:apply>
+	    </m:math>
+
+	    <equation id="eq8">
+	      <m:math>
+		<m:apply>
+		  <m:eq/>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:cn>1</m:cn>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar>
+			<m:ci>k</m:ci>
+		      </m:bvar>
+		      <m:uplimit>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>N</m:ci>
+			  <m:cn>1</m:cn>
+			</m:apply>
+		      </m:uplimit>
+		      <m:lowlimit>
+			<m:cn>0</m:cn>
+		      </m:lowlimit>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">X</m:ci>
+			  <m:ci>k</m:ci>
+			</m:apply>
+			<m:apply>
+			  <m:exp/>
+			  <m:apply>
+			    <m:times/>
+			    <m:imaginaryi/>
+			    <m:cn>2</m:cn>
+			    <m:pi/>
+			    <m:apply>
+			      <m:divide/>
+			      <m:ci>k</m:ci>
+			      <m:ci>N</m:ci>
+			    </m:apply>
+			    <m:ci>n</m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>		
+		  
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:cn>1</m:cn>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar>
+			<m:ci>k</m:ci>
+		      </m:bvar>
+		      <m:uplimit>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>N</m:ci>
+			  <m:cn>1</m:cn>
+			</m:apply>
+		      </m:uplimit>
+		      <m:lowlimit>
+			<m:cn>0</m:cn>
+		      </m:lowlimit>
+		      <m:apply>
+			<m:sum/>
+			<m:bvar>
+			  <m:ci>m</m:ci>
+			</m:bvar>
+			<m:uplimit>
+			  <m:apply>
+			    <m:minus/>
+			    <m:ci>N</m:ci>
+			    <m:cn>1</m:cn>
+			  </m:apply>
+			</m:uplimit>
+			<m:lowlimit>
+			  <m:cn>0</m:cn>
+			</m:lowlimit>
+			<m:apply>
+			  <m:times/>
+			  <m:apply>
+			    <m:ci type="fn" class="discrete">x</m:ci>
+			    <m:ci>m</m:ci>
+			  </m:apply>
+			  <m:apply>
+			    <m:exp/>
+			    <m:apply>
+			      <m:times/>
+			      <m:apply>
+				<m:minus/>
+				<m:imaginaryi/>
+			      </m:apply>
+			      <m:cn>2</m:cn>
+			      <m:pi/>
+			      <m:apply>
+				<m:divide/>
+				<m:ci>k</m:ci>
+				<m:ci>N</m:ci>
+			      </m:apply>
+			      <m:ci>m</m:ci>
+			    </m:apply>
+			  </m:apply>
+			  <m:apply>
+			    <m:exp/>
+			    <m:apply>
+			      <m:times/>
+			      <m:imaginaryi/>
+			      <m:cn>2</m:cn>
+			      <m:pi/>
+			      <m:apply>
+				<m:divide/>
+				<m:ci>k</m:ci>
+				<m:ci>N</m:ci>
+			      </m:apply>
+			      <m:ci>n</m:ci>
+			    </m:apply>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		  <m:ci>???</m:ci>
+		</m:apply>
+	      </m:math>
+	    </equation>
+	    
+	  </para>
+	</section>
+      </section>
+
+
+      <!-- DFT EXAMPLE BELOW -->
+      <example id="eg2">
+	<title>Computing DFT</title>
+	<para id="p1_eg2">
+	  Given the following discrete-time signal (<link target-id="fig5" strength="3"/>) with 
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>N</m:ci>
+	      <m:cn>4</m:cn>
+	    </m:apply>
+	  </m:math>, 
+	  we will compute the DFT using two different methods (the DFT
+	  Formula and Sample DTFT):
+	</para>
+	
+	<figure id="fig5">
+	  <media id="idp7815632" alt=""><image src="../../media/sec8_fig5.png" mime-type="image/png"/></media>
+	</figure>
+	
+	<para id="p2_eg2">
+	  <list id="list1" list-type="enumerated">
+	    <item>
+	      DFT Formula
+	      
+	      <equation id="eq9">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">X</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar>
+			<m:ci>n</m:ci>
+		      </m:bvar>
+		      <m:uplimit>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>N</m:ci>
+			  <m:cn>1</m:cn>
+			</m:apply>
+		      </m:uplimit>
+		      <m:lowlimit>
+			<m:cn>0</m:cn>
+		      </m:lowlimit>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">x</m:ci>
+			  <m:ci>n</m:ci>
+			</m:apply>
+			<m:apply>
+			  <m:exp/>
+			  <m:apply>
+			    <m:times/>
+			    <m:apply>
+			      <m:minus/>
+			      <m:imaginaryi/>
+			    </m:apply>
+			    <m:cn>2</m:cn>
+			    <m:pi/>
+			    <m:apply>
+			      <m:divide/>
+			      <m:ci>k</m:ci>
+			      <m:ci>N</m:ci>
+			    </m:apply>
+			    <m:ci>n</m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		    
+		    <m:apply>
+		      <m:plus/>
+		      <m:cn>1</m:cn>
+		      <m:apply>
+			<m:exp/>
+			<m:apply>
+			  <m:times/>
+			  <m:apply>
+			    <m:minus/>
+			    <m:imaginaryi/>
+			  </m:apply>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			  <m:apply>
+			    <m:divide/>
+			    <m:ci>k</m:ci>
+			    <m:cn>4</m:cn>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>		      
+		      <m:apply>
+			<m:exp/>
+			<m:apply>
+			  <m:times/>
+			  <m:apply>
+			    <m:minus/>
+			    <m:imaginaryi/>
+			  </m:apply>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			  <m:apply>
+			    <m:divide/>
+			    <m:ci>k</m:ci>
+			    <m:cn>4</m:cn>
+			  </m:apply>
+			  <m:cn>2</m:cn>
+			</m:apply>
+		      </m:apply>
+		        <m:apply>
+			<m:exp/>
+			<m:apply>
+			  <m:times/>
+			  <m:apply>
+			    <m:minus/>
+			    <m:imaginaryi/>
+			  </m:apply>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			  <m:apply>
+			    <m:divide/>
+			    <m:ci>k</m:ci>
+			    <m:cn>4</m:cn>
+			  </m:apply>
+			  <m:cn>3</m:cn>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+
+		    <m:apply>
+		      <m:plus/>
+		      <m:cn>1</m:cn>
+		      <m:apply>
+			<m:exp/>
+			<m:apply>
+			  <m:times/>
+			  <m:apply>
+			    <m:minus/>
+			    <m:imaginaryi/>
+			  </m:apply>
+			  <m:apply>
+			    <m:divide/>
+			    <m:pi/>
+			    <m:cn>2</m:cn>
+			  </m:apply>
+			  <m:ci>k</m:ci>
+			</m:apply>
+		      </m:apply>
+		      <m:apply>
+			<m:exp/>
+			<m:apply>
+			  <m:times/>
+			  <m:apply>
+			    <m:minus/>
+			    <m:imaginaryi/>
+			  </m:apply>
+			  <m:pi/>
+			  <m:ci>k</m:ci>
+			</m:apply>
+		      </m:apply>		      
+		      <m:apply>
+			<m:exp/>
+			<m:apply>
+			  <m:times/>
+			  <m:apply>
+			    <m:minus/>
+			    <m:imaginaryi/>
+			  </m:apply>
+			  <m:apply>
+			    <m:divide/>
+			    <m:cn>3</m:cn>
+			    <m:cn>2</m:cn>
+			  </m:apply>
+			  <m:pi/>
+			  <m:ci>k</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </equation>
+	      
+	      Using the above equation, we can solve and get the
+	      following results:
+
+	      <m:math display="block">
+		<m:apply>
+		  <m:eq/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:cn>0</m:cn>
+		  </m:apply>
+		  <m:cn>4</m:cn>
+		</m:apply>
+	      </m:math>
+
+	      <m:math display="block">
+		<m:apply>
+		  <m:eq/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		  <m:cn>0</m:cn>
+		</m:apply>
+	      </m:math>
+
+	      <m:math display="block">
+		<m:apply>
+		  <m:eq/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:cn>0</m:cn>
+		</m:apply>
+	      </m:math>
+
+	      <m:math display="block">
+		<m:apply>
+		  <m:eq/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:cn>3</m:cn>
+		  </m:apply>
+		  <m:cn>0</m:cn>
+		</m:apply>
+	      </m:math>
+	    </item>
+
+	    <item>
+	      Sample DTFT.  Using the same figure, <link target-id="fig5" strength="3"/>, we will take the DTFT of the signal and
+	      get the following equations:
+
+	      <equation id="eq10">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">X</m:ci>
+		      <m:ci>ω</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar><m:ci>n</m:ci></m:bvar>
+		      <m:lowlimit><m:cn>0</m:cn></m:lowlimit>
+		      <m:uplimit><m:cn>3</m:cn></m:uplimit>
+		      <m:apply>
+			<m:exp/>
+			<m:apply>
+			  <m:times/>
+			  <m:apply>
+			    <m:minus/>
+			    <m:imaginaryi/>
+			  </m:apply>
+			  <m:ci>ω</m:ci>
+			  <m:ci>n</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:minus/>
+			<m:cn>1</m:cn>
+			<m:apply>
+			  <m:exp/>
+			  <m:apply>
+			    <m:times/>
+			    <m:apply>
+			      <m:minus/>
+			      <m:imaginaryi/>
+			    </m:apply>
+			    <m:cn>4</m:cn>
+			    <m:ci>ω</m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		      <m:apply>
+			<m:minus/>
+			<m:cn>1</m:cn>
+			<m:apply>
+			  <m:exp/>
+			  <m:apply>
+			    <m:times/>
+			    <m:apply>
+			      <m:minus/>
+			      <m:imaginaryi/>
+			    </m:apply>
+			    <m:ci>ω</m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		    <m:ci>???</m:ci>
+		  </m:apply>
+		</m:math>
+	      </equation>
+
+	      Our sample points will be:
+
+	      <m:math display="block">
+		<m:apply>
+		  <m:eq/>
+		  <m:msub>
+		    <m:mi>ω</m:mi>
+		    <m:mi>k</m:mi>
+		  </m:msub>
+		  <m:apply>
+		    <m:divide/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:pi/>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		    <m:cn>4</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:pi/>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:math>
+
+	      where 
+	      <m:math>
+		<m:apply>
+		  <m:eq/>
+		  <m:ci>k</m:ci>
+		  <m:set>
+		    <m:cn>0</m:cn>
+		    <m:cn>1</m:cn>
+		    <m:cn>2</m:cn>
+		    <m:cn>3</m:cn>
+		  </m:set>
+		</m:apply>
+	      </m:math> (<link target-id="fig6" strength="3"/>).
+	    </item>
+	  </list>
+	</para>
+	
+	<figure id="fig6">
+	  <media id="idp1595328" alt=""><image src="../../media/sec8_fig6.png" mime-type="image/png"/></media>
+	</figure>
+      </example>
+    </section>
+
+    <section id="sec3">
+      <title>Periodicity of the DFT</title>
+      <para id="p1_s3">
+	DFT 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn" class="discrete">X</m:ci>
+	    <m:ci>k</m:ci>
+	  </m:apply>
+	</m:math> consists of <emphasis>samples</emphasis> of DTFT, so 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">X</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math>, a 
+	<m:math>
+	  <m:apply>
+	    <m:times/>
+	    <m:cn>2</m:cn>
+	    <m:pi/>
+	  </m:apply>
+	</m:math>-periodic DTFT signal, can be converted to 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn" class="discrete">X</m:ci>
+	    <m:ci>k</m:ci>
+	  </m:apply>
+	</m:math>, an <m:math><m:ci>N</m:ci></m:math>-periodic DFT.
+
+	<equation id="eq11">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">X</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar>
+		  <m:ci>n</m:ci>
+		</m:bvar>
+		<m:uplimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:cn>0</m:cn>
+		</m:lowlimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:exp/>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:minus/>
+			<m:imaginaryi/>
+		      </m:apply>
+		      <m:cn>2</m:cn>
+		      <m:pi/>
+		      <m:apply>
+			<m:divide/>
+			<m:ci>k</m:ci>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+	
+	where 
+	<m:math>
+	  <m:apply>
+	    <m:exp/>
+	    <m:apply>
+	      <m:times/>
+	      <m:apply>
+		<m:minus/>
+		<m:imaginaryi/>
+	      </m:apply>
+	      <m:cn>2</m:cn>
+	      <m:pi/>
+	      <m:apply>
+		<m:divide/>
+		<m:ci>k</m:ci>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:apply>
+	</m:math> is an <m:math><m:ci>N</m:ci></m:math>-periodic basis
+	function (See <link target-id="fig7" strength="3"/>).
+      </para>
+      
+      <figure id="fig7">
+	<media id="idp7163024" alt=""><image src="../../media/sec8_fig7.png" mime-type="image/png"/></media>
+      </figure>
+
+      <para id="p2_s3">
+	Also, recall, 
+
+	<equation id="eq12">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">x</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:cn>1</m:cn>
+		  <m:ci>N</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar>
+		    <m:ci>n</m:ci>
+		  </m:bvar>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:cn>0</m:cn>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">X</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+			<m:apply>
+			  <m:divide/>
+			  <m:ci>k</m:ci>
+			  <m:ci>N</m:ci>
+			</m:apply>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	   
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:cn>1</m:cn>
+		  <m:ci>N</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar>
+		    <m:ci>n</m:ci>
+		  </m:bvar>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:cn>0</m:cn>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">X</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+			<m:apply>
+			  <m:divide/>
+			  <m:ci>k</m:ci>
+			  <m:ci>N</m:ci>
+			</m:apply>
+			<m:apply>
+			  <m:plus/>
+			  <m:ci>n</m:ci>
+			  <m:apply>
+			    <m:times/>
+			    <m:ci>m</m:ci>
+			    <m:ci>N</m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:ci>???</m:ci>
+	    </m:apply>
+	  </m:math>
+	</equation>
+      </para>
+
+      <example id="eg3">
+	<title>Illustration</title>
+
+	<figure id="fig8">
+	  <media id="idp14753664" alt=""><image src="../../media/sec8_fig8.png" mime-type="image/png"/></media>
+	</figure>
+
+	<para id="p1_eg3">
+	  <note type="note" id="idp9046304">
+	    When we deal with the DFT, we need to remember that, in
+	    effect, this treats the signal as an
+	    <m:math><m:ci>N</m:ci></m:math>-periodic sequence.
+	  </note>
+	</para>
+      </example>
+
+    </section>
+
+    <section id="sec4">
+      <title>A Sampling Perspective</title>
+      <para id="p1_s4">
+	Think of sampling the continuous function 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">X</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math>, as depicted in <link target-id="fig9" strength="3"/>.  
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">S</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math> will represent the sampling function applied to 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">X</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math> and is illustrated in <link target-id="fig9" strength="3"/> as well.  This will result in our
+	discrete-time sequence,
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn" class="discrete">X</m:ci>
+	    <m:ci>k</m:ci>
+	  </m:apply>
+	</m:math>.
+      </para>
+
+      <figure id="fig9">
+	<media id="idp743184" alt=""><image src="../../media/sec8_fig9.png" mime-type="image/png"/></media>
+      </figure>
+      
+      <para id="p2_s4">
+	<note type="Recall" id="idp10376400"><label>Recall</label>
+	  Remember the multiplication in the frequency domain is equal
+	  to convolution in the time domain!
+	</note>
+      </para>
+
+      <section id="sub1_s">
+	<title>Inverse DTFT of S(ω)</title>
+	<para id="p1_s1s">
+	  
+	  <equation id="eq13">
+	    <m:math>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar>
+		  <m:ci>k</m:ci>
+		</m:bvar>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:apply>
+		  <m:ci type="fn">δ</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>ω</m:ci>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+			<m:ci>k</m:ci>
+		      </m:apply>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+	
+	  Given the above equation, we can take the DTFT and get the
+	  following equation:
+
+	  <equation id="eq14">
+	    <m:math>
+	      <m:apply>
+		<m:equivalent/>
+		<m:apply>
+		  <m:times/>
+		  <m:ci>N</m:ci>
+		  <m:apply>
+		    <m:sum/>
+		    <m:bvar>
+		      <m:ci>m</m:ci>
+		    </m:bvar>
+		    <m:uplimit>
+		      <m:infinity/>
+		    </m:uplimit>
+		    <m:lowlimit>
+		      <m:apply>
+			<m:minus/>
+			<m:infinity/>
+		      </m:apply>
+		    </m:lowlimit>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">δ</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>n</m:ci>
+			<m:apply>
+			  <m:times/>
+			  <m:ci>m</m:ci>
+			  <m:ci>N</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>		  
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">S</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+	</para>
+	
+	<exercise id="exer2">
+	  <problem id="idp11234096">
+	    <para id="ex2_p1">
+	      Why does <link target-id="eq14" strength="3"/> equal 
+	      <m:math>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">S</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:math>?
+	    </para>
+	  </problem>
+	  <solution id="idp14350880">
+	    <para id="ex2_sol1">
+	      <m:math>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">S</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:math> is <m:math><m:ci>N</m:ci></m:math>-periodic,
+	      so it has the following <link document="m10496" strength="3">Fourier Series</link>:
+
+	      <equation id="eq15">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:msub>
+		      <m:mi>c</m:mi>
+		      <m:mi>k</m:mi>
+		    </m:msub>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:divide/>
+			<m:cn>1</m:cn>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:int/>
+			<m:bvar>
+			  <m:ci>n</m:ci>
+			</m:bvar>
+			<m:lowlimit>
+			  <m:apply>
+			    <m:minus/>
+			    <m:apply>
+			      <m:divide/>
+			      <m:ci>N</m:ci>
+			      <m:cn>2</m:cn>
+			    </m:apply>
+			  </m:apply>
+			</m:lowlimit>
+			<m:uplimit>			
+			  <m:apply>
+			    <m:divide/>
+			    <m:ci>N</m:ci>
+			    <m:cn>2</m:cn>
+			  </m:apply>
+			</m:uplimit>
+			<m:apply>
+			  <m:times/>
+			  <m:apply>
+			    <m:ci type="fn" class="discrete">δ</m:ci>
+			    <m:ci>n</m:ci>
+			  </m:apply>
+			  <m:apply>
+			    <m:exp/>
+			    <m:apply>
+			      <m:times/>
+			      <m:apply>
+				<m:minus/>
+				<m:imaginaryi/>
+			      </m:apply>
+			      <m:cn>2</m:cn>
+			      <m:pi/>
+			      <m:apply>
+				<m:divide/>
+				<m:ci>k</m:ci>
+				<m:ci>N</m:ci>
+			      </m:apply>
+			      <m:ci>n</m:ci>
+			    </m:apply>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:divide/>
+		      <m:cn>1</m:cn>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </equation>
+
+	      <equation id="eq16">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">S</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar>
+			<m:ci>k</m:ci>
+		      </m:bvar>
+		      <m:uplimit>
+			<m:infinity/>
+		      </m:uplimit>
+		      <m:lowlimit>
+			<m:apply>
+			  <m:minus/>
+			  <m:infinity/>
+			</m:apply>
+		      </m:lowlimit>
+		      <m:apply>
+			<m:exp/>
+			<m:apply>
+			  <m:times/>
+			  <m:apply>
+			    <m:minus/>
+			    <m:imaginaryi/>
+			  </m:apply>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			  <m:apply>
+			    <m:divide/>
+			    <m:ci>k</m:ci>
+			    <m:ci>N</m:ci>
+			  </m:apply>
+			  <m:ci>n</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>		    
+		  </m:apply>
+		</m:math>
+	      </equation>
+
+	      where the DTFT of the exponential in the above equation
+	      is equal to 
+	      <m:math>
+		<m:apply>
+		  <m:ci type="fn">δ</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>ω</m:ci>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+			<m:ci>k</m:ci>
+		      </m:apply>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:math>.
+	    </para>
+	  </solution>
+	</exercise>
+	
+	<para id="p_next">
+	  So, in the time-domain we have (<link target-id="fig10" strength="3"/>):
+	</para>
+	
+	<figure id="fig10">
+	  <media id="idp10957040" alt=""><image src="../../media/sec8_fig10.png" mime-type="image/png"/></media>
+	</figure>
+      
+      </section>
+    </section>
+
+    <section id="sec_last">
+      <title>Connections</title>
+      
+      <figure id="fig11">
+	<media id="idp9151888" alt=""><image src="../../media/sec8_fig11.png" mime-type="image/png"/></media>
+      </figure>
+	
+      <para id="p1_seclast">
+	Combine signals in <link target-id="fig11" strength="3"/> to get
+	signals in <link target-id="fig11b" strength="3"/>.
+      </para>
+
+      <figure id="fig11b">
+	<media id="idp14646528" alt=""><image src="../../media/sec8_fig11b.png" mime-type="image/png"/></media>
+      </figure>
+
+    </section>
+
+  </content>
+</document>

@@ -1,0 +1,929 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  
+  <title>Fast Convolution Using the FFT</title>
+  
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>b52edcaf-d0cf-456c-8ed3-140288d0e487</md:uuid>
+</metadata>
+
+  <content>
+    <section id="sec1">
+      <title>Important Application of the FFT</title>
+      
+      <exercise id="exe1">
+	<problem id="idp9614448">
+	  <para id="exe1para1">
+	    How many complex multiplies and adds are required to
+	    convolve two <m:math><m:ci>N</m:ci></m:math>-pt
+	    sequences?
+	    
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">y</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar><m:ci>m</m:ci></m:bvar>
+		  <m:lowlimit>
+		    <m:cn>0</m:cn>
+		  </m:lowlimit>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:uplimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">x</m:ci>
+		      <m:ci>m</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">h</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>n</m:ci>
+			<m:ci>m</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+
+	  </para>
+	</problem>
+	<solution id="idp10898960">
+	  <para id="exe1para2">
+	    There are 
+	    <m:math>
+	      <m:apply>
+		<m:minus/>
+		<m:apply>
+		  <m:times/>
+		  <m:cn>2</m:cn>
+		  <m:ci>N</m:ci>
+		</m:apply>
+		<m:cn>1</m:cn>
+	      </m:apply>
+	    </m:math> non-zero output points and each will be computed
+	    using <m:math><m:ci>N</m:ci></m:math> complex mults and 
+	    <m:math>
+	      <m:apply>
+		<m:minus/>
+		<m:ci>N</m:ci>
+		<m:cn>1</m:cn>
+	      </m:apply>
+	    </m:math> complex adds.  Therefore, 
+
+	    <m:math display="block">
+	      <m:apply>
+              <m:eq/>
+                <m:mtext>Total Cost</m:mtext>
+                <m:apply>
+		<m:approx/>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:plus/>
+		      <m:ci>N</m:ci>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">O</m:ci>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>N</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+             </m:apply>
+	    </m:math>
+	  </para>
+	</solution>
+      </exercise>
+      
+      <list id="list1" list-type="enumerated">
+	<item>
+	  Zero-pad these two sequences to length 
+	  <m:math>
+	    <m:apply>
+	      <m:minus/>
+	      <m:apply>
+		<m:times/>
+		<m:cn>2</m:cn>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	      <m:cn>1</m:cn>
+	    </m:apply>
+	  </m:math>, take DFTs using the FFT algorithm
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:tendsto/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">x</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">X</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:tendsto/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">h</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">H</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  The cost is 
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">O</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:log/>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn">O</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:ci>N</m:ci>
+		  <m:apply>
+		    <m:log/>
+		    <m:ci>N</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</item>
+	
+	<item>
+	  Multiply DFTs 
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:times/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">X</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">H</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  The cost is 
+	  
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">O</m:ci>
+		<m:apply>
+		  <m:minus/>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:ci>N</m:ci>
+		  </m:apply>
+		  <m:cn>1</m:cn>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn">O</m:ci>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	</item>
+	
+	<item>
+	  Inverse DFT using FFT 
+	  
+	  <m:math display="block">
+	    <m:apply>
+	      <m:tendsto/>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">X</m:ci>
+		  <m:ci>k</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">H</m:ci>
+		  <m:ci>k</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">y</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  The cost is 
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">O</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:log/>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn">O</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:ci>N</m:ci>
+		  <m:apply>
+		    <m:log/>
+		    <m:ci>N</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</item>	  
+      </list>
+      
+      <para id="sec1para1">
+	So the total cost for direct convolution of two
+	<m:math><m:ci>N</m:ci></m:math>-point sequences is
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">O</m:ci>
+	    <m:apply>
+	      <m:power/>
+	      <m:ci>N</m:ci>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:apply>
+	</m:math>.  Total cost for convolution using FFT algorithm is 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">O</m:ci>
+	    <m:apply>
+	      <m:times/>
+	      <m:ci>N</m:ci>
+	      <m:apply>
+		<m:log/>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>. That is a <emphasis>huge savings</emphasis> (<link target-id="figure1" strength="3"/>).
+      </para>
+
+      <figure id="figure1">
+	<media id="idp9666000" alt=""><image src="../../media/figure1-aeb4.png" mime-type="image/png"/></media>
+      </figure>
+
+    </section>
+
+    <section id="sec2">
+      <title>Summary of DFT</title>
+      <list id="list2">
+	<item>
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">x</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math> is an <m:math><m:ci>N</m:ci></m:math>-point signal
+	  (<link target-id="figure2" strength="3"/>).
+	</item>
+      </list>
+      
+      <figure id="figure2">
+	<media id="idp8264544" alt=""><image src="../../media/figure2-aeb4.png" mime-type="image/png"/></media>
+      </figure>
+
+      <list id="list3">
+	<item>
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">X</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar><m:ci>n</m:ci></m:bvar>
+		<m:lowlimit>
+		  <m:cn>0</m:cn>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:exp/>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:apply>
+			  <m:divide/>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>2</m:cn>
+			    <m:pi/>
+			  </m:apply>
+			  <m:ci>N</m:ci>
+			</m:apply>
+			<m:ci>k</m:ci>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar><m:ci>n</m:ci></m:bvar>
+		<m:lowlimit>
+		  <m:cn>0</m:cn>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>
+		      <m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+		    </m:ci>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>k</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  where 
+	  
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>
+		<m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+	      </m:ci>
+	      <m:apply>
+		<m:exp/>
+		<m:apply>
+		  <m:minus/>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> is a "twiddle factor" and the first part is the basic DFT.
+	</item>
+      </list>
+
+      <section id="sub1">
+       <title>What is the DFT</title>
+       <para id="sub1p">
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">X</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">X</m:ci>
+		<m:apply>
+		  <m:eq/>
+		  <m:ci>F</m:ci>
+		  <m:apply>
+		    <m:divide/>
+		    <m:ci>k</m:ci>
+		    <m:ci>N</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar><m:ci>n</m:ci></m:bvar>
+		<m:lowlimit>
+		  <m:cn>0</m:cn>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:exp/>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+			<m:ci>F</m:ci>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  where 
+
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">X</m:ci>
+	      <m:apply>
+		<m:eq/>
+		<m:ci>F</m:ci>
+		<m:apply>
+		  <m:divide/>
+		  <m:ci>k</m:ci>
+		  <m:ci>N</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> is the DTFT of 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">x</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math> and 
+	  <m:math>
+	    <m:apply>
+	      <m:sum/>
+	      <m:bvar><m:ci>n</m:ci></m:bvar>
+	      <m:lowlimit>
+		<m:cn>0</m:cn>
+	      </m:lowlimit>
+	      <m:uplimit>
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>N</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+	      </m:uplimit>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:imaginaryi/>
+		      <m:cn>2</m:cn>
+		      <m:pi/>
+		      <m:ci>F</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> is the DTFT of 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">x</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math> at digital frequency
+	  <m:math><m:ci>F</m:ci></m:math>.  This is a sample of the
+	  DTFT.  We can do frequency domain analysis on a computer!
+	</para>
+     </section>
+
+     <section id="sub2">
+         <title>Inverse DFT (IDFT)</title>
+  <para id="sub2p">
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">x</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:cn>1</m:cn>
+		  <m:ci>N</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar><m:ci>n</m:ci></m:bvar>
+		  <m:lowlimit>
+		    <m:cn>0</m:cn>
+		  </m:lowlimit>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:uplimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">X</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:apply>
+			  <m:divide/>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>2</m:cn>
+			    <m:pi/>
+			  </m:apply>
+			  <m:ci>N</m:ci>
+			</m:apply>
+			<m:ci>k</m:ci>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  <list id="list6">
+	    <item>
+	      Build 
+	      <m:math>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:math> using <emphasis>Simple</emphasis> complex
+	      sinusoidal <emphasis>building block</emphasis> signals
+	    </item>
+	    <item>
+	      Amplitude of each complex sinusoidal building block in 
+	      <m:math>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:math> is 
+	      <m:math>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:cn>1</m:cn>
+		    <m:ci>N</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">X</m:ci>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:math>
+	    </item>
+	  </list>
+     </para>
+    </section>
+
+
+  <section id="sub3bb">
+    <title>Circular Convolution</title>
+	<para id="sub3p">  
+	  <equation id="eq1">
+	    <title>DFT</title>
+	    <m:math display="block">
+	      <m:apply>
+		<m:ci><m:mo>↔</m:mo></m:ci>
+		<m:apply>
+		  <m:xor/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">h</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">X</m:ci>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">H</m:ci>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+</para>
+	</section>
+
+       <section id="sub3">
+        <title>Regular Convolution from Circular Convolution</title>
+	<para id="sub3ap">  
+	  <list id="list9">
+	    <item>
+	      Zero pad 
+	      <m:math>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:math> and 
+	      <m:math>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">h</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:math> to 
+	      <m:math>
+		<m:apply>
+		  <m:eq/>
+		  <m:ci>length</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:plus/>
+		      <m:apply>
+			<m:ci type="fn">length</m:ci>
+			<m:ci>x</m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:ci type="fn">length</m:ci>
+			<m:ci>h</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:math>
+	    </item>
+	    <item>
+	      Zero padding increases frequency resolution in DFT
+	      domain (<link target-id="figure3" strength="3"/>)
+	    </item>
+	  </list>
+	</para>
+
+      <figure id="figure3" orient="horizontal">
+	<subfigure id="figure3-1">
+	  <media id="idp10733472" alt=""><image src="../../media/figure3-1.png" mime-type="image/png"/></media>
+	  <caption>8-pt DFT of 8-pt signal</caption>
+	</subfigure>
+	<subfigure id="figure3-2">
+	  <media id="idp11988016" alt=""><image src="../../media/figure3-2.png" mime-type="image/png"/></media>
+	  <caption>
+	    16-pt DFT of same signal padded with 8 additional zeros</caption>
+	</subfigure>	
+      </figure>
+     </section>
+
+      <section id="sub5">
+       <title>The Fast Fourier Transform (FFT)</title>
+
+	  <list id="list11">
+	    <item>
+	      Efficient computational algorithm for calculating the
+	      DFT
+	    </item>
+	    <item>
+	      "Divide and conquer"
+	    </item>
+	    <item>
+	      Break signal into even and odd samples keep taking
+	      shorter and shorter DFTs, then build
+	      <m:math><m:ci>N</m:ci></m:math>-pt DFT by cleverly
+	      combining shorter DFTs
+	    </item>
+	    <item>
+	      <m:math><m:ci>N</m:ci></m:math>-pt DFT: 
+	      <m:math>
+		<m:apply>
+		  <m:tendsto type="above"/>
+		  <m:apply>
+		    <m:ci type="fn">O</m:ci>
+		    <m:apply>
+		      <m:power/>
+		      <m:ci>N</m:ci>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn">O</m:ci>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>N</m:ci>
+		      <m:apply>
+			<m:log/>
+			<m:logbase>
+			  <m:cn>2</m:cn>
+			</m:logbase>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:math>
+	    </item>
+	  </list>
+	</section>
+
+       <section id="sub6">
+         <title>Fast Convolution</title>
+	  
+	  <list id="list13">
+	    <item>
+	      Use FFT's to compute circular convolution of zero-padded
+	      signals
+	    </item>
+	    <item>
+	      Much faster than regular convolution if signal lengths
+	      are long
+	    </item>
+	    <item>
+	      <m:math>
+		<m:apply>
+		  <m:tendsto type="above"/>
+		  <m:apply>
+		    <m:ci type="fn">O</m:ci>
+		    <m:apply>
+		      <m:power/>
+		      <m:ci>N</m:ci>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn">O</m:ci>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>N</m:ci>
+		      <m:apply>
+			<m:log/>
+			<m:logbase>
+			  <m:cn>2</m:cn>
+			</m:logbase>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:math>  
+	    </item>
+	  </list>
+   <para id="subend">
+	  See <link target-id="figure4" strength="3"/>.
+	</para>
+
+      <figure id="figure4">
+	<media id="idp13701904" alt=""><image src="../../media/figure4.png" mime-type="image/png"/></media>
+      </figure>
+
+      </section>
+    </section>
+
+  </content>
+</document>

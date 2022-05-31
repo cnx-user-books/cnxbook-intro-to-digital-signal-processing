@@ -1,0 +1,88 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:md="http://cnx.rice.edu/mdml">
+    <title>FIR Filter Design using MATLAB</title>
+    <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>02dfc550-5c4a-4763-a840-1f9142fcfe0a</md:uuid>
+</metadata>
+
+
+
+    <content>
+      <section id="sec1">
+	<title>FIR Filter Design Using MATLAB</title>
+	<!-- one of (rule exercise example table figure codeblock list equation para definition section) -->
+	<section id="subsec1">
+	  <title>Design by windowing</title>
+	  <para id="p1">
+	    The MATLAB function <code>fir1()</code> designs
+	    conventional lowpass, highpass, bandpass, and bandstop
+	    linear-phase FIR filters based on the windowing
+	    method. The command
+	  </para>
+	  <code display="block" id="idm695984">
+	    
+	    b = fir1(N,Wn)     
+	    
+	  </code>
+	  <para id="p2">
+	    returns in vector <code>b</code> the impulse response of a
+	    lowpass filter of order <code>N</code>. The cut-off
+	    frequency <code>Wn</code> must be between 0 and 1 with 1
+	    corresponding to the half sampling rate.
+	  </para>
+	  <para id="p3">
+	    The command
+	  </para>
+	  <code display="block" id="idm861520">
+	    
+	    b = fir1(N,Wn,'high')
+	    
+	  </code>
+	  <para id="p4">
+	    returns the impulse response of a highpass filter of order
+	    <code>N</code> with normalized cutoff frequency
+	    <code>Wn</code>.
+	  </para>
+	  <para id="p5">
+	    Similarly, <code>b = fir1(N,Wn,'stop')</code> with
+	    <code>Wn</code> a two-element vector designating the
+	    stopband designs a bandstop filter.
+	  </para>
+	  <para id="p6">
+	    Without explicit specification, the <emphasis>Hamming
+	    window</emphasis> is employed in the design.  Other
+	    windowing functions can be used by specifying the
+	    windowing function as an extra argument of the function.
+	    For example, Blackman window can be used instead by the
+	    command <code>b = fir1(N, Wn, blackman(N))</code>.
+	  </para>
+	</section>
+	<section id="subsec2">
+	  <title>Parks-McClellan FIR filter design</title>
+	  <para id="p7">
+	    The MATLAB command
+	  </para>
+	  <code display="block" id="idm1188768">
+	    
+	    b = remez(N,F,A)
+	    
+	  </code>
+	  <para id="p8">
+	    returns the impulse response of the length <code>N+1</code>
+	    linear phase FIR filter of order <code>N</code> designed
+	    by Parks-McClellan algorithm.  F is a vector of frequency
+	    band edges in ascending order between 0 and 1 with 1
+	    corresponding to the half sampling rate. A is a real
+	    vector of the same size as F which specifies the desired
+	    amplitude of the frequency response of the points
+	    <code>(F(k),A(k))</code> and <code>(F(k+1),A(k+1))</code>
+	    for odd <code>k</code>. For odd <code>k</code>, the bands
+	    between <code>F(k+1)</code> and <code>F(k+2)</code> is
+	    considered as transition bands.
+	  </para>
+	</section>
+      </section>
+      <para id="delete_me">
+	<!-- Insert module text here -->
+      </para>   
+    </content>
+    
+  </document>

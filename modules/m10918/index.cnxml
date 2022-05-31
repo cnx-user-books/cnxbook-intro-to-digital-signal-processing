@@ -1,0 +1,60 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:md="http://cnx.rice.edu/mdml">
+    <title>MATLAB FIR Filter Design Exercise</title>
+    <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>1e29ded2-aa3f-4875-bc9a-5f7e1c2f7190</md:uuid>
+</metadata>
+
+
+
+    <content>
+      <section id="sec1">
+	<title>FIR Filter Design MATLAB Exercise</title>
+
+	<section id="subsec1">
+	  <title>Design by windowing</title>
+	  <exercise id="ex1">
+	    <problem id="idp6482448">
+	      <para id="p1">
+		Assuming sampling rate at 48kHz, design an order-40
+		low-pass filter having cut-off frequency 10kHz by
+		windowing method. In your design, use Hamming window
+		as the windowing function.
+	      </para>
+	    </problem>
+	    <solution id="idp6948512">
+	      <code display="block" id="idm496160">
+		
+		b = fir1(40,10.0/48.0)
+		
+	      </code>
+	    </solution>
+	  </exercise>
+
+	</section>
+	<section id="subsec2">
+	  <title>Parks-McClellan Optimal Design</title>
+	  <exercise id="ex2">
+	    <problem id="idp8250784">
+	      <para id="p2">
+		Assuming sampling rate at 48kHz, design an order-40
+		lowpass filter having transition band 10kHz-11kHz
+		using the Parks-McClellan optimal FIR filter design
+		algorithm.
+	      </para>
+	    </problem>
+	    <solution id="idm1228688">
+	      <code display="block" id="idp8317536">
+		
+		b = remez(40,[1 1 0 0],[0 10/48 11/48 1])
+		
+	      </code>
+	    </solution>
+	  </exercise>
+	</section>
+      </section>
+
+      <para id="delete_me">
+	<!-- Insert module text here -->
+      </para>   
+    </content>
+    
+  </document>

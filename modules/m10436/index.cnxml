@@ -1,0 +1,651 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  
+  <title>Discrete Wavelet Transform:  Main Concepts</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>555ca956-6056-4832-83ea-b3019ab1adeb</md:uuid>
+</metadata>
+
+
+  <content>
+    <section id="intro">
+      <title>Main Concepts</title>
+      <para id="p1">
+	The <term>discrete wavelet transform</term> (DWT) is a
+	representation of a signal
+	<m:math>
+	  <m:apply>
+	    <m:in/>
+	    <m:apply>
+	      <m:ci type="fn">x</m:ci>
+	      <m:ci>t</m:ci>
+	    </m:apply>
+	    <m:ci type="set"><m:msub>
+		<m:mi>ℒ</m:mi>
+		<m:mn>2</m:mn>
+	      </m:msub></m:ci>
+	  </m:apply>
+	</m:math> using an orthonormal basis consisting of a
+	countably-infinite set of <term>wavelets</term>.  Denoting the
+	wavelet basis as 
+	<m:math>
+	  <m:set>
+	    <m:bvar>
+	      <m:apply>
+		<m:ci type="fn"><m:msub>
+		    <m:mi>ψ</m:mi>
+		    <m:mrow>
+		      <m:mi>k</m:mi>
+		      <m:mo>,</m:mo>
+		      <m:mi>n</m:mi>
+		    </m:mrow>
+		  </m:msub></m:ci>
+		<m:ci>t</m:ci>
+	      </m:apply>
+	    </m:bvar>
+	    <m:condition>
+	      <m:apply>
+		<m:and/>
+		<m:apply>
+		  <m:in/>
+		  <m:ci>k</m:ci>
+		  <m:integers/>
+		</m:apply>
+		<m:apply>
+		  <m:in/>
+		  <m:ci>n</m:ci>
+		  <m:integers/>
+		</m:apply>
+	      </m:apply>
+	    </m:condition>
+	  </m:set>
+	</m:math>, the DWT transform pair is
+
+	<equation id="DWTex">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">x</m:ci>
+		<m:ci>t</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar><m:ci>k</m:ci></m:bvar>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar><m:ci>n</m:ci></m:bvar>
+		  <m:lowlimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:infinity/>
+		    </m:apply>
+		  </m:lowlimit>
+		  <m:uplimit>
+		    <m:infinity/>
+		  </m:uplimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:ci><m:msub>
+			<m:mi>d</m:mi>
+			<m:mrow>
+			  <m:mi>k</m:mi>
+			  <m:mo>,</m:mo>
+			  <m:mi>n</m:mi>
+			</m:mrow>
+		      </m:msub></m:ci>
+		    <m:apply>
+		      <m:ci type="fn"><m:msub>
+			  <m:mi>ψ</m:mi>
+			  <m:mrow>
+			    <m:mi>k</m:mi>
+			    <m:mo>,</m:mo>
+			    <m:mi>n</m:mi>
+			  </m:mrow>
+			</m:msub></m:ci>
+		      <m:ci>t</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	<equation id="defofd">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci><m:msub>
+		  <m:mi>d</m:mi>
+		  <m:mrow>
+		    <m:mi>k</m:mi>
+		    <m:mo>,</m:mo>
+		    <m:mi>n</m:mi>
+		  </m:mrow>
+		</m:msub></m:ci>
+	      <m:apply>
+		<m:scalarproduct/>
+		<m:apply>
+		  <m:ci type="fn"><m:msub>
+		      <m:mi>ψ</m:mi>
+		      <m:mrow>
+			<m:mi>k</m:mi>
+			<m:mo>,</m:mo>
+			<m:mi>n</m:mi>
+		      </m:mrow>
+		    </m:msub></m:ci>
+		  <m:ci>t</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">x</m:ci>
+		  <m:ci>t</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:int/>
+		<m:bvar><m:ci>t</m:ci></m:bvar>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:conjugate/>
+		    <m:apply>
+		      <m:ci type="fn"><m:msub>
+			  <m:mi>ψ</m:mi>
+			  <m:mrow>
+			    <m:mi>k</m:mi>
+			    <m:mo>,</m:mo>
+			    <m:mi>n</m:mi>
+			  </m:mrow>
+			</m:msub></m:ci>
+		      <m:ci>t</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn">x</m:ci>
+		    <m:ci>t</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	where
+	<m:math>
+	  <m:set>
+	    <m:ci><m:msub>
+		<m:mi>d</m:mi>
+		<m:mrow>
+		  <m:mi>k</m:mi>
+		  <m:mo>,</m:mo>
+		  <m:mi>n</m:mi>
+		</m:mrow>
+	      </m:msub></m:ci>
+	  </m:set>
+	</m:math> are the wavelet coefficients.  Note the relationship
+	to Fourier series and to the sampling theorem: in both cases
+	we can perfectly describe a continuous-time signal
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">x</m:ci>
+	    <m:ci>t</m:ci>
+	  </m:apply>
+	</m:math> using a countably-infinite (<foreign>i.e.</foreign>,
+	discrete) set of coefficients.  Specifically, Fourier series
+	enabled us to describe <term>periodic</term> signals using
+	Fourier coefficients
+	<m:math>
+	  <m:set>
+	    <m:bvar>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">X</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	    </m:bvar>
+	    <m:condition>
+	      <m:apply>
+		<m:in/>
+		<m:ci>k</m:ci>
+		<m:integers/>
+	      </m:apply>
+	    </m:condition>
+	  </m:set>
+	</m:math>, while the sampling theorem enabled us to describe
+	<term>bandlimited</term> signals using signal samples
+	<m:math>
+	  <m:set>
+	    <m:bvar>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">x</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:bvar>
+	    <m:condition>
+	      <m:apply>
+		<m:in/>
+		<m:ci>n</m:ci>
+		<m:integers/>
+	      </m:apply>
+	    </m:condition>
+	  </m:set>
+	</m:math>.  In both cases, signals within a limited class are
+	represented using a coefficient set with a single countable
+	index.  The DWT can describe <emphasis>any</emphasis> signal
+	in 
+	<m:math>
+	  <m:ci type="set"><m:msub> 
+	      <m:mi>ℒ</m:mi> 
+	      <m:mn>2</m:mn>
+	    </m:msub></m:ci> 
+	</m:math>
+	using a coefficient set parameterized by two countable
+	indices:
+	<m:math>
+	  <m:set>
+	    <m:bvar>
+	      <m:ci><m:msub>
+		  <m:mi>d</m:mi>
+		  <m:mrow>
+		    <m:mi>k</m:mi>
+		    <m:mo>,</m:mo>
+		    <m:mi>n</m:mi>
+		  </m:mrow>
+		</m:msub></m:ci>
+	    </m:bvar>
+	    <m:condition>
+	      <m:apply>
+		<m:and/>
+		<m:apply>
+		  <m:in/>
+		  <m:ci>k</m:ci>
+		  <m:integers/>
+		</m:apply>
+		<m:apply>
+		  <m:in/>
+		  <m:ci>n</m:ci>
+		  <m:integers/>
+		</m:apply>
+	      </m:apply>
+	    </m:condition>
+	  </m:set>
+	</m:math>.
+      </para>
+
+      <para id="wavelet">
+	<term>Wavelets</term> are orthonormal functions in 
+	<m:math>
+	  <m:ci type="set"><m:msub> 
+	      <m:mi>ℒ</m:mi> 
+	      <m:mn>2</m:mn>
+	    </m:msub></m:ci> 
+	</m:math>
+	obtained by shifting and stretching a <term>mother
+	wavelet</term>,
+	<m:math>
+	  <m:apply>
+	    <m:in/>
+	    <m:apply>
+	      <m:ci type="fn">ψ</m:ci>
+	      <m:ci>t</m:ci>
+	    </m:apply>
+	    <m:ci type="set"><m:msub> 
+		<m:mi>ℒ</m:mi> 
+		<m:mn>2</m:mn>
+	      </m:msub></m:ci>
+	  </m:apply>
+	</m:math>.  For example,
+
+	<equation id="waveletex">
+	  <m:math>
+	    <m:apply>
+	      <m:forall/>
+	      <m:bvar><m:ci>k</m:ci></m:bvar>
+	      <m:bvar><m:ci>n</m:ci></m:bvar>
+	      <m:condition>
+		<m:apply>
+		  <m:in/>
+		  <m:apply>
+		    <m:and/>
+		    <m:ci>k</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		  <m:integers/>
+		</m:apply>
+	      </m:condition>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn"><m:msub>
+		      <m:mi>ψ</m:mi>
+		      <m:mrow>
+			<m:mi>k</m:mi>
+			<m:mo>,</m:mo>
+			<m:mi>n</m:mi>
+		      </m:mrow>
+		    </m:msub></m:ci>
+		  <m:ci>t</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:power/>
+		    <m:cn>2</m:cn>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:divide/>
+			<m:ci>k</m:ci>
+			<m:cn>2</m:cn>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn">ψ</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:power/>
+			  <m:cn>2</m:cn>
+			  <m:apply>
+			    <m:minus/>
+			    <m:ci>k</m:ci>
+			  </m:apply>
+			</m:apply>
+			<m:ci>t</m:ci>
+		      </m:apply>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+	defines a family of wavelets
+	<m:math>
+	  <m:set>
+	    <m:bvar>
+	      <m:apply>
+		<m:ci type="fn"><m:msub>
+		    <m:mi>ψ</m:mi>
+		    <m:mrow>
+		      <m:mi>k</m:mi>
+		      <m:mo>,</m:mo>
+		      <m:mi>n</m:mi>
+		    </m:mrow>
+		  </m:msub></m:ci>
+		<m:ci>t</m:ci>
+	      </m:apply>
+	    </m:bvar>
+	    <m:condition>
+	      <m:apply>
+		<m:and/>
+		<m:apply>
+		  <m:in/>
+		  <m:ci>k</m:ci>
+		  <m:integers/>
+		</m:apply>
+		<m:apply>
+		  <m:in/>
+		  <m:ci>n</m:ci>
+		  <m:integers/>
+		</m:apply>
+	      </m:apply>
+	    </m:condition>
+	  </m:set>
+	</m:math>
+	related by power-of-two stretches.  As
+	<m:math><m:ci>k</m:ci></m:math> increases, the wavelet
+	stretches by a factor of two; as
+	<m:math><m:ci>n</m:ci></m:math> increases, the wavelet shifts
+	right.
+
+	<note type="note" id="idp1805344">
+	  When  
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#norm"/>
+		<m:apply>
+		  <m:ci type="fn">ψ</m:ci>
+		  <m:ci>t</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:cn>1</m:cn>
+	    </m:apply>
+	  </m:math>, the normalization ensures that 
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#norm"/>
+		<m:apply>
+		  <m:ci type="fn"><m:msub>
+		      <m:mi>ψ</m:mi>
+		      <m:mrow>
+			<m:mi>k</m:mi>
+			<m:mo>,</m:mo>
+			<m:mi>n</m:mi>
+		      </m:mrow>
+		    </m:msub></m:ci>
+		  <m:ci>t</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:cn>1</m:cn>
+	    </m:apply>
+	  </m:math> for all
+	  <m:math>
+	    <m:apply>
+	      <m:in/>
+	      <m:ci>k</m:ci>
+	      <m:integers/>
+	    </m:apply>
+	  </m:math>, 
+	  <m:math>
+	    <m:apply>
+	      <m:in/>
+	      <m:ci>n</m:ci>
+	      <m:integers/>
+	    </m:apply>
+	  </m:math>.
+	</note>
+	Power-of-two stretching is a convenient, though somewhat
+	arbitrary, choice.  In our treatment of the discrete wavelet
+	transform, however, we will focus on this choice.  Even with
+	power-of two stretches, there are various possibilities for
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">ψ</m:ci>
+	    <m:ci>t</m:ci>
+	  </m:apply>
+	</m:math>, each giving a different flavor of DWT.
+      </para>
+
+      <para id="p3">
+	Wavelets are constructed so that 
+	<m:math>
+	  <m:set>
+	    <m:bvar>
+	      <m:apply>
+		<m:ci type="fn"><m:msub>
+		    <m:mi>ψ</m:mi>
+		    <m:mrow>
+		      <m:mi>k</m:mi>
+		      <m:mo>,</m:mo>
+		      <m:mi>n</m:mi>
+		    </m:mrow>
+		  </m:msub></m:ci>
+		<m:ci>t</m:ci>
+	      </m:apply>
+	    </m:bvar>
+	    <m:condition>
+	      <m:apply>
+		<m:in/>
+		<m:ci>n</m:ci>
+		<m:integers/>
+	      </m:apply>
+	    </m:condition>
+	  </m:set>
+	</m:math> (<foreign>i.e.</foreign>, the set of all shifted
+	wavelets at fixed scale <m:math><m:ci>k</m:ci></m:math>),
+	describes a particular level of 'detail' in the signal.  As
+	<m:math><m:ci>k</m:ci></m:math> becomes smaller
+	(<foreign>i.e.</foreign>, closer to
+	<m:math>
+	  <m:apply>
+	    <m:minus/>
+	    <m:infinity/>
+	  </m:apply>
+	</m:math>), the wavelets become more "fine grained" and the
+	level of detail increases.  In this way, the DWT can give a
+	<term>multi-resolution</term> description of a signal, very
+	useful in analyzing "real-world" signals.  Essentially, the
+	DWT gives us a <emphasis>discrete multi-resolution description
+	of a continuous-time signal in</emphasis>
+	<m:math>
+	  <m:ci type="set"><m:msub> 
+	      <m:mi>ℒ</m:mi> 
+	      <m:mn>2</m:mn>
+	    </m:msub></m:ci>
+	</m:math>.
+      </para>
+
+      <para id="p4">
+	In the modules that follow, these DWT concepts will be
+	developed "from scratch" using Hilbert space principles.  To
+	aid the development, we make use of the so-called
+	<term>scaling function</term> 
+	<m:math>
+	  <m:apply>
+	    <m:in/>
+	    <m:apply>
+	      <m:ci type="fn">φ</m:ci>
+	      <m:ci>t</m:ci>
+	    </m:apply>
+	    <m:ci type="set"><m:msub> 
+		<m:mi>ℒ</m:mi> 
+		<m:mn>2</m:mn>
+	      </m:msub></m:ci>
+	  </m:apply>
+	</m:math>, which will be used to approximate the signal
+	<emphasis>up to a particular level of detail</emphasis>.  Like
+	with wavelets, a family of scaling functions can be
+	constructed via shifts and power-of-two stretches
+
+	<equation id="scalingfn">
+	  <m:math>
+	    <m:apply>
+	      <m:forall/>
+	      <m:bvar><m:ci>k</m:ci></m:bvar>
+	      <m:bvar><m:ci>n</m:ci></m:bvar>
+	      <m:condition>
+		<m:apply>
+		  <m:in/>
+		  <m:apply>
+		    <m:and/>
+		    <m:ci>k</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		  <m:integers/>
+		</m:apply>
+	      </m:condition>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn"><m:msub>
+		      <m:mi>φ</m:mi>
+		      <m:mrow>
+			<m:mi>k</m:mi>
+			<m:mo>,</m:mo>
+			<m:mi>n</m:mi>
+		      </m:mrow>
+		    </m:msub></m:ci>
+		  <m:ci>t</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:power/>
+		    <m:cn>2</m:cn>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:divide/>
+			<m:ci>k</m:ci>
+			<m:cn>2</m:cn>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn">φ</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:power/>
+			  <m:cn>2</m:cn>
+			  <m:apply>
+			    <m:minus/>
+			    <m:ci>k</m:ci>
+			  </m:apply>
+			</m:apply>
+			<m:ci>t</m:ci>
+		      </m:apply>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+	given mother scaling function 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">φ</m:ci>
+	    <m:ci>t</m:ci>
+	  </m:apply>
+	</m:math>.  The relationships between wavelets and scaling
+	functions will be elaborated upon later via <link document="m10476" strength="3">theory</link> and
+	<link document="m10437" strength="3">example</link>.
+	<note type="note" id="idp565136">
+	  The inner-product expression for
+	  <m:math>
+	    <m:ci><m:msub>
+		<m:mi>d</m:mi>
+		<m:mrow>
+		  <m:mi>k</m:mi>
+		  <m:mo>,</m:mo>
+		  <m:mi>n</m:mi>
+		</m:mrow>
+	      </m:msub></m:ci> </m:math>, <link target-id="defofd" strength="3"/> is written for the general complex-valued
+	  case.  In our treatment of the discrete wavelet transform,
+	  however, we will assume real-valued signals and wavelets.
+	  For this reason, we omit the complex conjugations in the
+	  remainder of our DWT discussions</note>
+      </para>
+
+    </section>
+  </content>
+</document>

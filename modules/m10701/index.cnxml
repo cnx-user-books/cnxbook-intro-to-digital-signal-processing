@@ -1,0 +1,1008 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+
+  <title>Design of Linear-Phase FIR Filters by DFT-Based Interpolation</title>
+
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>5dd330e1-a78e-4a1c-bb8b-e9f5092b72d2</md:uuid>
+</metadata>
+
+  <content>
+    <section id="dft">
+      <title>
+	DESIGN OF FIR FILTERS BY DFT-BASED INTERPOLATION
+      </title>
+    <para id="dftinterpolation">
+	One approach to the design of FIR filters is to ask that
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">A</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math> pass through a specified set of values.  If the
+	number of specified interpolation points is the same as the
+	number of filter parameters, then the filter is totally
+	determined by the interpolation conditions, and the filter can
+	be found by solving a system of linear equations.  When the
+	interpolation points are equally spaced between 0 and
+	<m:math>
+	  <m:apply>
+	    <m:times/>
+	    <m:cn>2</m:cn>
+	    <m:pi/>
+	  </m:apply>
+	</m:math>, then this interpolation problem can be solved very
+	efficiently using the DFT.
+      </para>
+      
+      <para id="para2">
+	To derive the DFT solution to the interpolation problem, recall
+	the formula relating the samples of the frequency response to
+	the DFT.  In the case we are interested here, the number of
+	samples is to be the <emphasis>same</emphasis> as the length of
+	the filter (
+	<m:math>
+	  <m:apply>
+	  <m:eq/>
+	    <m:ci>L</m:ci>
+	    <m:ci>N</m:ci>
+	  </m:apply>
+	</m:math>).  
+	
+	<equation id="eqn1">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">H</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		    <m:ci>N</m:ci>
+		  </m:apply>
+		  <m:ci>k</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+	      <m:sum/>
+		<m:bvar><m:ci>n</m:ci></m:bvar>
+		<m:lowlimit><m:cn>0</m:cn></m:lowlimit>
+		<m:uplimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn">h</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:exp/>
+		    <m:apply>
+		      <m:times/>
+		      <m:imaginaryi/>
+		      <m:apply>
+			<m:divide/>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			</m:apply>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:ci>n</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn"><m:msub>
+		    <m:mi>DFT</m:mi>
+		    <m:mi>N</m:mi>
+		</m:msub></m:ci>
+		<m:apply>
+		  <m:ci type="fn">h</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+      </para>
+
+      <section id="subsec1">
+	<title>Types I and II</title>
+	<para id="type12">
+	  Recall the relation between 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">A</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math> and
+
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn"><m:msup>
+		  <m:mi>H</m:mi>
+		  <m:mi>f</m:mi>
+		</m:msup></m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math> for a Type I and II filter, to obtain
+
+	  <equation id="eqn2">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn">A</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn">H</m:ci>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:divide/>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			</m:apply>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:exp/>
+		    <m:apply>
+		      <m:times/>
+		      <m:imaginaryi/>
+		      <m:ci>M</m:ci>
+		      <m:apply>
+			<m:divide/>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			</m:apply>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn"><m:msub>
+			<m:mi>DFT</m:mi>
+			<m:mi>N</m:mi>
+		      </m:msub></m:ci>
+		    <m:apply>
+		      <m:ci type="fn">h</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:ci><m:msubsup>
+		      <m:mi>W</m:mi>
+		      <m:mi>N</m:mi>
+		      <m:mrow>
+			<m:mi>M</m:mi>
+			<m:mi>k</m:mi>
+		      </m:mrow>
+		    </m:msubsup></m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+
+	  Now we can related the <m:math><m:ci>N</m:ci></m:math>-point
+	  DFT of
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">h</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math> to the samples of
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">A</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math>:
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn"><m:msub>
+		    <m:mi>DFT</m:mi>
+		    <m:mi>N</m:mi>
+		  </m:msub></m:ci>
+		<m:apply>
+		  <m:ci type="fn">h</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn">A</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:ci><m:msubsup>
+		    <m:mi>W</m:mi>
+		    <m:mi>N</m:mi>
+		    <m:mrow>
+		      <m:mo>−</m:mo>
+		      <m:mi>M</m:mi>
+		      <m:mi>k</m:mi>
+		    </m:mrow>
+		  </m:msubsup></m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  Finally, we can solve for the filter coefficients 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">h</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math>.  
+
+	  <equation id="eqn3">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn">h</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:apply>
+		    <m:inverse/>
+		    <m:ci type="fn"><m:msub>
+			<m:mi>DFT</m:mi>
+			<m:mi>N</m:mi>
+		      </m:msub></m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:divide/>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>2</m:cn>
+			    <m:pi/>
+			  </m:apply>
+			  <m:ci>N</m:ci>
+			</m:apply>
+			<m:ci>k</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:ci><m:msubsup>
+			<m:mi>W</m:mi>
+			<m:mi>N</m:mi>
+			<m:mrow>
+			  <m:mo>−</m:mo>
+			  <m:mi>M</m:mi>
+			  <m:mi>k</m:mi>
+			</m:mrow>
+			</m:msubsup></m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+	  
+	  Therefore, if the values 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">A</m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:pi/>
+		  </m:apply>
+		  <m:ci>N</m:ci>
+		</m:apply>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>are specified, we can then obtain the filter
+	  coefficients 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">h</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math>that satisfies the interpolation conditions by
+	  using the inverse DFT.  It is important to note however,
+	  that the specified values
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">A</m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:pi/>
+		  </m:apply>
+		  <m:ci>N</m:ci>
+		</m:apply>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>must possess the appropriate symmetry in order for
+	  the result of the inverse DFT to be a real Type I or II FIR
+	  filter.
+	</para>
+      </section>
+
+      <section id="subsec2">
+	<title>Types III and IV</title>
+	<para id="type34">
+	  For Type III and IV filters, we have
+
+	  <equation id="eqn4">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn">A</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:minus/>
+		    <m:imaginaryi/>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn">H</m:ci>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:divide/>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			</m:apply>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:exp/>
+		    <m:apply>
+		      <m:times/>
+		      <m:imaginaryi/>
+		      <m:ci>M</m:ci>
+		      <m:apply>
+			<m:divide/>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			</m:apply>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:minus/>
+		    <m:imaginaryi/>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn"><m:msub>
+			<m:mi>DFT</m:mi>
+			<m:mi>N</m:mi>
+		      </m:msub></m:ci>
+		    <m:apply>
+		      <m:ci type="fn">h</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:ci><m:msubsup>
+		      <m:mi>W</m:mi>
+		      <m:mi>N</m:mi>
+		      <m:mrow>
+			<m:mi>M</m:mi>
+			<m:mi>k</m:mi>
+		      </m:mrow>
+		    </m:msubsup></m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+
+	  Then we can related the
+	  <m:math><m:ci>N</m:ci></m:math>-point DFT of
+
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">h</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math> to the samples of
+
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">A</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math>:
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn"><m:msub>
+		    <m:mi>DFT</m:mi>
+		    <m:mi>N</m:mi>
+		  </m:msub></m:ci>
+		<m:apply>
+		  <m:ci type="fn">h</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:imaginaryi/>
+		<m:apply>
+		  <m:ci type="fn">A</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:ci><m:msubsup>
+		    <m:mi>W</m:mi>
+		    <m:mi>N</m:mi>
+		    <m:mrow>
+		      <m:mi>M</m:mi>
+		      <m:mi>k</m:mi>
+		    </m:mrow>
+		  </m:msubsup></m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  Solving for the filter coefficients
+
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">h</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math> gives: 
+
+	  <equation id="eqn5">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn">h</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:apply>
+		    <m:inverse/>
+		    <m:ci type="fn"><m:msub>
+			<m:mi>DFT</m:mi>
+			<m:mi>N</m:mi>
+		      </m:msub></m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:divide/>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>2</m:cn>
+			    <m:pi/>
+			  </m:apply>
+			  <m:ci>N</m:ci>
+			</m:apply>
+			<m:ci>k</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:ci><m:msubsup>
+			<m:mi>W</m:mi>
+			<m:mi>N</m:mi>
+			<m:mrow>
+			  <m:mo>−</m:mo>
+			  <m:mi>M</m:mi>
+			  <m:mi>k</m:mi>
+			</m:mrow>
+			</m:msubsup></m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+	</para>
+      </section>
+    </section>
+
+    <section id="dftinterpexamples">
+      <title>EXAMPLE: DFT-INTERPOLATION (TYPE I)</title>
+      <para id="extype1">
+	The following Matlab code fragment illustrates how to use this
+	approach to design a length 11 Type I FIR filter for which 
+	<m:math display="inline">
+	  <m:apply>
+	    <m:forall/>
+	    <m:bvar><m:ci>k</m:ci></m:bvar>
+	    <m:condition>
+	      <m:apply>
+		<m:and/>
+		<m:apply>
+		  <m:leq/>
+		  <m:cn>0</m:cn>
+		  <m:ci>k</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:eq/>
+		  <m:ci>N</m:ci>
+		  <m:cn>11</m:cn>
+		</m:apply>
+	      </m:apply>
+	    </m:condition>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">A</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		    <m:ci>N</m:ci>
+		  </m:apply>
+		  <m:ci>k</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:vector>
+		<m:cn>1</m:cn>
+		<m:cn>1</m:cn>
+		<m:cn>1</m:cn>
+		<m:cn>0</m:cn>
+		<m:cn>0</m:cn>
+		<m:cn>0</m:cn>
+		<m:cn>0</m:cn>
+		<m:cn>0</m:cn>
+		<m:cn>0</m:cn>
+		<m:cn>1</m:cn>
+		<m:cn>1</m:cn>
+	      </m:vector>
+	    </m:apply>
+	  </m:apply>
+	</m:math>.
+      </para>
+
+      <code display="block" id="idm8374048">
+
+	&gt;&gt; N = 11;
+	&gt;&gt; M = (N-1)/2;
+	&gt;&gt; Ak = [1 1 1 0 0 0 0 0 0 1 1};   % samples of A(w)
+	&gt;&gt; k = 0:N-1;
+	&gt;&gt; W = exp(j*2*pi/N);
+	&gt;&gt; h = ifft(Ak.*W.^(-M*k));
+	&gt;&gt; h'
+
+	ans = 
+
+	   0.0694 - 0.0000i
+	  -0.0540 - 0.0000i
+	  -0.1094 + 0.0000i
+	   0.0474 + 0.0000i
+	   0.3194 + 0.0000i
+	   0.4545 + 0.0000i
+	   0.3194 + 0.0000i
+	   0.0474 + 0.0000i
+	  -0.1094 + 0.0000i
+	  -0.0540 - 0.0000i
+	   0.0694 - 0.0000i
+
+      </code>
+
+      <para id="extype1b">
+	Observe that the filter coefficients <code>h</code>
+	are real and symmetric; that a Type I filter is obtained as
+	desired.  The plot of
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">A</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math> for this filter illustrates the interpolation
+	points.
+      </para>
+
+      <code display="block" id="idm8457504">
+
+	L = 512;
+	H = fft([h zeros(1,L-N)]);
+	W = exp(j*2*pi/L);
+	k = 0:L-1;
+	A = H .* W.^(M*k);
+	A = real(A);
+	w = k*2*pi/L;
+	plot(w/pi,A,2*[0:N-1]/N,Ak,'o')
+	xlabel('\omega/\pi')
+	title('A(\omega)')
+
+      </code>
+
+      <figure id="figtype1">
+	<media id="idp186880" alt=""><image src="../../media/inter1.png" mime-type="image/png"/></media>
+      </figure>
+
+      <para id="extype1c">
+	An exercise for the student: develop this DFT-based
+	interpolation approach for Type II, III, and IV FIR filters.
+	Modify the Matlab code above for each case.
+      </para>
+    </section>
+
+    <section id="summarydft">
+      <title>SUMMARY: IMPULSE AND AMP RESPONSE</title>
+      <para id="summary">
+	For an <m:math><m:ci>N</m:ci></m:math>-point linear-phase FIR
+	filter
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">h</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math>, we summarize: 
+
+	<list id="sum" list-type="enumerated">
+	  <item>
+	    The formulas for evaluating the amplitude response
+
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn">A</m:ci>
+		<m:ci>ω</m:ci>
+	      </m:apply>
+	    </m:math> at <m:math><m:ci>L</m:ci></m:math> equally
+	    spaced points from 0 to 
+	    <m:math>
+	      <m:apply>
+		<m:times/>
+		<m:cn>2</m:cn>
+		<m:pi/>
+	      </m:apply>
+	    </m:math> (
+	    <m:math>
+	      <m:apply>
+		<m:geq/>
+		<m:ci>L</m:ci>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	    </m:math>).
+	  </item>
+	  <item>
+	    The formulas for the DFT-based interpolation design of 
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn">h</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:math>.
+	  </item>
+	</list>
+
+	TYPE I and II:
+	<equation id="eqn1-2">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">A</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		    <m:ci>L</m:ci>
+		  </m:apply>
+		  <m:ci>k</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn"><m:msub>
+		      <m:mi>DFT</m:mi>
+		      <m:mi>L</m:mi>
+		    </m:msub></m:ci>
+		  <m:list>
+		    <m:apply>
+		      <m:ci type="fn">h</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		    <m:ci><m:msub>
+			<m:mn>0</m:mn>
+			<m:mrow>
+			  <m:mi>L</m:mi>
+			  <m:mo>-</m:mo>
+			  <m:mi>N</m:mi>
+			</m:mrow>
+		      </m:msub></m:ci>
+		  </m:list>
+		</m:apply>
+		<m:ci><m:msubsup>
+		    <m:mi>W</m:mi>
+		    <m:mi>L</m:mi>
+		    <m:mrow>
+		      <m:mi>M</m:mi>
+		      <m:mi>k</m:mi>
+		    </m:mrow>
+		  </m:msubsup></m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	<equation id="eqn1-2b">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">h</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:apply>
+		  <m:inverse/>
+		  <m:ci type="fn"><m:msub>
+		      <m:mi>DFT</m:mi>
+		      <m:mi>N</m:mi>
+		    </m:msub></m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn">A</m:ci>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:divide/>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			</m:apply>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:ci><m:msubsup>
+		      <m:mi>W</m:mi>
+		      <m:mi>N</m:mi>
+		      <m:mrow>
+			<m:mo>−</m:mo>
+			<m:mi>M</m:mi>
+			<m:mi>k</m:mi>
+		      </m:mrow>
+		    </m:msubsup></m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	TYPE III and IV:
+
+	<equation id="eqn3-4">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">A</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		    <m:ci>L</m:ci>
+		  </m:apply>
+		  <m:ci>k</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:minus/>
+		  <m:imaginaryi/>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn"><m:msub>
+		      <m:mi>DFT</m:mi>
+		      <m:mi>L</m:mi>
+		    </m:msub></m:ci>
+		  <m:list>
+		    <m:apply>
+		      <m:ci type="fn">h</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		    <m:ci><m:msub>
+			<m:mn>0</m:mn>
+			<m:mrow>
+			  <m:mi>L</m:mi>
+			  <m:mo>-</m:mo>
+			  <m:mi>N</m:mi>
+			</m:mrow>
+		      </m:msub></m:ci>
+		  </m:list>
+		</m:apply>
+		<m:ci><m:msubsup>
+		    <m:mi>W</m:mi>
+		    <m:mi>L</m:mi>
+		    <m:mrow>
+		      <m:mi>M</m:mi>
+		      <m:mi>k</m:mi>
+		    </m:mrow>
+		  </m:msubsup></m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	<equation id="eqn3-4b">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">h</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:apply>
+		  <m:inverse/>
+		  <m:ci type="fn"><m:msub>
+		      <m:mi>DFT</m:mi>
+		      <m:mi>N</m:mi>
+		    </m:msub></m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:imaginaryi/>
+		  <m:apply>
+		    <m:ci type="fn">A</m:ci>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:divide/>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			</m:apply>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:ci><m:msubsup>
+		      <m:mi>W</m:mi>
+		      <m:mi>N</m:mi>
+		      <m:mrow>
+			<m:mo>−</m:mo>
+			<m:mi>M</m:mi>
+			<m:mi>k</m:mi>
+		      </m:mrow>
+		    </m:msubsup></m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+      </para>
+    </section>
+  </content>
+</document>

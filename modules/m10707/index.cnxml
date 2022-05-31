@@ -1,0 +1,1687 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+
+  <title>Linear-Phase FIR Filters: Amplitude Formulas</title>
+
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>6e56eb1f-df70-430a-831f-4ae6e641623d</md:uuid>
+</metadata>
+
+  <content>
+    <section id="summary">
+      <title>SUMMARY: AMPLITUDE FORMULAS</title>
+      <table frame="all" id="sumtable" summary="">
+	<tgroup cols="3" align="center" colsep="1" rowsep="1">
+	  <thead>
+	    <row>
+	      <entry>Type</entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:ci type="fn">θ</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:ci type="fn">A</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	  </thead>
+	  <tbody valign="top">
+	    <row>
+	      <entry>I</entry>
+	      <entry>
+		  <m:math>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>M</m:ci>
+		      <m:ci>ω</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:plus/>
+		    <m:apply>
+		      <m:ci type="fn">h</m:ci>
+		      <m:ci>M</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:apply>
+			<m:sum/>
+			<m:bvar><m:ci>n</m:ci></m:bvar>
+			<m:lowlimit><m:cn>0</m:cn></m:lowlimit>
+			<m:uplimit>
+			  <m:apply>
+			    <m:minus/>
+			    <m:ci>M</m:ci>
+			    <m:cn>1</m:cn>
+			  </m:apply>
+			</m:uplimit>
+			<m:apply>
+			  <m:times/>
+			  <m:apply>
+			    <m:ci type="fn">h</m:ci>
+			    <m:ci>n</m:ci>
+			  </m:apply>
+			  <m:apply>
+			    <m:cos/>
+			    <m:apply>
+			      <m:times/>
+			      <m:apply>
+				<m:minus/>
+				<m:ci>M</m:ci>
+				<m:ci>n</m:ci>
+			      </m:apply>
+			      <m:ci>ω</m:ci>
+			    </m:apply>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	    <row>
+	      <entry>II</entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>M</m:ci>
+		      <m:ci>ω</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  </m:math>
+	      </entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar><m:ci>n</m:ci></m:bvar>
+		      <m:lowlimit><m:cn>0</m:cn></m:lowlimit>
+		      <m:uplimit>
+			<m:apply>
+			  <m:minus/>
+			  <m:apply>
+			    <m:divide/>
+			    <m:ci>N</m:ci>
+			    <m:cn>2</m:cn>
+			  </m:apply>
+			  <m:cn>1</m:cn>
+			</m:apply>
+		      </m:uplimit>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:ci type="fn">h</m:ci>
+			  <m:ci>n</m:ci>
+			</m:apply>
+			<m:apply>
+			  <m:cos/>
+			  <m:apply>
+			    <m:times/>
+			    <m:apply>
+			      <m:minus/>
+			      <m:ci>M</m:ci>
+			      <m:ci>n</m:ci>
+			    </m:apply>
+			    <m:ci>ω</m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		  </m:math>
+	      </entry>
+	    </row>
+	    <row>
+	      <entry>III</entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:plus/>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:times/>
+			<m:ci>M</m:ci>
+			<m:ci>ω</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:divide/>
+		      <m:pi/>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar><m:ci>n</m:ci></m:bvar>
+		      <m:lowlimit><m:cn>0</m:cn></m:lowlimit>
+		      <m:uplimit>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>M</m:ci>
+			    <m:cn>1</m:cn>
+			</m:apply>
+		      </m:uplimit>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:ci type="fn">h</m:ci>
+			  <m:ci>n</m:ci>
+			</m:apply>
+			<m:apply>
+			  <m:sin/>
+			  <m:apply>
+			    <m:times/>
+			    <m:apply>
+			      <m:minus/>
+			      <m:ci>M</m:ci>
+			      <m:ci>n</m:ci>
+			    </m:apply>
+			    <m:ci>ω</m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	    <row>
+	      <entry>IV</entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:plus/>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:times/>
+			<m:ci>M</m:ci>
+			<m:ci>ω</m:ci>
+		      </m:apply>
+		    </m:apply>
+		      <m:apply>
+		      <m:divide/>
+		      <m:pi/>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar><m:ci>n</m:ci></m:bvar>
+		      <m:lowlimit><m:cn>0</m:cn></m:lowlimit>
+		      <m:uplimit>
+			<m:apply>
+			  <m:minus/>
+			  <m:apply>
+			    <m:divide/>
+			    <m:ci>N</m:ci>
+			    <m:cn>2</m:cn>
+			  </m:apply>
+			  <m:cn>1</m:cn>
+			</m:apply>
+		      </m:uplimit>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:ci type="fn">h</m:ci>
+			  <m:ci>n</m:ci>
+			</m:apply>
+			<m:apply>
+			  <m:sin/>
+			  <m:apply>
+			    <m:times/>
+			      <m:apply>
+			      <m:minus/>
+			      <m:ci>M</m:ci>
+			      <m:ci>n</m:ci>
+			    </m:apply>
+			    <m:ci>ω</m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	  </tbody>
+	</tgroup>
+      </table>
+      <para id="tablecaption">where 
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci>M</m:ci>
+	    <m:apply>
+	      <m:divide/>
+	      <m:apply>
+		<m:minus/>
+		<m:ci>N</m:ci>
+		<m:cn>1</m:cn>
+	      </m:apply>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+      </para>
+    </section>
+
+    <section id="character">
+      <title>AMPLITUDE RESPONSE CHARACTERISTICS</title>
+      <para id="char1">
+	To analyze or design linear-phase FIR filters, we need to know
+	the characteristics of the amplitude response
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">A</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math>.
+      </para>
+
+      <table frame="all" id="chartable" summary="">
+	<tgroup cols="3">
+	  <thead>
+	    <row>
+	      <entry>Type</entry>
+	      <entry>Properties</entry>
+	    </row>
+	  </thead>
+	  <tbody>
+	    <row>
+	      <entry morerows="2" align="center">I</entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:ci type="fn">A</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:math> is even about
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:ci>ω</m:ci>
+		    <m:cn>0</m:cn>
+		  </m:apply>
+		</m:math>
+	      </entry>
+
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:ci>ω</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>ω</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	    <row rowsep="0">
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:ci type="fn">A</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:math> is even about
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:ci>ω</m:ci>
+		    <m:pi/>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:apply>
+			<m:plus/>
+			<m:pi/>
+			<m:ci>ω</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:pi/>
+			<m:ci>ω</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	    <row rowsep="0">
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:ci type="fn">A</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:math> is periodic with
+		<m:math>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:pi/>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:apply>
+			<m:plus/>
+			<m:ci>ω</m:ci>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:ci>ω</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	       
+	    <row>
+	      <entry morerows="2" align="center">II</entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:ci type="fn">A</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:math> is even about
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:ci>ω</m:ci>
+		    <m:cn>0</m:cn>
+		  </m:apply>
+		</m:math>
+	      </entry>
+
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:ci>ω</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>ω</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	    <row>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:ci type="fn">A</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:math> is odd about
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:ci>ω</m:ci>
+		    <m:pi/>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:apply>
+			<m:plus/>
+			<m:pi/>
+			<m:ci>ω</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:ci type="fn">A</m:ci>
+			<m:apply>
+			  <m:minus/>
+			  <m:pi/>
+			  <m:ci>ω</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	    <row>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:ci type="fn">A</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:math> is periodic with
+		<m:math>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>4</m:cn>
+		    <m:pi/>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:apply>
+			<m:plus/>
+			<m:ci>ω</m:ci>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>4</m:cn>
+			  <m:pi/>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:ci>ω</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>	    
+	    <row>
+	      <entry morerows="2" align="center">III</entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:ci type="fn">A</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:math> is odd about
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:ci>ω</m:ci>
+		    <m:cn>0</m:cn>
+		  </m:apply>
+		</m:math>
+	      </entry>
+
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:ci>ω</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:ci type="fn">A</m:ci>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>ω</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	    <row>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:ci type="fn">A</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:math> is odd about
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:ci>ω</m:ci>
+		    <m:pi/>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:apply>
+			<m:plus/>
+			<m:pi/>
+			<m:ci>ω</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:ci type="fn">A</m:ci>
+			<m:apply>
+			  <m:minus/>
+			  <m:pi/>
+			  <m:ci>ω</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	    <row>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:ci type="fn">A</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:math> is periodic with
+		<m:math>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:pi/>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:apply>
+			<m:plus/>
+			<m:ci>ω</m:ci>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:ci>ω</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	    <row>
+	      <entry morerows="2" align="center">IV</entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:ci type="fn">A</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:math> is odd about
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:ci>ω</m:ci>
+		    <m:cn>0</m:cn>
+		  </m:apply>
+		</m:math>
+	      </entry>
+
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:ci>ω</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:ci type="fn">A</m:ci>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>ω</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	    <row>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:ci type="fn">A</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:math> is even about
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:ci>ω</m:ci>
+		    <m:pi/>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:apply>
+			<m:plus/>
+			<m:pi/>
+			<m:ci>ω</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:pi/>
+			<m:ci>ω</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	    <row>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:ci type="fn">A</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:math> is periodic with
+		<m:math>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>4</m:cn>
+		    <m:pi/>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	      <entry>
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:apply>
+			<m:plus/>
+			<m:ci>ω</m:ci>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>4</m:cn>
+			  <m:pi/>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn">A</m:ci>
+		      <m:ci>ω</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>	
+	  </tbody>
+	</tgroup>
+      </table>
+
+      <figure id="fig1">
+	<media id="idp1270400" alt=""><image src="../../media/fourAmps.png" mime-type="image/png"/></media>
+      </figure>
+    </section>
+
+    <section id="responseeval">
+      <title>EVALUATING THE AMPLITUDE RESPONSE</title>
+      <para id="eval1">
+	The frequency response 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn"><m:msup>
+		<m:mi>H</m:mi>
+		<m:mi>f</m:mi>
+	      </m:msup></m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math> of an FIR filter can be evaluated at
+	<m:math><m:ci>L</m:ci></m:math> equally spaced frequencies
+	between 0 and <m:math><m:pi/></m:math> using the DFT.
+	Consider a causal FIR filter with an impulse response 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">h</m:ci>
+	    <m:ci>n</m:ci>
+	  </m:apply>
+	</m:math> of length-<m:math><m:ci>N</m:ci></m:math>, with 
+	<m:math>
+	  <m:apply>
+	    <m:leq/>
+	    <m:ci>N</m:ci>
+	    <m:ci>L</m:ci>
+	  </m:apply>
+	</m:math>.  Samples of the frequency
+	response of the filter can be written as 
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">H</m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:pi/>
+		  </m:apply>
+		  <m:ci>L</m:ci>
+		</m:apply>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	    </m:apply>
+	    <m:apply>
+	      <m:sum/>
+	      <m:bvar><m:ci>n</m:ci></m:bvar>
+	      <m:lowlimit><m:cn>0</m:cn></m:lowlimit>
+	      <m:uplimit>
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>N</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+	      </m:uplimit>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn">h</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:minus/>
+		      <m:imaginaryi/>
+		    </m:apply>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>L</m:ci>
+		    </m:apply>
+		    <m:ci>n</m:ci>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	Define the <m:math><m:ci>L</m:ci></m:math>-point signal 
+	<m:math>
+	  <m:set>
+	    <m:bvar>
+	      <m:apply>
+		<m:ci type="fn">g</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:bvar>
+	    <m:condition>
+	      <m:apply>
+		<m:leq/>
+		<m:cn>0</m:cn>
+		<m:ci>n</m:ci>
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>L</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+	      </m:apply>
+	    </m:condition>
+	  </m:set>
+	</m:math> as 
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">g</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	    <m:piecewise>
+	      <m:piece>
+		<m:apply>
+		  <m:ci type="fn">h</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:leq/>
+		  <m:cn>0</m:cn>
+		  <m:ci>n</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:piece>
+	      <m:piece>
+		<m:cn>0</m:cn>
+		<m:apply>
+		  <m:leq/>
+		  <m:ci>N</m:ci>
+		  <m:ci>n</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>L</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:piece>
+	    </m:piecewise>
+	  </m:apply>
+	</m:math>
+	Then 
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">H</m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:pi/>
+		  </m:apply>
+		  <m:ci>L</m:ci>
+		</m:apply>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	    </m:apply>
+	    <m:apply>
+	      <m:ci type="fn">G</m:ci>
+	      <m:ci>k</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:ci type="fn"><m:msub>
+		  <m:mi>DFT</m:mi>
+		  <m:mi>L</m:mi>
+		</m:msub></m:ci>
+	      <m:apply>
+		<m:ci type="fn">g</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	where 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">G</m:ci>
+	    <m:ci>k</m:ci>
+	  </m:apply>
+	</m:math> is the <m:math><m:ci>L</m:ci></m:math>-point DFT of 
+
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">g</m:ci>
+	    <m:ci>n</m:ci>
+	  </m:apply>
+	</m:math>.
+      </para>
+
+      <section id="type1-2">
+	<title>Types I and II</title>
+	<para id="para1-2">
+	  Suppose the FIR filter 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">h</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math> is either a Type I or a Type II FIR filter.  Then
+	  we have from above
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn"><m:msup>
+		    <m:mi>H</m:mi>
+		    <m:mi>f</m:mi>
+		  </m:msup></m:ci>
+		<m:ci>ω</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn">A</m:ci>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:minus/>
+		      <m:imaginaryi/>
+		    </m:apply>
+		    <m:ci>M</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	  or
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">A</m:ci>
+		<m:ci>ω</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn"><m:msup>
+		      <m:mi>H</m:mi>
+		      <m:mi>f</m:mi>
+		    </m:msup></m:ci>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:ci>M</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	  Samples of the real-valued amplitude
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">A</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math>
+	  can be obtained from samples of the function
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn"><m:msup>
+		  <m:mi>H</m:mi>
+		  <m:mi>f</m:mi>
+		</m:msup></m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math> as: 
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">A</m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:pi/>
+		  </m:apply>
+		  <m:ci>L</m:ci>
+		</m:apply>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	    </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn">H</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>L</m:ci>
+		    </m:apply>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:ci>M</m:ci>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>L</m:ci>
+		    </m:apply>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn">G</m:ci>
+		  <m:ci>k</m:ci>
+		</m:apply>
+		<m:ci><m:msubsup>
+		    <m:mi>W</m:mi>
+		    <m:mi>L</m:mi>
+		    <m:mrow>
+		      <m:mi>M</m:mi>
+		      <m:mi>k</m:mi>
+		    </m:mrow>
+		  </m:msubsup></m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  Therefore, the samples of the real-valued amplitude function
+	  can be obtained by zero-padding
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">h</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math>, taking the DFT, and multiplying by the complex
+	  exponential.  This can be written as:
+
+	  <equation id="eqn1">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn">A</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>L</m:ci>
+		    </m:apply>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn"><m:msub>
+			<m:mi>DFT</m:mi>
+			<m:mi>L</m:mi>
+		      </m:msub></m:ci>
+		    <m:list>
+		      <m:apply>
+			<m:ci type="fn">h</m:ci>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		      <m:ci type="vector"><m:msub>
+			  <m:mn>0</m:mn>
+			  <m:mrow>
+			    <m:mi>L</m:mi>
+			    <m:mo>-</m:mo>
+			    <m:mi>N</m:mi>
+			  </m:mrow>
+			</m:msub></m:ci>
+		    </m:list>
+		  </m:apply>
+		  <m:ci><m:msubsup>
+		      <m:mi>W</m:mi>
+		      <m:mi>L</m:mi>
+		      <m:mrow>
+			<m:mi>M</m:mi>
+			<m:mi>k</m:mi>
+		      </m:mrow>
+		    </m:msubsup></m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+	</para>
+      </section>
+
+      <section id="types3-4">
+	<title>Types III and IV</title>
+	<para id="para3-4">
+	  For Type III and Type IV FIR filters, we have 
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn"><m:msup>
+		    <m:mi>H</m:mi>
+		    <m:mi>f</m:mi>
+		  </m:msup></m:ci>
+		<m:ci>ω</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:imaginaryi/>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:minus/>
+		      <m:imaginaryi/>
+		    </m:apply>
+		    <m:ci>M</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">A</m:ci>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	  or
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">A</m:ci>
+		<m:ci>ω</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:minus/>
+		  <m:imaginaryi/>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn"><m:msup>
+		      <m:mi>H</m:mi>
+		      <m:mi>f</m:mi>
+		    </m:msup></m:ci>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:ci>M</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  Therefore, samples of the real-valued amplitude 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">A</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math> can be obtained from samples of the function
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn"><m:msup>
+		  <m:mi>H</m:mi>
+		  <m:mi>f</m:mi>
+		</m:msup></m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math> as:
+
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">A</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		    <m:ci>L</m:ci>
+		  </m:apply>
+		  <m:ci>k</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:minus/>
+		  <m:imaginaryi/>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">H</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>L</m:ci>
+		    </m:apply>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:ci>M</m:ci>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>L</m:ci>
+		    </m:apply>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:minus/>
+		  <m:imaginaryi/>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">G</m:ci>
+		  <m:ci>k</m:ci>
+		</m:apply>
+		<m:ci><m:msubsup>
+		    <m:mi>W</m:mi>
+		    <m:mi>L</m:mi>
+		    <m:mrow>
+		      <m:mi>M</m:mi>
+		      <m:mi>k</m:mi>
+		    </m:mrow>
+		  </m:msubsup></m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  Therefore, the samples of the real-valued amplitude function
+	  can be obtained by zero-padding 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">h</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math>, taking the DFT, and multiplying by the complex
+	  exponential.
+
+	  <equation id="eqn2">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn">A</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>L</m:ci>
+		    </m:apply>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:minus/>
+		    <m:imaginaryi/>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn"><m:msub>
+			<m:mi>DFT</m:mi>
+			<m:mi>L</m:mi>
+		      </m:msub></m:ci>
+		    <m:list>
+		      <m:apply>
+			<m:ci type="fn">h</m:ci>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		      <m:ci type="vector"><m:msub>
+			  <m:mn>0</m:mn>
+			  <m:mrow>
+			    <m:mi>L</m:mi>
+			    <m:mo>-</m:mo>
+			    <m:mi>N</m:mi>
+			  </m:mrow>
+			</m:msub></m:ci>
+		    </m:list>
+		  </m:apply>
+		  <m:ci><m:msubsup>
+		      <m:mi>W</m:mi>
+		      <m:mi>L</m:mi>
+		      <m:mrow>
+			<m:mi>M</m:mi>
+			<m:mi>k</m:mi>
+		      </m:mrow>
+		    </m:msubsup></m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+	</para>
+      </section>
+
+      <example id="type1">
+	<title>EVALUATING THE AMP RESP (TYPE I)</title>
+	<para id="ex1">
+	  In this example, the filter is a Type I FIR filter of length
+	  7.  An accurate plot of
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">A</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math> can be obtained with zero padding.
+	</para>
+
+	<figure id="fig2">
+	  <media id="idp1145472" alt=""><image src="../../media/type1.png" mime-type="image/png"/></media>
+	</figure>
+
+	<para id="ex1p2">
+	  The following Matlab code fragment for the plot of
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">A</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math> for a Type I FIR filter.
+	</para>
+
+	<code display="block" id="idp1610864">
+	  h = [3 4 5 6 5 4 3]/30;
+	  N = 7;
+	  M = (N-1)/2;
+	  L = 512;
+	  H = fft([h zeros(1,L-N)]);
+	  k = 0:L-1;
+	  W = exp(j*2*pi/L);
+	  A = H .* W.^(M*k);
+	  A = real(A);
+
+	  figure(1)
+	  w = [0:L-1]*2*pi/(L-1);
+	  subplot(2,1,1)
+	  plot(w/pi,abs(H))
+	  ylabel('|H(\omega)| = |A(\omega)|')
+	  xlabel('\omega/\pi')
+	  subplot(2,1,2)
+	  plot(w/pi,A)
+	  ylabel('A(\omega)')
+	  xlabel('\omega/\pi')
+	  print -deps type1
+	</code>
+
+	<para id="ex1p3">
+	  The command <code>A = real(A)</code> removes the
+	  imaginary part which is equal to zero to within computer
+	  precision.  Without this command, Matlab takes
+	  <code>A</code> to be a complex vector and the
+	  following plot command will not be right.
+	</para>
+
+	<para id="ex1p4">
+	  Observe the symmetry of 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">A</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math> due to 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">h</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math> being real-valued.  Because of this symmetry, 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">A</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math> is usually plotted for 
+	  <m:math>
+	    <m:apply>
+	      <m:leq/>
+	      <m:cn>0</m:cn>
+	      <m:ci>ω</m:ci>
+	      <m:pi/>
+	    </m:apply>
+	  </m:math> only.
+	</para>
+      </example>
+
+      <example id="type2">
+	<title>EVALUATING THE AMP RESP (TYPE II)</title>
+
+	<figure id="fig3">
+	  <media id="idp10470560" alt=""><image src="../../media/type2.png" mime-type="image/png"/></media>
+	</figure>
+
+	<para id="ex2p1">
+	  The following Matlab code fragment produces a plot of
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">A</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math> for a Type II FIR filter.
+	</para>
+
+	<code display="block" id="idp8387888">
+	  h = [3 5 6 7 7 6 5 3]/42;
+	  N = 8;
+	  M = (N-1)/2;
+	  L = 512;
+	  H = fft([h zeros(1,L-N)]);
+	  k = 0:L-1;
+	  W = exp(j*2*pi/L);
+	  A = H .* W.^(M*k);
+	  A = real(A);
+
+	  figure(1)
+	  w = [0:L-1]*2*pi/(L-1);
+	  subplot(2,1,1)
+	  plot(w/pi,abs(H))
+	  ylabel('|H(\omega)| = |A(\omega)|')
+	  xlabel('\omega/\pi')
+	  subplot(2,1,2)
+	  plot(w/pi,A)
+	  ylabel('A(\omega)')
+	  xlabel('\omega/\pi')
+	  print -deps type2
+	</code>
+
+	<para id="ex2p2">
+	  The imaginary part of the amplitude is zero.  Notice that
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">A</m:ci>
+		<m:pi/>
+	      </m:apply>
+	      <m:cn>0</m:cn>
+	    </m:apply>
+	  </m:math>.  In fact this will always be the case for a Type
+	  II FIR filter.
+	</para>
+
+	<para id="ex2p3">
+	  An exercise for the student: Describe how to obtain samples
+	  of
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">A</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	  </m:math> for Type III and Type IV FIR filters.  Modify the
+	  Matlab code above for these types.  Do you notice that
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">A</m:ci>
+		<m:ci>ω</m:ci>
+	      </m:apply>
+	      <m:cn>0</m:cn>
+	    </m:apply>
+	  </m:math> always for special values of
+	  <m:math><m:ci>ω</m:ci></m:math>?
+	</para>
+      </example>
+    </section>
+
+    <section id="further">
+      <title>Modules for Further Study</title>
+      <list id="furthermodules" list-type="enumerated">
+	<item>
+	  <link document="m10700" strength="3">Zero Locations of
+	  Linear-Phase Filters</link>
+	</item>
+	<item>
+	  <link document="m10701" strength="3">Design of Linear-Phase
+	    FIR Filters by Interpolation</link>
+	</item>
+	<item>
+	  <link document="m10577" strength="3">Linear-Phase FIR Filter
+	    Design by Least Squares</link>
+	</item>
+      </list>
+    </section>
+
+  </content>
+</document>

@@ -1,0 +1,296 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Digital Image Processing Basics</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>86fc14f0-161f-468f-9493-fd8369d85fae</md:uuid>
+</metadata>
+
+  <content>
+    <section id="sec1">
+      <title>Digital Image Processing</title>
+      <para id="p1">
+	A sampled image gives us our usual 2D array of pixels 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn" class="discrete">f</m:ci>
+	    <m:ci>m</m:ci>
+	    <m:ci>n</m:ci>
+	  </m:apply>
+	</m:math> (<link target-id="fig1" strength="3"/>):
+      </para>
+
+      <figure id="fig1">
+	<media id="idm8318464" alt=""><image src="../../media/smiley.png" mime-type="image/png"/></media>
+	<caption>
+	  We illustrate a "pixelized" smiley face.
+	</caption>
+      </figure>
+
+      <para id="p2">
+	We can filter 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn" class="discrete">f</m:ci>
+	    <m:ci>m</m:ci>
+	    <m:ci>n</m:ci>
+	  </m:apply>
+	</m:math>  
+	by applying a 2D discrete-space <link document="m10087" strength="3">convolution</link> as shown below (where 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn" class="discrete">h</m:ci>
+	    <m:ci>m</m:ci>
+	    <m:ci>n</m:ci>
+	  </m:apply>
+	</m:math> is our PSF):
+
+	<equation id="eq1">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">g</m:ci>
+		<m:ci>m</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#convolve"/> 
+		<m:apply>
+		  <m:ci type="fn" class="discrete">h</m:ci>
+		    <m:ci>m</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">f</m:ci>
+		  <m:ci>m</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar><m:ci>k</m:ci></m:bvar>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar><m:ci>l</m:ci></m:bvar>
+		  <m:uplimit>
+		    <m:infinity/>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:infinity/>
+		    </m:apply>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">h</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>m</m:ci>
+			<m:ci>k</m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>n</m:ci>
+			<m:ci>l</m:ci>
+		      </m:apply>
+		    </m:apply> 
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">f</m:ci>
+		      <m:ci>k</m:ci>
+		      <m:ci>l</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+      </para>
+
+      
+      <example id="eg1">
+	<title>Sampled Image</title>
+	<figure id="fig2">
+	  <media id="idp375568" alt=""><image src="../../media/sec2_eg1.png" mime-type="image/png"/></media>
+	  <caption>
+	    Illustrate the "pixelized" nature of all digital images.
+	  </caption>
+	</figure>  
+
+      </example>
+
+      <para id="p3">
+	We also have discrete-space FTS:
+
+	<equation id="eq2">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">F</m:ci>
+		<m:ci>u</m:ci>
+		<m:ci>v</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar><m:ci>m</m:ci></m:bvar>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar><m:ci>n</m:ci></m:bvar>
+		  <m:uplimit>
+		    <m:infinity/>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:infinity/>
+		    </m:apply>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">f</m:ci>
+		      <m:ci>m</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:minus/>
+			<m:apply>
+			  <m:times/>
+			  <m:imaginaryi/>
+			  <m:ci>u</m:ci>
+			  <m:ci>m</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:minus/>
+			<m:apply>
+			  <m:times/>
+			  <m:imaginaryi/>
+			  <m:ci>v</m:ci>
+			  <m:ci>m</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	where 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn" class="discrete">F</m:ci>
+	    <m:ci>u</m:ci>
+	    <m:ci>v</m:ci>
+	  </m:apply>
+	</m:math> is analogous to <link document="m10247" strength="3">DTFT</link> in 1D.  
+
+	<note type="note" id="idp924576">
+	  "Convolution in Time" is the <emphasis>same</emphasis> as
+	  "Multiplication in Frequency"
+	</note>
+
+	<equation id="eq3">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">g</m:ci>
+		<m:ci>m</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#convolve"/> 
+		<m:apply>
+		  <m:ci type="fn" class="discrete">h</m:ci>
+		  <m:ci>m</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">f</m:ci>
+		  <m:ci>m</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	which, as stated above, is the same as: 
+
+	<equation id="eq4">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">G</m:ci>
+		<m:ci>u</m:ci>
+		<m:ci>v</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">H</m:ci>
+		  <m:ci>u</m:ci>
+		  <m:ci>v</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">F</m:ci>
+		  <m:ci>u</m:ci>
+		  <m:ci>v</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+      </para>
+
+      <example id="eg2">
+	<title>Magnitude of FT of Cameraman Image</title>
+	<figure id="fig3">
+	  <media id="idm396208" alt=""><image src="../../media/cam_mag.png" mime-type="image/png"/></media>
+	</figure>  
+
+	<para id="p1_eg2">
+	  To get a better image, we can use the
+	  <code>fftshift</code> command in Matlab to center
+	  the Fourier Transform.  The resulting image is shown in
+	  <link target-id="fig4" strength="3"/>:
+	</para>
+
+	<figure id="fig4">
+	  <media id="idm1904592" alt=""><image src="../../media/cam_mag_center.png" mime-type="image/png"/></media>
+	</figure> 
+
+      </example>
+
+    </section>
+
+  </content>
+</document>

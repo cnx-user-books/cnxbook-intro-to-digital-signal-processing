@@ -1,0 +1,1173 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+
+  <title>Random Processes: Mean and Variance</title>
+
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>553c430d-a923-4ed9-86f8-a2d86ccd12c5</md:uuid>
+</metadata>
+
+
+  <content>
+    <para id="para1">
+      In order to study the characteristics of a <link document="m10649" strength="2">random process</link>, let us look at some of the
+      basic properties and operations of a random process.  Below we
+      will focus on the operations of the random signals that compose
+      our random processes.  We will denote our random process with
+      <m:math><m:ci>X</m:ci></m:math> and a random variable from a
+      random process or signal by <m:math><m:ci>x</m:ci></m:math>.
+    </para>   
+
+    <section id="sec1">
+      <title>Mean Value</title>
+      <para id="p1_mean">
+	Finding the average value of a set of random signals or random
+	variables is probably the most fundamental concepts we use in
+	evaluating random processes through any sort of statistical
+	method.  <emphasis>The mean of a random process is the average
+	of all realizations of that process.</emphasis> In order to
+	find this average, we must look at a random signal over a
+	range of time (possible values) and determine our average from
+	this set of values.  The <term>mean</term>, or average, of a
+	random process,
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">x</m:ci><m:ci>t</m:ci>
+	  </m:apply>
+	</m:math>,
+	is given by the following equation:
+
+	<equation id="eq_mean">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">
+		  <m:msub>
+		    <m:mi>m</m:mi>
+		    <m:mi>x</m:mi>
+		  </m:msub>
+		</m:ci>
+		<m:ci>t</m:ci>
+	      </m:apply>
+
+	      <m:apply>
+		<m:ci type="fn">
+		  <m:msub>
+		    <m:mi>μ</m:mi>
+		    <m:mi>x</m:mi>
+		  </m:msub>
+		</m:ci>
+		<m:ci>t</m:ci>
+	      </m:apply>
+
+	      <m:apply>
+		<m:mean/>
+		<m:ci>X</m:ci>
+	      </m:apply>
+
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+		<m:ci>X</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:int/>
+		<m:bvar>
+		  <m:ci>x</m:ci>
+		</m:bvar>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:ci>x</m:ci>
+		  <m:apply>
+		    <m:ci type="fn">f</m:ci>
+		    <m:ci>x</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	This equation may seem quite cluttered at first glance, but we
+	want to introduce you to the various notations used to
+	represent the mean of a random signal or process.  Throughout
+	texts and other readings, remember that these will all equal
+	the same thing. The symbol,
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">
+	      <m:msub>
+		<m:mi>μ</m:mi>
+		<m:mi>x</m:mi>
+	      </m:msub>
+	    </m:ci>
+	    <m:ci>t</m:ci>
+	  </m:apply>
+	</m:math>, and the <m:math><m:ci>X</m:ci> </m:math> with a bar
+	over it are often used as a short-hand to represent an
+	average, so you might see it in certain textbooks.  The other
+	important notation used is,
+	<m:math>
+	  <m:apply>
+	    <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+	    <m:ci>X</m:ci>
+	  </m:apply>
+	</m:math>, which represents the "expected value of
+	<m:math><m:ci>X</m:ci></m:math>" or the mathematical
+	expectation.  This notation is very common and will appear
+	again.
+      </para>
+      <para id="p2_mean">
+	If the random variables, which make up our random process, are
+	discrete or quantized values, such as in a binary process,
+	then the integrals become summations over all the possible
+	values of the random variable.  In this case, our expected
+	value becomes
+
+	<equation id="eq2_mean">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:condition>
+		  <m:ci>x</m:ci>
+		</m:condition>
+		<m:apply>
+		  <m:times/>
+		  <m:ci>α</m:ci>
+		  <m:apply>
+		    <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#probability"/>
+		    <m:apply>
+		      <m:eq/>
+		      <m:apply>
+			<m:ci type="fn" class="discrete">x</m:ci>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		      <m:ci>α</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	If we have two random signals or variables, their averages can
+	reveal how the two signals interact.  If the product of the two individual
+	averages of both signals do <emphasis>not</emphasis> equal the
+	average of the product of the two signals, then the two
+	signals are said to be <term>linearly independent</term>, also
+	referred to as <term>uncorrelated</term>.  
+      </para>
+
+      <para id="p33end">
+	In the case where we have a random process in which only one
+	sample can be viewed at a time, then we will often not have
+	all the information available to calculate the mean using the
+	density function as shown above.  In this case we must
+	estimate the mean through the <link target-id="time_ave" strength="3">time-average mean</link>, discussed later.  For
+	fields such as signal processing that deal mainly with
+	discrete signals and values, then these are the averages most
+	commonly used.
+      </para>
+      
+      <section id="sub_mean">
+	<title>Properties of the Mean</title>
+
+	<para id="p1_sub_mean">
+	  <list id="mean_props">
+	    <item>
+	      The expected value of a constant,
+	      <m:math><m:ci>α</m:ci> </m:math>, is the constant:
+	      
+	      <equation id="eq_prop1">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+		      <m:ci>α</m:ci>
+		    </m:apply>
+		    <m:ci>α</m:ci>
+		  </m:apply>
+		</m:math>
+	      </equation>
+	    </item>
+	    
+	    <item>
+	      Adding a constant, <m:math><m:ci>α</m:ci>
+	      </m:math>, to each term increases the expected value by
+	      that constant:
+
+	      <equation id="eq_prop2">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+		      <m:apply>
+			<m:plus/>
+			<m:ci>X</m:ci>
+			<m:ci>α</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:plus/>
+		      <m:apply>
+			<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+			<m:ci>X</m:ci>
+		      </m:apply>
+		      <m:ci>α</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </equation>
+	    </item>
+	    
+	    <item>
+	      Multiplying the random variable by a constant,
+	      <m:math><m:ci>α</m:ci> </m:math>, multiplies the
+	      expected value by that constant.
+
+	      <equation id="eq_prop3">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+		      <m:apply>
+			<m:times/>
+			<m:ci>α</m:ci>
+			<m:ci>X</m:ci>			
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>α</m:ci>
+		      <m:apply>
+			<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+			<m:ci>X</m:ci>
+		      </m:apply>		  
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </equation>
+	    </item>
+	      
+	    <item>
+	      The expected value of the sum of two or more random
+	      variables, is the sum of each individual expected
+	      value.
+
+	      <equation id="eq_prop4">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+		      <m:apply>
+			<m:plus/>
+			<m:ci>X</m:ci>
+			<m:ci>Y</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:plus/>
+		      <m:apply>
+			<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+			<m:ci>X</m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+			<m:ci>Y</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </equation>
+	    </item>
+
+	  </list>
+	</para>
+      </section>
+
+    </section>
+
+
+    <section id="msq_val">
+      <title>Mean-Square Value</title>
+      <para id="p1_msv">
+	If we look at the second <term>moment</term> of the term
+	(we now look at 
+	<m:math>
+	  <m:apply>
+	    <m:power/>
+	    <m:ci>x</m:ci>
+	    <m:cn>2</m:cn>
+	  </m:apply>
+	</m:math> in the integral), then we will have the <term>mean-square
+	value</term> of our random process.  As you would expect, this
+	is written as
+
+	<equation id="eq1_msv">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:mean/>
+		<m:apply>
+		  <m:power/>
+		  <m:ci>X</m:ci>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+		<m:apply>
+		  <m:power/>
+		  <m:ci>X</m:ci>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	       <m:apply>
+		<m:int/>
+		<m:bvar>
+		  <m:ci>x</m:ci>
+		</m:bvar>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>x</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn">f</m:ci>
+		    <m:ci>x</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	This equation is also often referred to as the <term>average
+	power</term> of a process or signal.
+
+      </para>
+    </section>
+
+    <section id="var">
+      <title>Variance</title>
+      <para id="p1_var">
+	Now that we have an idea about the average value or values
+	that a random process takes, we are often interested in seeing
+	just how spread out the different random values might be.  To
+	do this, we look at the <term>variance</term> which is a measure
+	of this spread.  The variance, often denoted by 
+	<m:math>
+	  <m:apply>
+	    <m:power/>
+	    <m:ci>σ</m:ci>
+	    <m:cn>2</m:cn>
+	  </m:apply>
+	</m:math>, is written as follows:
+
+	<equation id="eq1_var">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:power/>
+		<m:ci>σ</m:ci>
+		<m:cn>2</m:cn>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn">Var</m:ci>
+		<m:ci>X</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+		<m:apply>
+		  <m:power/>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>X</m:ci>
+		    <m:apply>
+		      <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+		      <m:ci>X</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:int/>
+		<m:bvar>
+		  <m:ci>x</m:ci>
+		</m:bvar>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:power/>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>x</m:ci>
+		      <m:apply>
+			<m:mean/>
+			<m:ci>X</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn">f</m:ci>
+		    <m:ci>x</m:ci>
+		  </m:apply>
+		</m:apply>	      
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	Using the rules for the expected value, we can rewrite this
+	formula as the following form, which is commonly seen:
+
+	<equation id="eq2_var">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:power/>
+		<m:ci>σ</m:ci>
+		<m:cn>2</m:cn>
+	      </m:apply>
+	      <m:apply>
+		<m:minus/>
+		<m:apply>
+		  <m:mean/>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>X</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:power/>
+		  <m:apply>
+		    <m:mean/>
+		    <m:ci>X</m:ci>
+		  </m:apply>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:minus/>
+		<m:apply>
+		  <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>X</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:power/>
+		  <m:apply>
+		    <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+		    <m:ci>X</m:ci>
+		  </m:apply>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+      </para>
+
+      <section id="std">
+	<title>Standard Deviation</title>
+	<para id="p1_std">
+	  Another common statistical tool is the standard deviation.
+	  Once you know how to calculate the variance, the standard
+	  deviation is simply <emphasis>the square root of the
+	  variance</emphasis>, or <m:math><m:ci>σ</m:ci>
+	  </m:math>.
+	</para>
+      </section>
+
+
+      <section id="sub2_var">
+	<title>Properties of Variance</title>
+	<para id="p1_sd">
+	  
+	  <list id="prop_var_list">
+	    <item>
+	      The variance of a constant, <m:math><m:ci>α</m:ci>
+	      </m:math>, equals zero:
+
+	      <equation id="eq1_varprop">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">Var</m:ci>
+		      <m:ci>α</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:variance/>
+		      <m:ci>α</m:ci>
+		    </m:apply>		      
+		    <m:cn>0</m:cn>		  
+		  </m:apply>
+		</m:math>
+	      </equation>
+	    </item>
+
+	    <item>
+	      Adding a constant, <m:math><m:ci>α</m:ci>
+	      </m:math>, to a random variable does not affect the
+	      variance because the mean increases by the same value:
+
+	      <equation id="eq2_varprop">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">Var</m:ci>
+		      <m:apply>
+			<m:plus/>
+			<m:ci>X</m:ci>
+			<m:ci>α</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:variance/>
+		      <m:apply>
+			<m:plus/>
+			<m:ci>X</m:ci>
+			<m:ci>α</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:variance/>
+		      <m:ci>X</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </equation>
+	    </item>
+
+	    <item>
+	      Multiplying the random variable by a constant,
+	      <m:math><m:ci>α</m:ci> </m:math>, increases the
+	      variance by the square of the constant:
+	      
+	      <equation id="eq3_varprop">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">Var</m:ci>
+		      <m:apply>
+			<m:times/>
+			<m:ci>α</m:ci>
+			<m:ci>X</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:variance/>
+		      <m:apply>
+			<m:times/>
+			<m:ci>α</m:ci>
+			<m:ci>X</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:power/>
+			<m:ci>α</m:ci>
+			<m:cn>2</m:cn>
+		      </m:apply>
+		      <m:apply>
+			<m:variance/>
+			<m:ci>X</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </equation>
+	    </item>
+
+	    <item>
+	      The variance of the sum of two random variables only
+	      equals the sum of the variances if the variable are
+	      <term>independent</term>.
+
+	       <equation id="eq4_varprop">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">Var</m:ci>
+		      <m:apply>
+			<m:plus/>
+			<m:ci>X</m:ci>
+			<m:ci>Y</m:ci>
+		      </m:apply>
+		    </m:apply>
+		     <m:apply>
+		      <m:variance/>
+		      <m:apply>
+			<m:plus/>
+			<m:ci>X</m:ci>
+			<m:ci>Y</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:plus/>
+		      <m:apply>
+			<m:variance/>
+			<m:ci>X</m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:variance/>
+			<m:ci>Y</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </equation>
+
+	      Otherwise, if the random variable are
+	      <emphasis>not</emphasis> independent, then we must also
+	      include the covariance of the product of the variables
+	      as follows:
+
+	       <equation id="eq5_varprop">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn">Var</m:ci>
+		      <m:apply>
+			<m:plus/>
+			<m:ci>X</m:ci>
+			<m:ci>Y</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:plus/>
+		      <m:apply>
+			<m:variance/>
+			<m:ci>X</m:ci>
+		      </m:apply>
+		      
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:apply>
+			  <!--HACK: NO MATHML FOR COVAR -->
+			  <m:ci type="fn">Cov</m:ci>
+			  <m:ci>X</m:ci>
+			  <m:ci>Y</m:ci>
+			</m:apply>
+		      </m:apply>
+
+		      <m:apply>
+			<m:variance/>
+			<m:ci>Y</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </equation>
+
+	    </item>
+	  </list>
+
+	</para>
+      </section>
+    </section>
+
+
+    <section id="time_ave">
+      <title>Time Averages</title>
+      <para id="p1_ta">
+	In the case where we can not view the entire ensemble of the
+	random process, we must use time averages to estimate the
+	values of the mean and variance for the process.  Generally,
+	this will only give us acceptable results for independent and
+	<term>ergodic</term> processes, meaning those processes in
+	which each signal or member of the process seems to have the
+	same statistical behavior as the entire process.  The time
+	averages will also only be taken over a finite interval since
+	we will only be able to see a finite part of the sample.
+      </para>
+
+      <section id="s1_ta">
+	<title>Estimating the Mean</title>
+	<para id="p1_s1ta">
+	  
+	  For the ergodic random process, 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">x</m:ci>
+	      <m:ci>t</m:ci>
+	    </m:apply>
+	  </m:math>, we will estimate the mean using the time
+	  averaging function defined as
+
+	  <equation id="eq1_ta">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:mean/>
+		  <m:ci>X</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+		  <m:ci>X</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:cn>1</m:cn>
+		    <m:ci>T</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:int/>
+		    <m:bvar>
+		      <m:ci>t</m:ci>
+		    </m:bvar>
+		    <m:lowlimit>
+		      <m:cn>0</m:cn>
+		    </m:lowlimit>
+		    <m:uplimit>
+		      <m:ci>T</m:ci>
+		    </m:uplimit>
+		    <m:apply>
+		      <m:ci type="fn">X</m:ci>
+		      <m:ci>t</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+
+	  However, for most real-world situations we will be dealing
+	  with discrete values in our computations and signals.  We
+	  will represent this mean as
+
+	   <equation id="eq2_ta">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:mean/>
+		  <m:ci>X</m:ci>
+		</m:apply>
+
+		<m:apply>
+		  <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#expectedvalue"/>
+		  <m:ci>X</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:cn>1</m:cn>
+		    <m:ci>N</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:sum/>
+		     <m:bvar>
+		      <m:ci>n</m:ci>
+		    </m:bvar>
+		    <m:lowlimit>
+		      <m:cn>1</m:cn>
+		    </m:lowlimit>
+		    <m:uplimit>
+		      <m:ci>N</m:ci>
+		    </m:uplimit>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">X</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+		    
+	</para>
+      </section>
+
+      <section id="s2_var">
+	<title>Estimating the Variance</title>
+	<para id="p1_vars2">
+	  Once the mean of our random process has been estimated then
+	  we can simply use those values in the following variance
+	  equation (introduced in one of the above sections)
+	  
+	  <equation id="eq3_ta">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:power/>
+		  <m:ci>
+		    <m:msub>
+		      <m:mi>σ</m:mi>
+		      <m:mi>x</m:mi>
+		    </m:msub>
+		  </m:ci>
+		  <m:cn>2</m:cn>
+		</m:apply>
+		<m:apply>
+		  <m:minus/>
+		  <m:apply>
+		    <m:mean/>
+		    <m:apply>
+		      <m:power/>
+		      <m:ci>X</m:ci>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:power/>
+		    <m:apply>
+		      <m:mean/>
+		      <m:ci>X</m:ci>
+		    </m:apply>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+	  
+	</para>
+      </section>
+
+    </section>
+
+
+    <section id="examples">
+      <title>Example</title>
+      <para id="p1_eg">
+	Let us now look at how some of the formulas and concepts above
+	apply to a simple example.  We will just look at a single,
+	continuous random variable for this example, but the
+	calculations and methods are the same for a random process.
+	For this example, we will consider a random variable having
+	the probability density function described below and shown in
+	<link target-id="fig1"/>.
+
+	<equation id="eg1a_eg1">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">f</m:ci>
+		<m:ci>x</m:ci>
+	      </m:apply>
+	      <m:piecewise>
+		<m:piece>
+		  <m:apply>
+		    <m:divide/>
+		    <m:cn>1</m:cn>
+		    <m:cn>10</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:leq/>
+		    <m:apply>
+		      <m:leq/>
+		      <m:cn>10</m:cn>
+		      <m:ci>x</m:ci>
+		    </m:apply>
+		    <m:cn>20</m:cn>
+		  </m:apply>
+		</m:piece>
+		<m:otherwise>
+		  <m:cn>0</m:cn>
+		</m:otherwise>
+	      </m:piecewise>
+	    </m:apply>
+	  </m:math>
+	</equation>
+      </para>
+
+      <figure id="fig1">
+	<title>Probability Density Function</title>
+	<media id="idm110976" alt=""><image src="../../media/rmean_eg.png" mime-type="image/png"/></media>
+	<caption>
+	  A uniform probability density function.
+	</caption>
+      </figure>
+      
+      <para id="p2_eg">
+	First, we will use <link target-id="eq_mean" strength="2"/>
+	to solve for the mean value.
+
+	<equation id="eq1_eg1">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:mean/>
+		<m:ci>X</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:int/>
+		<m:bvar>
+		  <m:ci>x</m:ci>
+		</m:bvar>
+		<m:lowlimit>
+		  <m:cn>10</m:cn>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:cn>20</m:cn>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:ci>x</m:ci>
+		  <m:apply>
+		    <m:divide/>
+		    <m:cn>1</m:cn>
+		    <m:cn>10</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#evaluateat"/>
+		<m:bvar>
+		  <m:ci>x</m:ci>
+		</m:bvar>		
+		<m:lowlimit>
+		  <m:cn>10</m:cn>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:cn>20</m:cn>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:cn>1</m:cn>
+		    <m:cn>10</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:power/>
+			<m:ci>x</m:ci>
+			<m:cn>2</m:cn>
+		      </m:apply>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:cn>1</m:cn>
+		  <m:cn>10</m:cn>
+		</m:apply>
+		<m:apply>
+		  <m:minus/>
+		  <m:cn>200</m:cn>
+		  <m:cn>50</m:cn>
+		</m:apply>
+	      </m:apply>	
+	      <m:cn>15</m:cn>
+	    </m:apply>
+	  </m:math>
+	</equation>
+		    
+	Using <link target-id="eq1_msv" strength="2"/> we can
+	obtain the mean-square value for the above density function.
+
+	<equation id="eq2_eg1">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:mean/>
+		<m:apply>
+		  <m:power/>
+		  <m:ci>X</m:ci>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:int/>
+		<m:bvar>
+		  <m:ci>x</m:ci>
+		</m:bvar>
+		<m:lowlimit>
+		  <m:cn>10</m:cn>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:cn>20</m:cn>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>x</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:divide/>
+		    <m:cn>1</m:cn>
+		    <m:cn>10</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>		
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#evaluateat"/>
+		<m:bvar>
+		  <m:ci>x</m:ci>
+		</m:bvar>		
+		<m:lowlimit>
+		  <m:cn>10</m:cn>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:cn>20</m:cn>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:cn>1</m:cn>
+		    <m:cn>10</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:power/>
+			<m:ci>x</m:ci>
+			<m:cn>3</m:cn>
+		      </m:apply>
+		      <m:cn>3</m:cn>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:cn>1</m:cn>
+		  <m:cn>10</m:cn>
+		</m:apply>
+		<m:apply>
+		  <m:minus/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:cn>8000</m:cn>
+		    <m:cn>3</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:divide/>
+		    <m:cn>1000</m:cn>
+		    <m:cn>3</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>	
+	      <m:cn>233.33</m:cn>
+	    </m:apply>
+	  </m:math>
+	</equation>
+	
+	And finally, let us solve for the variance of this function.
+	
+	<equation id="eq3_eg1">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:power/>
+		<m:ci>σ</m:ci>
+		<m:cn>2</m:cn>
+	      </m:apply>
+	      <m:apply>
+		<m:minus/>
+		<m:apply>
+		  <m:mean/>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>X</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:power/>
+		  <m:apply>
+		    <m:mean/>
+		    <m:ci>X</m:ci>
+		  </m:apply>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:minus/>
+		<m:cn>233.33</m:cn>
+		<m:apply>
+		  <m:power/>
+		  <m:cn>15</m:cn>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	      <m:cn>8.33</m:cn>
+	    </m:apply>
+	  </m:math>
+	</equation>
+	
+      </para>
+    </section>
+
+  </content>
+</document>

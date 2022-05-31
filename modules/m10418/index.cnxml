@@ -1,0 +1,512 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  
+  <title>Continuous Wavelet Transform</title>
+  <metadata>
+  <md:content-id>m10418</md:content-id><md:title>Continuous Wavelet Transform</md:title>
+  <md:abstract>This module introduces continuous wavelet transform.</md:abstract>
+  <md:uuid>bcd60908-bf21-452c-bbd1-57bbb8074594</md:uuid>
+</metadata>
+
+<content>
+    <para id="para1">
+      The STFT provided a means of (joint) time-frequency analysis
+      with the property that spectral/temporal widths (or resolutions)
+      were the same for all basis elements. Let's now take a closer
+      look at the implications of uniform resolution.
+    </para>
+    
+    <para id="para2">
+      Consider two signals composed of sinusoids with frequency 1 Hz
+      and 1.001 Hz, respectively. It may be difficult to distinguish
+      between these two signals in the presence of background noise
+      unless many cycles are observed, implying the need for a
+      many-second observation. Now consider two signals with pure
+      frequencies of 1000 Hz and 1001 Hz-again, a 0.1%
+      difference. Here it should be possible to distinguish the two
+      signals in an interval of much less than one second. In other
+      words, good frequency resolution requires longer observation
+      times as frequency decreases. Thus, it might be more convenient
+      to construct a basis whose elements have larger temporal width
+      at low frequencies.
+    </para>
+
+    <para id="para3">
+      The previous example motivates a multi-resolution time-frequency
+      tiling of the form (<link target-id="uncertainty" strength="3"/>):
+    </para>
+
+    <figure id="uncertainty">
+      <media id="id1170584485553" alt="">
+<image src="../../media/uncertainty.png" mime-type="image/png"/>
+<image for="pdf" src="../../media/uncertainty.eps" mime-type="application/postscript"/></media>
+    </figure>
+
+    <para id="para4">
+      The Continuous Wavelet Transform (CWT) accomplishes the above
+      multi-resolution tiling by time-scaling and time-shifting a
+      prototype function 
+      <m:math>
+	<m:apply>
+	  <m:ci type="fn">ψ</m:ci>
+	  <m:ci>t</m:ci>
+	</m:apply>
+      </m:math>, often called the <term>mother wavelet</term>.  The
+      <m:math><m:ci>a</m:ci></m:math>-scaled and
+      <m:math><m:ci>τ</m:ci></m:math>-shifted basis elements is
+      given by
+
+      <m:math display="block">
+	<m:apply>
+	  <m:eq/>
+	  <m:apply>
+	    <m:ci type="fn">
+	      <m:msub><m:mi>ψ</m:mi>
+		<m:mrow>
+		  <m:mi>a</m:mi>
+		  <m:mo>,</m:mo>
+		  <m:mi>τ</m:mi>
+		</m:mrow>
+	      </m:msub>
+	    </m:ci>
+	    <m:ci>t</m:ci>
+	  </m:apply>
+	  <m:apply>
+	    <m:times/>
+	    <m:apply>
+	      <m:divide/>
+	      <m:cn>1</m:cn>
+	      <m:apply>
+		<m:root/>
+		<m:apply>
+		  <m:abs/>
+		  <m:ci>a</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	    <m:apply>
+	      <m:ci type="fn">ψ</m:ci>
+	      <m:apply>
+		<m:divide/>
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>t</m:ci>
+		  <m:ci>τ</m:ci>
+		</m:apply>
+		<m:ci>a</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:apply>
+      </m:math>
+
+      where 
+
+      <m:math display="block">
+	<m:apply>
+	  <m:in/>
+	  <m:apply>
+	    <m:and/>
+	    <m:ci>a</m:ci>
+	    <m:ci>τ</m:ci>
+	  </m:apply>
+	  <m:reals/>
+	</m:apply>
+      </m:math>
+
+      <m:math display="block">
+	<m:apply>
+	  <m:eq/>
+	  <m:apply>
+	    <m:int/>
+	    <m:bvar><m:ci>t</m:ci></m:bvar>
+	    <m:lowlimit>
+	      <m:apply>
+		<m:minus/>
+		<m:infinity/>
+	      </m:apply>
+	    </m:lowlimit>
+	    <m:uplimit>
+	      <m:infinity/>
+	    </m:uplimit>
+	    <m:apply>
+	      <m:ci type="fn">ψ</m:ci>
+	      <m:ci>t</m:ci>
+	    </m:apply>
+	  </m:apply>
+	  <m:cn>0</m:cn>
+	</m:apply>
+      </m:math>
+
+      <m:math display="block">
+	<m:apply>
+	  <m:eq/>
+	  <m:ci>
+	    <m:msub><m:mi>C</m:mi><m:mi>ψ</m:mi></m:msub>
+	  </m:ci>
+	  <m:apply>
+	    <m:lt/>
+	    <m:apply>
+	      <m:int/>
+	      <m:bvar><m:ci>Ω</m:ci></m:bvar>
+	      <m:lowlimit>
+		<m:apply>
+		  <m:minus/>
+		  <m:infinity/>
+		</m:apply>
+	      </m:lowlimit>
+	      <m:uplimit>
+		<m:infinity/>
+	      </m:uplimit>
+	      <m:apply>
+		<m:divide/>
+		<m:apply>
+		  <m:power/>
+		  <m:apply>
+		    <m:abs/>
+		    <m:apply>
+		      <m:ci type="fn">ψ</m:ci>
+		      <m:ci>Ω</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:cn>2</m:cn>
+		</m:apply>
+		<m:apply>
+		  <m:abs/>
+		  <m:ci>Ω</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	    <m:infinity/>
+	  </m:apply>
+	</m:apply>
+      </m:math>
+
+      The conditions above imply that 
+      <m:math>
+	<m:apply>
+	  <m:ci type="fn">ψ</m:ci>
+	  <m:ci>t</m:ci>
+	</m:apply>
+      </m:math> is bandpass and sufficiently smooth.  Assuming that 
+      
+      <m:math>
+	<m:apply>
+	  <m:eq/>
+	  <m:apply>
+	    <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#norm"/>
+	    <m:apply>
+	      <m:ci type="fn">ψ</m:ci>
+	      <m:ci>t</m:ci>
+	    </m:apply>
+	  </m:apply>
+	  <m:cn>1</m:cn>
+	</m:apply>
+      </m:math>, the definition above ensures that 
+      
+      <m:math>
+	<m:apply>
+	  <m:eq/>
+	  <m:apply>
+	    <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#norm"/>
+	    <m:apply>
+	      <m:ci type="fn">
+		<m:msub><m:mi>ψ</m:mi>
+		  <m:mrow>
+		    <m:mi>a</m:mi>
+		    <m:mo>,</m:mo>
+		    <m:mi>τ</m:mi>
+		  </m:mrow>
+		</m:msub>
+	      </m:ci>
+	      <m:ci>t</m:ci>
+	    </m:apply>
+	  </m:apply>
+	  <m:cn>1</m:cn>
+	</m:apply>
+      </m:math> for all <m:math><m:ci>a</m:ci></m:math> and
+      <m:math><m:ci>τ</m:ci></m:math>.  The CWT is then defined by
+      the transform pair
+
+      <m:math display="block">
+	<m:apply>
+	  <m:eq/>
+	  <m:apply>
+	    <m:ci type="fn">
+	      <m:msub><m:mi>X</m:mi><m:mi>CWT</m:mi></m:msub>
+	    </m:ci>
+	    <m:ci>a</m:ci>
+	    <m:ci>τ</m:ci>
+	  </m:apply>
+	  <m:apply>
+	    <m:int/>
+	    <m:bvar><m:ci>t</m:ci></m:bvar>
+	    <m:lowlimit>
+	      <m:apply>
+		<m:minus/>
+		<m:infinity/>
+	      </m:apply>
+	    </m:lowlimit>
+	    <m:uplimit>
+	      <m:infinity/>
+	    </m:uplimit>
+	    <m:apply>
+	      <m:times/>
+	      <m:apply>
+		<m:ci type="fn">x</m:ci>
+		<m:ci>t</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:conjugate/>
+		<m:apply>
+		  <m:ci type="fn">
+		    <m:msub><m:mi>ψ</m:mi>
+		      <m:mrow>
+			<m:mi>a</m:mi>
+			<m:mo>,</m:mo>
+			<m:mi>τ</m:mi>
+		      </m:mrow>
+		    </m:msub>
+		  </m:ci>
+		  <m:ci>t</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:apply>
+      </m:math>
+
+      <m:math display="block">
+	<m:apply>
+	  <m:eq/>
+	  <m:apply>
+	    <m:ci type="fn">x</m:ci>
+	    <m:ci>t</m:ci>
+	  </m:apply>
+	  <m:apply>
+	    <m:times/>
+	    <m:apply>
+	      <m:divide/>
+	      <m:cn>1</m:cn>
+	      <m:ci>
+		<m:msub><m:mi>C</m:mi><m:mi>ψ</m:mi></m:msub>
+	      </m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:int/>
+	      <m:bvar><m:ci>a</m:ci></m:bvar>
+	      <m:lowlimit>
+		<m:apply>
+		  <m:minus/>
+		  <m:infinity/>
+		</m:apply>
+	      </m:lowlimit>
+	      <m:uplimit>
+		<m:infinity/>
+	      </m:uplimit>
+	      <m:apply>
+		<m:int/>
+		<m:bvar><m:ci>τ</m:ci></m:bvar>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn">
+			<m:msub><m:mi>X</m:mi><m:mi>CWT</m:mi></m:msub>
+		      </m:ci>
+		      <m:ci>a</m:ci>
+		      <m:ci>τ</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn">
+			<m:msub><m:mi>ψ</m:mi>
+			  <m:mrow>
+			    <m:mi>a</m:mi>
+			    <m:mo>,</m:mo>
+			    <m:mi>τ</m:mi>
+			  </m:mrow>
+			</m:msub>
+		      </m:ci>
+		      <m:ci>t</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>a</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:apply>
+      </m:math>
+
+      In basis terms, the CWT says that a waveform can be decomposed
+      into a collection of shifted and stretched versions of the
+      mother wavelet 
+      <m:math>
+	<m:apply>
+	  <m:ci type="fn">ψ</m:ci>
+	  <m:ci>t</m:ci>
+	</m:apply>
+      </m:math>.  As such, it is usually said that wavelets perform a
+      "time-scale" analysis rather than a time-frequency analysis.
+    </para>
+
+    <para id="para5">
+      The <term>Morlet wavelet</term> is a classic example of the
+      CWT.  It employs a windowed complex exponential as the mother
+      wavelet:
+      
+      <m:math display="block">
+	<m:apply>
+	  <m:eq/>
+	  <m:apply>
+	    <m:ci type="fn">ψ</m:ci>
+	    <m:ci>t</m:ci>
+	  </m:apply>
+	  <m:apply>
+	    <m:times/>
+	    <m:apply>
+	      <m:divide/>
+	      <m:cn>1</m:cn>
+	      <m:apply>
+		<m:root/>
+		<m:apply>
+		  <m:times/>
+		  <m:cn>2</m:cn>
+		  <m:pi/>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	    <m:apply>
+	      <m:exp/>
+	      <m:apply>
+		<m:minus/>
+		<m:apply>
+		  <m:times/>
+		  <m:imaginaryi/>
+		  <m:ci>
+		    <m:msub><m:mi>Ω</m:mi><m:mn>0</m:mn></m:msub>
+		  </m:ci>
+		  <m:ci>t</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	    <m:apply>
+	      <m:exp/>
+	      <m:apply>
+		<m:minus/>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>t</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:apply>
+      </m:math>
+
+      <m:math display="block">
+	<m:apply>
+	  <m:eq/>
+	  <m:apply>
+	    <m:ci type="fn">Ψ</m:ci>
+	    <m:ci>Ω</m:ci>
+	  </m:apply>
+	  <m:apply>
+	    <m:exp/>
+	    <m:apply>
+	      <m:minus/>
+	      <m:apply>
+		<m:divide/>
+		<m:apply>
+		  <m:power/>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>Ω</m:ci>
+		    <m:ci>
+		      <m:msub><m:mi>Ω</m:mi><m:mn>0</m:mn></m:msub>
+		    </m:ci>
+		  </m:apply>
+		  <m:cn>2</m:cn>
+		</m:apply>
+		<m:cn>2</m:cn>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:apply>
+      </m:math>
+
+      where it is typical to select 
+      <m:math>
+	<m:apply>
+	  <m:eq/>
+	  <m:ci>
+	    <m:msub><m:mi>Ω</m:mi><m:mn>0</m:mn></m:msub>
+	  </m:ci>
+	  <m:apply>
+	    <m:times/>
+	    <m:pi/>
+	    <m:apply>
+	      <m:root/>
+	      <m:apply>
+		<m:divide/>
+		<m:cn>2</m:cn>
+		<m:apply>
+		  <m:log/>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:apply>
+      </m:math>. (See <link target-id="fig2" strength="2">illustration</link>.)  While this wavelet does not
+      exactly satisfy the conditions established earlier, since
+      <m:math>
+	<m:apply>
+	  <m:approx/>
+	  <m:apply>
+	    <m:ci type="fn">Ψ</m:ci>
+	    <m:cn>0</m:cn>
+	  </m:apply>
+	  <m:apply>
+	    <m:neq/>
+	    <m:cn type="e-notation">7<m:sep/>-7</m:cn>
+	    <m:cn>0</m:cn>
+	  </m:apply>
+	</m:apply>
+      </m:math>, it can be corrected, though in practice the
+      correction is negligible and usually ignored. 
+    </para>
+ 
+    <figure id="fig2">
+      <media id="id3896378" alt=""><image src="../../media/figure2-2caa.png" mime-type="image/png"/></media>
+    </figure>      
+
+    <para id="para6">
+      While the CWT discussed above is an interesting theoretical and
+      pedagogical tool, the discrete wavelet transform (DWT) is much
+      more practical. Before shifting our focus to the DWT, we take a
+      step back and review some of the basic concepts from the branch
+      of mathematics known as Hilbert Space theory (<link document="m10419" strength="3">Vector Space</link>, <link document="m10428" strength="3">Normed Vector Space</link>, <link document="m10430" strength="3">Inner Product Space</link>, <link document="m10434" strength="3">Hilbert Space</link>, <link document="m10435" strength="3">Projection Theorem</link>). These
+      concepts will be essential in our development of the DWT.
+    </para>
+
+  </content>
+</document>

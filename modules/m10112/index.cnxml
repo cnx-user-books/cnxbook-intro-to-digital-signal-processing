@@ -1,0 +1,392 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  
+  <title>Poles and Zeros</title>
+
+  <metadata>
+  <md:content-id>m10112</md:content-id><md:title>Poles and Zeros</md:title>
+  <md:abstract>Explains poles and zeros of transfer functions.</md:abstract>
+  <md:uuid>6cc2a6b9-87af-4f20-9948-f6520e372eda</md:uuid>
+</metadata>
+
+<content>
+    
+    <section id="intro">
+      <title>Introduction</title>
+      
+      <para id="para1">
+	It is quite difficult to qualitatively analyze the <link document="m10110" strength="2">Laplace transform</link> and
+	<link document="m10549" strength="2">Z-transform</link>, since
+	mappings of their magnitude and phase or real part and
+	imaginary part result in multiple mappings of 2-dimensional
+	surfaces in 3-dimensional space.  For this reason, it is very
+	common to examine a plot of a <link document="m0028" strength="2">transfer function's</link> poles and zeros to
+	try to gain a qualitative idea of what a system does.
+      </para>
+      
+      <para id="para2">
+	Given a continuous-time transfer function in the Laplace domain,
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">H</m:ci>
+	    <m:ci>s</m:ci>
+	  </m:apply>
+	</m:math>, or a discrete-time one in the Z-domain,
+
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">H</m:ci>
+	    <m:ci>z</m:ci>
+	  </m:apply>
+	</m:math>, a zero is any value of
+	<m:math><m:ci>s</m:ci></m:math> or
+	<m:math><m:ci>z</m:ci></m:math> such that the transfer
+	function is zero, and a pole is any value of
+	<m:math><m:ci>s</m:ci></m:math> or
+	<m:math><m:ci>z</m:ci></m:math> such that the transfer
+	function is infinite.  To define them precisely:
+	
+	<definition id="z_def">
+  	  <term>zeros</term>
+  	  <meaning id="id1168428964545">
+	    The value(s) for <m:math><m:ci>z</m:ci></m:math> where the
+	    <emphasis>numerator</emphasis> of the transfer function
+	    equals zero
+	  </meaning>
+	  <meaning id="id1168428964562">
+	    The complex frequencies that make the overall gain of the
+	    filter transfer function zero.
+	  </meaning>
+  	</definition>
+	
+	<definition id="p_def">
+  	  <term>poles</term>
+  	  <meaning id="id1168428964579">
+	    The value(s) for <m:math><m:ci>z</m:ci></m:math> where the
+	    <emphasis>denominator</emphasis> of the transfer function
+	    equals zero
+	  </meaning>
+	  <meaning id="id1168428964593">
+	    The complex frequencies that make the overall gain of the filter
+	    transfer function infinite.
+	  </meaning>
+  	</definition>
+      </para>
+    </section>
+    
+    <section id="plots">
+      <title>Pole/Zero Plots</title>
+      <para id="pp">
+	When we plot these in the appropriate s- or z-plane, we
+	represent zeros with "o" and poles with "x".  Refer to <link document="m10556" strength="2">this module</link> for a detailed
+	looking at plotting the poles and zeros of a z-transform on
+	the Z-plane.
+      </para>
+      
+      <example id="exa1">
+	<para id="para3">
+	  Find the poles and zeros for the transfer function
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">H</m:ci>
+		<m:ci>s</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:divide/>
+		<m:apply>
+		  <m:plus/>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>s</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>6</m:cn>
+		    <m:ci>s</m:ci>
+		  </m:apply>
+		  <m:cn>8</m:cn>
+		</m:apply>
+		<m:apply>
+		  <m:plus/>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>s</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	  and plot the results in the s-plane.
+	</para>
+	
+	<para id="para4">
+	  The first thing we recognize is that this transfer function
+	  will equal zero whenever the top,
+	  <m:math>
+	    <m:apply>
+	      <m:plus/>
+	      <m:apply>
+		<m:power/>
+		<m:ci>s</m:ci>
+		<m:cn>2</m:cn>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:cn>6</m:cn>
+		<m:ci>s</m:ci>
+	      </m:apply>
+	      <m:cn>8</m:cn>
+	    </m:apply>
+	  </m:math>, equals zero.  To find where this equals zero, we
+	  factor this to get,
+	  <m:math>
+	    <m:apply>
+	      <m:times/>
+	      <m:apply>
+		<m:plus/>
+		<m:ci>s</m:ci>
+		<m:cn>2</m:cn>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+		<m:ci>s</m:ci>
+		<m:cn>4</m:cn>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>.
+	  This yields zeros at
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>s</m:ci>
+	      <m:cn>-2</m:cn>
+	    </m:apply>
+	  </m:math>
+	  and
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>s</m:ci>
+	      <m:cn>-4</m:cn>
+	    </m:apply>
+	  </m:math>.  Had this function been more complicated, it
+	  might have been necessary to use the quadratic formula.
+	</para>
+	
+	<para id="para5">
+	  For poles, we must recognize that the transfer function will
+	  be infinite whenever the bottom part is zero.  That is when
+	  <m:math>
+	    <m:apply>
+	      <m:plus/>
+	      <m:apply>
+		<m:power/>
+		<m:ci>s</m:ci>
+		<m:cn>2</m:cn>
+	      </m:apply>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:math>
+	  is zero.  To find this, we again look to factor the
+	  equation.  This yields
+	  <m:math>
+	    <m:apply>
+	      <m:times/>
+	      <m:apply>
+		<m:plus/>
+		<m:ci>s</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:imaginaryi/>
+		  <m:apply>
+		    <m:root/>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:minus/>
+		<m:ci>s</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:imaginaryi/>
+		  <m:apply>
+		    <m:root/>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>.
+	  This yields purely imaginary roots of
+	  <m:math>
+	    <m:apply>
+	      <m:plus/>
+	      <m:apply>
+		<m:times/>
+		<m:imaginaryi/>
+		<m:apply>
+		  <m:root/>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	  and
+	  <m:math>
+	    <m:apply>
+	      <m:minus/>
+	      <m:apply>
+		<m:times/>
+		<m:imaginaryi/>
+		<m:apply>
+		  <m:root/>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</para>
+	
+	<para id="para6">
+	  Plotting this gives <link target-id="fig1"/>
+	</para>
+<!--
+	<figure id='pz_roc'>
+	  <name>Region of Convergence for the Pole/Zero Plot</name>
+	  <media type='image/jpeg' src='zp_roc.jpg'/>
+	  <caption>
+	    The shaded area represents the chosen ROC for the transfer function.
+	  </caption>
+        </figure>
+-->
+
+	<figure id="fig1">
+	  <title>Pole and Zero Plot</title>
+	  <media id="id1168429076158" alt=""><image src="../../media/pz1.png" mime-type="image/png"/></media>
+	  <caption>Sample pole-zero plot</caption>
+	</figure>
+      </example>
+
+      
+      <para id="para7">
+	Now that we have found and plotted the poles and zeros, we
+	must ask what it is that this plot gives us.  Basically what
+	we can gather from this is that the magnitude of the transfer
+	function will be larger when it is closer to the poles and
+	smaller when it is closer to the zeros.  This provides us with
+	a qualitative understanding of what the system does at various
+	frequencies and is crucial to the discussion of <link document="m10113" strength="2">stability</link>.
+      </para>
+    </section>
+
+    <section id="sect1">
+      <title>Repeated Poles and Zeros</title>
+      <para id="para8">
+	It is possible to have more than one pole or zero at any given
+	point.  For instance, the discrete-time transfer function
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">H</m:ci>
+	      <m:ci>z</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:power/>
+	      <m:ci>z</m:ci>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+	will have two zeros at the origin and the continuous-time
+	function
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">H</m:ci>
+	      <m:ci>s</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:divide/>
+	      <m:cn>1</m:cn>
+	      <m:apply>
+		<m:power/>
+		<m:ci>s</m:ci>
+		<m:cn>25</m:cn>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+	will have 25 poles at the origin.
+      </para>
+    </section>
+    
+    <section id="sect2">
+      <title>Pole-Zero Cancellation</title>
+      <para id="para9">
+	An easy mistake to make with regards to poles and zeros is to
+	think that a function like
+	<m:math>
+	  <m:apply>
+	    <m:divide/>
+	    <m:apply>
+	      <m:times/>
+	      <m:apply>
+		<m:plus/>
+		<m:ci>s</m:ci>
+		<m:cn>3</m:cn>
+	      </m:apply>
+	      <m:apply>
+		<m:minus/>
+		<m:ci>s</m:ci>
+		<m:cn>1</m:cn>
+	      </m:apply>
+	    </m:apply>
+	    <m:apply>
+	      <m:minus/>
+	      <m:ci>s</m:ci>
+	      <m:cn>1</m:cn>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+	is the same as
+	<m:math>
+	  <m:apply>
+	    <m:plus/>
+	    <m:ci>s</m:ci>
+	    <m:cn>3</m:cn>
+	  </m:apply>
+	</m:math>.
+	In theory they are equivalent, as the pole and zero at
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci>s</m:ci>
+	    <m:cn>1</m:cn>
+	  </m:apply>
+	</m:math>
+
+	cancel each other out in what is known as <term>pole-zero
+	  cancellation</term>.  However, think about what may happen
+	  if this were a transfer function of a system that was
+	  created with physical circuits.  In this case, it is very
+	  unlikely that the pole and zero would remain in exactly the
+	  same place.  A minor temperature change, for instance, could
+	  cause one of them to move just slightly.  If this were to
+	  occur a tremendous amount of volatility is created in that
+	  area, since there is a change from infinity at the pole to
+	  zero at the zero in a very small range of signals.  This is
+	  generally a very bad way to try to eliminate a pole.  A much
+	  better way is to use <term>control theory</term> to move the
+	  pole to a better place.
+      </para>
+    </section>
+
+  </content>
+</document>

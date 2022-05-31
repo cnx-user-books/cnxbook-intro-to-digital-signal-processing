@@ -1,0 +1,2168 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  
+  <title>The FFT Algorithm</title>
+  
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>c9b459c6-b73f-409a-88a1-d587f51323ab</md:uuid>
+</metadata>
+
+  <content>    
+
+    <para id="pre_para">
+      <definition id="fft">
+  	<term>FFT</term>
+  	<meaning id="idp6302800">
+	  (Fast Fourier Transform) An efficient <term>computational 
+	  algorithm</term> for computing the <link document="m10249" strength="3">DFT</link>.  
+	</meaning>
+      </definition>
+    </para>
+
+    <section id="sec1">
+      <title>The Fast Fourier Transform FFT</title>
+      
+      <para id="sec1para2">
+	DFT can be <emphasis>expensive</emphasis> to compute
+	<emphasis>directly</emphasis> 
+
+	 <m:math display="block">
+	  <m:apply>
+	    <m:forall/>
+	    <m:bvar><m:ci>k</m:ci></m:bvar>
+	    <m:condition>
+	      <m:apply>
+		<m:leq/>
+		<m:cn>0</m:cn>
+		<m:ci>k</m:ci>
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>N</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+	      </m:apply>
+	    </m:condition>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">X</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar><m:ci>n</m:ci></m:bvar>
+		<m:lowlimit>
+		  <m:cn>0</m:cn>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:exp/>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+			<m:apply>
+			  <m:divide/>
+			  <m:ci>k</m:ci>
+			  <m:ci>N</m:ci>
+			</m:apply>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+	
+      </para>
+
+      <para id="sec1para3">
+	For each <m:math><m:ci>k</m:ci></m:math>, we must execute:
+	
+	<list id="list1_s1p3">
+	  <item>
+	<m:math><m:ci>N</m:ci></m:math> complex multiplies 
+	  </item>
+	  <item>
+	<m:math>
+	  <m:apply>
+	    <m:minus/>
+	    <m:ci>N</m:ci>
+	    <m:cn>1</m:cn>
+	  </m:apply>
+	</m:math> complex adds
+	  </item>
+	</list>
+
+        The total cost of direct computation
+	of an <m:math><m:ci>N</m:ci></m:math>-point DFT is
+
+	<list id="list2_s1p3">
+	  <item>
+	<m:math>
+	  <m:apply>
+	    <m:power/>
+	    <m:ci>N</m:ci>
+	    <m:cn>2</m:cn>
+	  </m:apply>
+	</m:math> complex multiplies
+	  </item>
+	  <item>
+	<m:math>
+	  <m:apply>
+	    <m:times/>
+	    <m:ci>N</m:ci>
+	    <m:apply>
+	      <m:minus/>
+	      <m:ci>N</m:ci>
+	      <m:cn>1</m:cn>
+	    </m:apply>
+	  </m:apply>
+	</m:math> complex adds
+	  </item>
+	</list>
+
+        How many adds and mults of <emphasis>real</emphasis> numbers 
+	are required? 
+      </para>
+
+      <para id="sec1para4">
+	This "
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">O</m:ci>
+	    <m:apply>
+	      <m:power/>
+	      <m:ci>N</m:ci>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:apply>
+	</m:math>" computation rapidly gets out of hand, as
+	<m:math><m:ci>N</m:ci></m:math> gets large:
+      </para>
+
+      <table frame="all" id="table1" summary="">
+	<tgroup cols="6" align="left" colsep="1" rowsep="1">
+	  <tbody valign="top">
+	    <row>
+	      <entry align="center">
+		<m:math><m:ci>N</m:ci></m:math>
+	      </entry>
+	      <entry align="center">1</entry>
+	      <entry align="center">10</entry>
+	      <entry align="center">100</entry>
+	      <entry align="center">1000</entry>
+	      <entry align="center">
+		<m:math>
+		  <m:apply>
+		    <m:power/>
+		    <m:cn>10</m:cn><m:cn>6</m:cn>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	    <row>
+	      <entry align="center">
+		<m:math>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>N</m:ci><m:cn>2</m:cn>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	      <entry align="center">1</entry>
+	      <entry align="center">100</entry>
+	      <entry align="center">10,000</entry>
+	      <entry align="center">
+		<m:math>
+		  <m:apply>
+		    <m:power/>
+		    <m:cn>10</m:cn><m:cn>6</m:cn>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	      <entry align="center">
+		<m:math>
+		  <m:apply>
+		    <m:power/>
+		    <m:cn>10</m:cn><m:cn>12</m:cn>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	  </tbody>
+	</tgroup>
+      </table>
+
+      <figure id="figure1">
+	<media id="idp7252496" alt=""><image src="../../media/figure1-aeb4.png" mime-type="image/png"/></media>
+      </figure>
+
+      <para id="sec1para5">
+	The FFT provides us with a much more
+	<emphasis>efficient</emphasis> way of computing the DFT.  The
+	FFT requires only "
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">O</m:ci>
+	    <m:apply>
+	      <m:times/>
+	      <m:ci>N</m:ci>
+	      <m:apply>
+		<m:log/>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>" computations to compute the
+	<m:math><m:ci>N</m:ci></m:math>-point DFT.
+      </para>
+
+      <table frame="all" id="table2" summary="">
+	<tgroup cols="5" align="left" colsep="1" rowsep="1">
+	  <tbody valign="top">
+	    <row>
+	      <entry align="center">
+		<m:math><m:ci>N</m:ci></m:math>
+	      </entry>
+	      <entry align="center">10</entry>
+	      <entry align="center">100</entry>
+	      <entry align="center">1000</entry>
+	      <entry align="center">
+		<m:math>
+		  <m:apply>
+		    <m:power/> 
+		    <m:cn>10</m:cn><m:cn>6</m:cn>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	    <row>
+	      <entry align="center">
+		<m:math>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>N</m:ci><m:cn>2</m:cn>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	      <entry align="center">100</entry>
+	      <entry align="center">10,000</entry>
+	      <entry align="center">
+		<m:math>
+		  <m:apply>
+		    <m:power/>
+		    <m:cn>10</m:cn><m:cn>6</m:cn>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	      <entry align="center">
+		<m:math>
+		  <m:apply>
+		    <m:power/>
+		    <m:cn>10</m:cn><m:cn>12</m:cn>
+		</m:apply>
+		</m:math>
+	      </entry>
+	    </row>
+	    <row>
+	      <entry align="center">
+		<m:math>
+		  <m:apply>
+		    <m:times/>
+		    <m:ci>N</m:ci>
+		    <m:apply>
+		      <m:log/>
+		      <m:logbase><m:cn>10</m:cn></m:logbase>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </entry>
+	      <entry align="center">10</entry>
+	      <entry align="center">200</entry>
+	      <entry align="center">3000</entry>
+	      <entry align="center">
+		<m:math>
+		  <m:cn type="e-notation">6<m:sep/>6</m:cn>
+		</m:math>
+	      </entry>
+	    </row>
+	  </tbody>
+	</tgroup>
+      </table>
+
+      <para id="sec1para6">
+	How long is 
+	<m:math>
+	  <m:apply>
+	    <m:times/>
+	    <m:apply>
+	      <m:power/>
+	      <m:cn>10</m:cn>
+	      <m:cn>12</m:cn>
+	    </m:apply>
+	    <m:ci>μsec</m:ci>
+	  </m:apply>
+	</m:math>?  More than 10 days!  How long is
+	<m:math>
+	  <m:apply>
+	    <m:times/>
+	    <m:cn type="e-notation">6<m:sep/>6</m:cn>
+	    <m:ci>μsec</m:ci>
+	  </m:apply>
+	</m:math>? 
+      </para>
+
+      <figure id="figure2">
+	<media id="idm426800" alt=""><image src="../../media/figure2-aeb4.png" mime-type="image/png"/></media>
+      </figure>
+
+      <para id="sec1para7">
+	The FFT and digital computers revolutionized DSP (1960 -
+	1980).
+      </para>
+    </section>
+
+    <section id="sec2">
+      <title>How does the FFT work?</title>
+      
+      <list id="list2">
+	<item>
+	  The FFT exploits the <term>symmetries</term> of the
+	  complex exponentials 
+
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:power/>
+		<m:ci>
+		  <m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+		</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:ci>k</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:exp/>
+		<m:apply>
+		  <m:minus/>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:ci>k</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</item>
+	
+	<item>
+	  <m:math>
+	    <m:apply>
+	      <m:power/>
+	      <m:ci>
+		<m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+	      </m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:ci>k</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> are called "<term>twiddle factors</term>"
+	</item>
+      </list>
+      
+      <rule type="Symmetry" id="rule1"><label>Symmetry</label>
+	<title>Complex Conjugate Symmetry</title>
+	<statement id="idp863248">
+	  <para id="rule1para1">
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:power/>
+		  <m:ci>
+		    <m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+		  </m:ci> 
+		  <m:apply>
+		    <m:times/>
+		    <m:ci>k</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:power/>
+		  <m:ci>
+		    <m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+		  </m:ci> 
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:times/>	   
+		      <m:ci>k</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:conjugate/>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>
+		      <m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+		    </m:ci>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>k</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	    
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:imaginaryi/>
+		      <m:cn>2</m:cn>
+		      <m:pi/>
+		      <m:apply>
+			<m:divide/>
+			<m:ci>k</m:ci>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>N</m:ci>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:cn>2</m:cn>
+		    <m:pi/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:ci>k</m:ci>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:conjugate/>
+		  <m:apply>
+		    <m:exp/>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+			<m:apply>
+			  <m:divide/>
+			  <m:ci>k</m:ci>
+			  <m:ci>N</m:ci>
+			</m:apply>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	    
+	  </para>
+	</statement>
+      </rule>
+
+      <rule type="Symmetry" id="rule2"><label>Symmetry</label>
+	<title>Periodicity in n and k</title>
+	<statement id="idp8382224">
+	  <para id="rule2para1">
+	    
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:power/>
+		  <m:ci>
+		    <m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+		  </m:ci> 
+		  <m:apply>
+		    <m:times/>
+		    <m:ci>k</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:power/>
+		  <m:ci>
+		    <m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+		  </m:ci> 
+		  <m:apply>
+		    <m:times/>	   
+		    <m:ci>k</m:ci>
+		    <m:apply>
+		      <m:plus/>
+		      <m:ci>N</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:power/>
+		  <m:ci>
+		    <m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+		  </m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:plus/>
+		      <m:ci>k</m:ci>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	    
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:imaginaryi/>
+		      <m:apply>
+			<m:divide/>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			</m:apply>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:ci>k</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:imaginaryi/>
+		      <m:apply>
+			<m:divide/>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			</m:apply>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:ci>k</m:ci>
+		      <m:apply>
+			<m:plus/>
+			<m:ci>N</m:ci>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:imaginaryi/>
+		      <m:apply>
+			<m:divide/>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			</m:apply>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:plus/>
+			<m:ci>k</m:ci>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:ci>
+		  <m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+		</m:ci>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:imaginaryi/>
+		      <m:apply>
+			<m:divide/>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			</m:apply>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+
+	  </para>
+	</statement>
+      </rule>      
+    </section>
+
+    <section id="sec3">
+      <title>Decimation in Time FFT</title>
+
+      <list id="list4">
+	<item>
+	  Just one of <emphasis>many</emphasis> different FFT
+	  algorithms
+	</item>
+	<item>
+	  The <emphasis>idea</emphasis> is to build a DFT out of
+	  smaller and smaller DFTs by decomposing
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">x</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math> into smaller and smaller subsequences.
+	</item>
+	<item>
+	  Assume 
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>N</m:ci>
+	      <m:apply>
+		<m:power/>
+		<m:cn>2</m:cn>
+		<m:ci>m</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> (a power of 2)
+	</item>
+      </list>
+
+      <section id="sec31">
+	<title>Derivation</title>
+	<para id="sec31para1">
+	  <m:math><m:ci>N</m:ci></m:math> is
+	  <emphasis>even</emphasis>, so we can complete
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">X</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	    </m:math> by separating 
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">x</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:math> into <emphasis>two</emphasis> subsequences each
+	    of length 
+	    <m:math>
+	      <m:apply>
+		<m:divide/>
+		<m:ci>N</m:ci>
+		<m:cn>2</m:cn>
+	      </m:apply>
+	    </m:math>. 
+
+	    <m:math display="block">
+	      <m:apply>
+		<m:tendsto/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:piecewise>
+		  <m:piece>
+		    <m:apply>
+		      <m:divide/>
+		      <m:ci>N</m:ci>
+		      <m:cn>2</m:cn>
+		    </m:apply> 
+		    <m:apply>
+		      <m:eq/>
+		      <m:ci>n</m:ci>
+		      <m:ci>even</m:ci>
+		    </m:apply>
+		  </m:piece>
+		  <m:piece>
+		    <m:apply>
+		      <m:divide/>
+		      <m:ci>N</m:ci>
+		      <m:cn>2</m:cn>
+		    </m:apply> 
+		    <m:apply>
+		      <m:eq/>
+		      <m:ci>n</m:ci>
+		      <m:ci>odd</m:ci>
+		    </m:apply>
+		  </m:piece>
+		</m:piecewise>
+	      </m:apply>
+	    </m:math>
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:forall/>
+	      <m:bvar><m:ci>k</m:ci></m:bvar>
+	      <m:condition>
+		<m:apply>
+		  <m:leq/>
+		  <m:cn>0</m:cn>
+		  <m:ci>k</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:condition>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">X</m:ci>
+		  <m:ci>k</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar><m:ci>n</m:ci></m:bvar>
+		  <m:lowlimit>
+		    <m:cn>0</m:cn>
+		  </m:lowlimit>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:uplimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">x</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:power/>
+		      <m:ci>
+			<m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+		      </m:ci> 
+		      <m:apply>
+			<m:times/>	   
+			<m:ci>k</m:ci>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> 
+	  
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">X</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar><m:ci>n</m:ci></m:bvar>
+		  <m:lowlimit>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:ci>r</m:ci>
+		    </m:apply>
+		  </m:lowlimit>
+		  <!-- should there be and uplimit?-->
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">x</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:power/>
+		      <m:ci>
+			<m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+		      </m:ci> 
+		      <m:apply>
+			<m:times/>	   
+			<m:ci>k</m:ci>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar><m:ci>n</m:ci></m:bvar>
+		  <m:lowlimit>
+		    <m:apply>
+		      <m:plus/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:ci>r</m:ci>
+		      </m:apply>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:lowlimit>
+		  <!-- should there be and uplimit?-->
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">x</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:power/>
+		      <m:ci>
+			<m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+		      </m:ci> 
+		      <m:apply>
+			<m:times/>	   
+			<m:ci>k</m:ci>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> 
+	  
+	  where 
+	  <m:math>
+	    <m:apply>
+	      <m:leq/>
+	      <m:cn>0</m:cn>
+	      <m:ci>r</m:ci>
+	      <m:apply>
+		<m:minus/>
+		<m:apply>
+		  <m:divide/>
+		  <m:ci>N</m:ci>
+		  <m:cn>2</m:cn>
+		</m:apply>
+		<m:cn>1</m:cn>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>.  So
+
+	  <equation id="eqn1">
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">X</m:ci>
+		  <m:ci>k</m:ci>
+		</m:apply>
+	      
+		<m:apply>
+		  <m:plus/>
+		  <m:apply>
+		    <m:sum/>
+		    <m:bvar><m:ci>r</m:ci></m:bvar>
+		    <m:lowlimit>
+		      <m:cn>0</m:cn>
+		    </m:lowlimit>
+		    <m:uplimit>
+		      <m:apply>
+			<m:minus/>
+			<m:apply>
+			  <m:divide/>
+			  <m:ci>N</m:ci>
+			  <m:cn>2</m:cn>
+			</m:apply>
+		      <m:cn>1</m:cn>
+		      </m:apply>
+		    </m:uplimit>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:ci type="fn" class="discrete">x</m:ci>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>2</m:cn>
+			  <m:ci>r</m:ci>
+			</m:apply>
+		      </m:apply>
+		      <m:apply>
+			<m:power/>
+			<m:ci>
+			  <m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+			</m:ci> 
+			<m:apply>
+			  <m:times/>	
+			  <m:cn>2</m:cn>
+			  <m:ci>k</m:ci>
+			  <m:ci>r</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:sum/>
+		    <m:bvar><m:ci>r</m:ci></m:bvar>
+		    <m:lowlimit>
+		      <m:cn>0</m:cn>
+		    </m:lowlimit>
+		    <m:uplimit>
+		      <m:apply>
+			<m:minus/>
+			<m:apply>
+			  <m:divide/>
+			  <m:ci>N</m:ci>
+			  <m:cn>2</m:cn>
+			</m:apply>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		    </m:uplimit>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:ci type="fn" class="discrete">x</m:ci>
+			<m:apply>
+			  <m:plus/>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>2</m:cn>
+			    <m:ci>r</m:ci>
+			  </m:apply>
+			  <m:cn>1</m:cn>
+			</m:apply>
+		      </m:apply>
+		      <m:apply>
+			<m:power/>
+			<m:ci>
+			  <m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+			</m:ci> 
+			<m:apply>
+			  <m:times/>
+			  <m:apply>
+			    <m:plus/>
+			    <m:apply>
+			      <m:times/>
+			      <m:cn>2</m:cn>
+			      <m:ci>r</m:ci>
+			    </m:apply>
+			    <m:cn>1</m:cn>
+			  </m:apply>
+			  <m:ci>k</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      
+		<m:apply>
+		  <m:plus/>
+		  <m:apply>
+		    <m:sum/>
+		    <m:bvar><m:ci>r</m:ci></m:bvar>
+		    <m:lowlimit>
+		      <m:cn>0</m:cn>
+		    </m:lowlimit>
+		    <m:uplimit>
+		      <m:apply>
+			<m:minus/>
+			<m:apply>
+			  <m:divide/>
+			  <m:ci>N</m:ci>
+			  <m:cn>2</m:cn>
+			</m:apply>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		    </m:uplimit>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:ci type="fn" class="discrete">x</m:ci>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>2</m:cn>
+			  <m:ci>r</m:ci>
+			</m:apply>
+		      </m:apply>
+		      <m:apply>
+			<m:power/>
+			<m:apply>
+			  <m:power/>
+			  <m:ci>
+			    <m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+			  </m:ci> 
+			  <m:cn>2</m:cn>
+			</m:apply>
+			<m:apply>
+			  <m:times/>
+			  <m:ci>k</m:ci>
+			  <m:ci>r</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:power/>
+		      <m:ci>
+			<m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+		      </m:ci> 
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar><m:ci>r</m:ci></m:bvar>
+		      <m:lowlimit>
+			<m:cn>0</m:cn>
+		      </m:lowlimit>
+		      <m:uplimit>
+			<m:apply>
+			  <m:minus/>
+			<m:apply>
+			    <m:divide/>
+			    <m:ci>N</m:ci>
+			    <m:cn>2</m:cn>
+			  </m:apply>
+			  <m:cn>1</m:cn>
+			</m:apply>
+		      </m:uplimit>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">x</m:ci>
+			  <m:apply>
+			    <m:plus/>
+			    <m:apply>
+			      <m:times/>
+			      <m:cn>2</m:cn>
+			      <m:ci>r</m:ci>
+			    </m:apply>
+			    <m:cn>1</m:cn>
+			  </m:apply>
+			</m:apply>
+			<m:apply>
+			  <m:power/>
+			  <m:apply>
+			    <m:power/>
+			    <m:ci>
+			      <m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+			    </m:ci> 
+			    <m:cn>2</m:cn>
+			  </m:apply>
+			  <m:apply>
+			    <m:times/>
+			    <m:ci>k</m:ci>
+			    <m:ci>r</m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+
+	  where 
+
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:power/>
+		<m:ci>
+		  <m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+		</m:ci> 
+		<m:cn>2</m:cn>
+	      </m:apply>
+	      <m:apply>
+		<m:exp/>
+		<m:apply>
+		  <m:minus/>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:exp/>
+		<m:apply>
+		  <m:minus/>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:apply>
+			<m:divide/>
+			<m:ci>N</m:ci>
+			<m:cn>2</m:cn>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:ci><m:msub>
+		  <m:mi>W</m:mi>
+		  <m:mrow>
+		    <m:mfrac>
+		      <m:mi>N</m:mi>
+		      <m:mn>2</m:mn>
+		    </m:mfrac>
+		  </m:mrow>
+		</m:msub></m:ci>
+	    </m:apply>
+	  </m:math>.  So 
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">X</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	      
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar><m:ci>r</m:ci></m:bvar>
+		  <m:lowlimit>
+		    <m:cn>0</m:cn>
+		  </m:lowlimit>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:divide/>
+			<m:ci>N</m:ci>
+			<m:cn>2</m:cn>
+		      </m:apply>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:uplimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">x</m:ci>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:ci>r</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:power/>
+		      <m:ci><m:msub>
+			  <m:mi>W</m:mi>
+			  <m:mrow>
+			    <m:mfrac>
+			      <m:mi>N</m:mi>
+			      <m:mn>2</m:mn>
+			    </m:mfrac>
+			  </m:mrow>
+			</m:msub></m:ci>
+		      <m:apply>
+			<m:times/>	
+			<m:ci>k</m:ci>
+			<m:ci>r</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>
+		      <m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+		    </m:ci> 
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:sum/>
+		    <m:bvar><m:ci>r</m:ci></m:bvar>
+		    <m:lowlimit>
+		      <m:cn>0</m:cn>
+		    </m:lowlimit>
+		    <m:uplimit>
+		      <m:apply>
+			<m:minus/>
+			<m:apply>
+			  <m:divide/>
+			  <m:ci>N</m:ci>
+			  <m:cn>2</m:cn>
+			</m:apply>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		    </m:uplimit>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:ci type="fn" class="discrete">x</m:ci>
+			<m:apply>
+			  <m:plus/>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>2</m:cn>
+			    <m:ci>r</m:ci>
+			  </m:apply>
+			  <m:cn>1</m:cn>
+			</m:apply>
+		      </m:apply>
+		      <m:apply>
+			<m:power/>
+			<m:ci><m:msub>
+			    <m:mi>W</m:mi>
+			    <m:mrow>
+			      <m:mfrac>
+				<m:mi>N</m:mi>
+				<m:mn>2</m:mn>
+			      </m:mfrac>
+			    </m:mrow>
+			  </m:msub></m:ci>
+			<m:apply>
+			  <m:times/>
+			  <m:ci>k</m:ci>
+			  <m:ci>r</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  where 
+	  <m:math>
+	    <m:apply>
+	      <m:sum/>
+	      <m:bvar><m:ci>r</m:ci></m:bvar>
+	      <m:lowlimit>
+		<m:cn>0</m:cn>
+	      </m:lowlimit>
+	      <m:uplimit>
+		<m:apply>
+		  <m:minus/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:ci>N</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:cn>1</m:cn>
+		</m:apply>
+	      </m:uplimit>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>2</m:cn>
+		    <m:ci>r</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:power/>
+		  <m:ci><m:msub>
+		      <m:mi>W</m:mi>
+		      <m:mrow>
+			<m:mfrac>
+			  <m:mi>N</m:mi>
+			  <m:mn>2</m:mn>
+			</m:mfrac>
+		      </m:mrow>
+		    </m:msub></m:ci>
+		  <m:apply>
+		    <m:times/>	
+		    <m:ci>k</m:ci>
+		    <m:ci>r</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> is 
+	  <m:math>
+	    <m:apply>
+	      <m:divide/>
+	      <m:ci>N</m:ci>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:math>-point DFT of even samples (
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">G</m:ci>
+	      <m:ci>k</m:ci>
+	    </m:apply>
+	  </m:math>) and 
+	  <m:math>
+	    <m:apply>
+	      <m:sum/>
+	      <m:bvar><m:ci>r</m:ci></m:bvar>
+	      <m:lowlimit>
+		<m:cn>0</m:cn>
+	      </m:lowlimit>
+	      <m:uplimit>
+		<m:apply>
+		  <m:minus/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:ci>N</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:cn>1</m:cn>
+		</m:apply>
+	      </m:uplimit>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:apply>
+		    <m:plus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:ci>r</m:ci>
+		    </m:apply>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:power/>
+		  <m:ci><m:msub>
+		      <m:mi>W</m:mi>
+		      <m:mrow>
+			<m:mfrac>
+			  <m:mi>N</m:mi>
+			  <m:mn>2</m:mn>
+			</m:mfrac>
+		      </m:mrow>
+		    </m:msub></m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:ci>k</m:ci>
+		    <m:ci>r</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> is 
+	  <m:math>
+	    <m:apply>
+	      <m:divide/>
+	      <m:ci>N</m:ci>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:math>-point DFT of odd samples (
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">H</m:ci>
+	      <m:ci>k</m:ci>
+	    </m:apply>
+	  </m:math>).
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:forall/>
+	      <m:bvar><m:ci>k</m:ci></m:bvar>
+	      <m:condition>
+		<m:apply>
+		  <m:leq/>
+		  <m:cn>0</m:cn>
+		  <m:ci>k</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:apply>  
+	      </m:condition>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">X</m:ci>
+		  <m:ci>k</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:plus/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">G</m:ci>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:power/>
+		      <m:ci>
+			<m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+		      </m:ci> 
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">H</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  Decomposition of an <m:math><m:ci>N</m:ci></m:math>-point
+	  DFT as a sum of 2
+	  <m:math>
+	    <m:apply>
+	      <m:divide/>
+	      <m:ci>N</m:ci>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:math>-point DFTs. 
+	</para>
+
+	<para id="sec31para2">
+	  Why would we want to do this?  <emphasis>Because it is more
+	  efficient!</emphasis> 
+
+	  <note type="Recall" id="idp7183232"><label>Recall</label>Cost to compute an
+	  <m:math><m:ci>N</m:ci></m:math>-point DFT is approximately
+	    <m:math>
+	      <m:apply>
+		<m:power/>
+		<m:ci>N</m:ci>
+		<m:cn>2</m:cn>
+	      </m:apply>
+	    </m:math> complex mults and adds. </note>
+
+	  But decomposition into 2  
+	  <m:math>
+	    <m:apply>
+	      <m:divide/>
+	      <m:ci>N</m:ci>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:math>-point DFTs + combination requires only 
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:power/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:ci>N</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:cn>2</m:cn>
+		</m:apply>
+		<m:apply>
+		  <m:power/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:ci>N</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:cn>2</m:cn>
+		</m:apply>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>N</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:cn>2</m:cn>
+		</m:apply>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  where the first part is the number of complex mults and adds for 
+	  <m:math>
+	    <m:apply>
+	      <m:divide/>
+	      <m:ci>N</m:ci>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:math>-point DFT, 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">G</m:ci>
+	      <m:ci>k</m:ci>
+	    </m:apply>
+	  </m:math>. The second part is the number of complex mults
+	  and adds for 
+	  <m:math>
+	    <m:apply>
+	      <m:divide/>
+	      <m:ci>N</m:ci>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:math>-point DFT, 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">H</m:ci>
+	      <m:ci>k</m:ci>
+	    </m:apply>
+	  </m:math>.  The third part is the number of complex mults and
+	  adds for combination.  And the total is 
+	  <m:math>
+	    <m:apply>
+	      <m:plus/>
+	      <m:apply>
+		<m:divide/>
+		<m:apply>
+		  <m:power/>
+		  <m:ci>N</m:ci>
+		  <m:cn>2</m:cn>
+		</m:apply>
+		<m:cn>2</m:cn>
+	      </m:apply>
+	      <m:ci>N</m:ci>
+	    </m:apply>
+	  </m:math> complex mults and adds. 
+	</para>
+
+	<example id="example1">
+	  <title>Savings</title>
+	  <para id="example1para1">
+	    For 
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:ci>N</m:ci>
+		<m:cn>1000</m:cn>
+	      </m:apply>
+	    </m:math>, 
+
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:power/>
+		  <m:ci>N</m:ci>
+		  <m:cn>2</m:cn>
+		</m:apply>
+		<m:apply>
+		  <m:power/>
+		  <m:cn>10</m:cn>
+		  <m:cn>6</m:cn>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:plus/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:apply>
+		      <m:power/>
+		      <m:ci>N</m:ci>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:ci>N</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:plus/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:apply>
+		      <m:power/>
+		      <m:cn>10</m:cn>
+		      <m:cn>6</m:cn>
+		    </m:apply>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:cn>1000</m:cn>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+
+	    Because 1000 is small compared to 500,000, 
+	    
+	    <m:math display="block">
+	      <m:apply>
+		<m:approx/>
+		<m:apply>
+		  <m:plus/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:apply>
+		      <m:power/>
+		      <m:ci>N</m:ci>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:ci>N</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:power/>
+		    <m:cn>10</m:cn>
+		    <m:cn>6</m:cn>
+		  </m:apply>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </para>
+	</example>
+
+	<para id="sec31para3">
+	  So why stop here?! Keep decomposing. Break each of the 
+	  <m:math>
+	    <m:apply>
+	      <m:divide/>
+	      <m:ci>N</m:ci>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:math>-point DFTs into two 
+	   <m:math>
+	    <m:apply>
+	      <m:divide/>
+	      <m:ci>N</m:ci>
+	      <m:cn>4</m:cn>
+	    </m:apply>
+	  </m:math>-point DFTs, <foreign>etc.</foreign>, ....
+	</para>
+
+	<para id="sec31para4">
+	  We can keep decomposing: 
+<!-- this equation in the original notes is confusing-->
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>	
+	      <m:apply>
+  	 	<m:divide/>
+		  <m:ci>N</m:ci>
+		  <m:apply>
+		   <m:power/>
+		   <m:cn>2</m:cn>
+		   <m:cn>1</m:cn>
+		  </m:apply>
+	      </m:apply>
+	      <m:set>
+		<m:apply>
+		  <m:divide/>
+		  <m:ci>N</m:ci>
+		  <m:cn>2</m:cn>
+		</m:apply>
+		<m:apply>
+		  <m:divide/>
+		  <m:ci>N</m:ci>
+		  <m:cn>4</m:cn>
+		</m:apply>
+		<m:apply>
+		  <m:divide/>
+		  <m:ci>N</m:ci>
+		  <m:cn>8</m:cn>
+		</m:apply>
+		<m:ci>…</m:ci>
+		<m:apply>
+		  <m:divide/>
+		  <m:ci>N</m:ci>
+		  <m:apply>
+		    <m:power/>
+		    <m:cn>2</m:cn>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>m</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:divide/>
+		  <m:ci>N</m:ci>
+		  <m:apply>
+		    <m:power/>
+		    <m:cn>2</m:cn>
+		    <m:ci>m</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:set>
+	      <m:cn>1</m:cn>
+	    </m:apply>
+	  </m:math>
+
+	  where 
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>m</m:ci>
+	      <m:apply>
+		<m:log/>
+		<m:logbase><m:cn>2</m:cn></m:logbase>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	      <m:mtext> times</m:mtext>
+	    </m:apply>
+	  </m:math>
+	</para>
+
+	<para id="sec31para5">
+	  Computational cost: 
+	  <m:math>
+	    <m:ci>N</m:ci>
+	  </m:math>-pt DFT  two 
+	  <m:math>
+	    <m:apply>
+	      <m:divide/>
+	      <m:ci>N</m:ci>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:math>-pt DFTs. The cost is 
+	  <m:math>
+	    <m:apply>
+	      <m:tendsto/>
+	      <m:apply>
+		<m:power/>
+		<m:ci>N</m:ci>
+		<m:cn>2</m:cn>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:times/>
+		  <m:cn>2</m:cn>
+		  <m:apply>
+		    <m:power/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:ci>N</m:ci>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		</m:apply>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>. So replacing each 
+	  <m:math>
+	    <m:apply>
+	      <m:divide/>
+	      <m:ci>N</m:ci>
+	      <m:cn>2</m:cn>
+	    </m:apply>
+	  </m:math>-pt DFT with two 
+	  <m:math>
+	    <m:apply>
+	      <m:divide/>
+	      <m:ci>N</m:ci>
+	      <m:cn>4</m:cn>
+	    </m:apply>
+	  </m:math>-pt DFTs will reduce cost to 
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:times/>
+		  <m:cn>2</m:cn>
+		  <m:apply>
+		    <m:plus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:apply>
+			<m:power/>
+			<m:apply>
+			  <m:divide/>
+			  <m:ci>N</m:ci>
+			  <m:cn>4</m:cn>
+			</m:apply>
+			<m:cn>2</m:cn>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:divide/>
+		      <m:ci>N</m:ci>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:times/>
+		  <m:cn>4</m:cn>
+		  <m:apply>
+		    <m:power/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:ci>N</m:ci>
+		      <m:cn>4</m:cn>
+		    </m:apply>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:cn>2</m:cn>
+		  <m:ci>N</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>N</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:power/>
+		    <m:cn>2</m:cn>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:cn>2</m:cn>
+		  <m:ci>N</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>N</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:power/>
+		    <m:cn>2</m:cn>
+		    <m:ci>p</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:ci>p</m:ci>
+		  <m:ci>N</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  As we keep going 
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>p</m:ci>
+	      <m:set>
+		<m:cn>3</m:cn>
+		<m:cn>4</m:cn>
+		<m:ci>…</m:ci>
+		<m:ci>m</m:ci>
+	      </m:set>
+	    </m:apply>
+	  </m:math>, where 
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>m</m:ci>
+	      <m:apply>
+		<m:log/>
+		<m:logbase><m:cn>2</m:cn></m:logbase>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>.  We get the cost 
+	  
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>N</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:power/>
+		    <m:cn>2</m:cn>
+		    <m:apply>
+		      <m:log/>
+		      <m:logbase><m:cn>2</m:cn></m:logbase>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:ci>N</m:ci>
+		  <m:apply>
+		    <m:log/>
+		    <m:logbase><m:cn>2</m:cn></m:logbase>
+		    <m:ci>N</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:divide/>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>N</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:ci>N</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:ci>N</m:ci>
+		  <m:apply>
+		    <m:log/>
+		    <m:logbase><m:cn>2</m:cn></m:logbase>
+		    <m:ci>N</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+		<m:ci>N</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:ci>N</m:ci>
+		  <m:apply>
+		    <m:log/>
+		    <m:logbase><m:cn>2</m:cn></m:logbase>
+		    <m:ci>N</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	  <m:math>
+	    <m:apply>
+	      <m:plus/>
+	      <m:ci>N</m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:ci>N</m:ci>
+		<m:apply>
+		  <m:log/>
+		  <m:logbase><m:cn>2</m:cn></m:logbase>
+		  <m:ci>N</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> is the total number of complex adds and mults. 
+	</para>
+
+
+	<para id="sec31para6">
+	  For large <m:math><m:ci>N</m:ci></m:math>, 
+	 
+	  <m:math>
+	    <m:apply>
+	      <m:approx/>
+	      <m:ci>cost</m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:ci>N</m:ci>
+		<m:apply>
+		  <m:log/>
+		  <m:logbase><m:cn>2</m:cn></m:logbase>
+		  <m:ci>N</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> or "
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">O</m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:ci>N</m:ci>
+		<m:apply>
+		  <m:log/>
+		  <m:logbase><m:cn>2</m:cn></m:logbase>
+		  <m:ci>N</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>", since 
+	  <m:math>
+	    <m:apply>
+	      <m:ci><m:mo>≫</m:mo></m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:ci>N</m:ci>
+		<m:apply>
+		  <m:log/>
+		  <m:logbase><m:cn>2</m:cn></m:logbase>
+		  <m:ci>N</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:ci>N</m:ci>
+	    </m:apply>
+	  </m:math> for large <m:math><m:ci>N</m:ci></m:math>. 
+	</para>
+      </section>
+
+      <figure id="figure3">
+	<media id="idp8908672" alt=""><image src="../../media/figure3.png" mime-type="image/png"/></media>
+	<caption><m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>N</m:ci>
+	      <m:cn>8</m:cn>
+	    </m:apply>
+	  </m:math> point FFT.  Summing nodes 
+	  <m:math>
+	    <m:apply>
+	      <m:power/>
+	      <m:ci>
+		<m:msub><m:mi>W</m:mi><m:mi>n</m:mi></m:msub>
+	      </m:ci>
+	      <m:ci>k</m:ci>
+	    </m:apply>
+	  </m:math> twiddle multiplication factors.</caption>
+      </figure>
+
+
+      <para id="sec1para10">
+	<note id="idm686352">Weird order of time samples</note>
+      </para>
+
+
+      <figure id="figure4">
+	<media id="idp6810800" alt=""><image src="../../media/figure4.png" mime-type="image/png"/></media>
+	<caption>This is called "butterflies."</caption>
+      </figure>
+
+    </section>
+  </content>
+</document>

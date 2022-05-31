@@ -1,0 +1,234 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  
+  <title>The Haar System as an Example of DWT</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>163961d6-6134-46fa-8f8e-3e6ac0d05217</md:uuid>
+</metadata>
+
+  <content>
+    <para id="haar1">
+      The Haar basis is perhaps the simplest example of a DWT basis,
+      and we will frequently refer to it in our DWT development.
+      Keep in mind, however, that <emphasis>the Haar basis is only
+	an example</emphasis>; there are many other ways of
+      constructing a DWT decomposition.
+    </para>
+
+    <para id="haar2">
+      For the Haar case, the mother <term>scaling function</term> is
+      defined by <link target-id="haareq1" strength="3"/> and <link target-id="sqscalingfn" strength="3"/>.
+
+      <equation id="haareq1">
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">φ</m:ci>
+	      <m:ci>t</m:ci>
+	    </m:apply>
+	    <m:piecewise>
+	      <m:piece>
+		<m:cn>1</m:cn>
+		<m:apply>
+		  <m:leq/>
+		  <m:cn>0</m:cn>
+		  <m:apply>
+		    <m:lt/>
+		    <m:ci>t</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:piece>
+	      <m:otherwise>
+		<m:cn>0</m:cn>
+	      </m:otherwise>
+	    </m:piecewise>
+	  </m:apply>
+	</m:math>
+      </equation>
+    </para>
+
+    <figure id="sqscalingfn">
+      <media id="idp5521392" alt=""><image src="../../media/scalingfn.png" mime-type="image/png"/></media>
+    </figure>
+
+    <para id="closure">
+      From the mother scaling function, we define a family of
+      shifted and stretched scaling functions
+      <m:math>
+	<m:set>
+	  <m:apply>
+	    <m:ci type="fn"><m:msub>
+		<m:mi>φ</m:mi>
+		<m:mrow>
+		  <m:mi>k</m:mi>
+		  <m:mo>,</m:mo>
+		  <m:mi>n</m:mi>
+		</m:mrow>
+	      </m:msub></m:ci>
+	    <m:ci>t</m:ci>
+	  </m:apply>
+	</m:set>
+      </m:math> according to <link target-id="haareq2" strength="3"/> and
+      <link target-id="shandstr" strength="3"/>
+      
+      <equation id="haareq2">
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn"><m:msub>
+		  <m:mi>φ</m:mi>
+		  <m:mrow>
+		    <m:mi>k</m:mi>
+		    <m:mo>,</m:mo>
+		    <m:mi>n</m:mi>
+		  </m:mrow>
+		</m:msub></m:ci>
+	      <m:ci>t</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:forall/>
+	      <m:bvar><m:ci>k</m:ci></m:bvar>
+	      <m:bvar><m:ci>n</m:ci></m:bvar>
+	      <m:condition>
+		<m:apply>
+		  <m:in/>
+		  <m:ci>k</m:ci>
+		  <m:integers/>
+		</m:apply>
+	      </m:condition>
+	      <m:condition>
+		<m:apply>
+		  <m:in/>
+		  <m:ci>n</m:ci>
+		  <m:integers/>
+		</m:apply>
+	      </m:condition>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:power/>
+		  <m:cn>2</m:cn>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:ci>k</m:ci>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">φ</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:power/>
+			<m:cn>2</m:cn>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>k</m:ci>
+			</m:apply>
+		      </m:apply>
+		      <m:ci>t</m:ci>
+		    </m:apply>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+
+	    <m:apply>
+	      <m:times/>
+	      <m:apply>
+		<m:power/>
+		<m:cn>2</m:cn>
+		<m:apply>
+		  <m:minus/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:ci>k</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn">φ</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:cn>1</m:cn>
+		    <m:apply>
+		      <m:power/>
+		      <m:cn>2</m:cn>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>t</m:ci>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>n</m:ci>
+		      <m:apply>
+			<m:power/>
+			<m:cn>2</m:cn>
+			<m:ci>k</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+      </equation>
+    </para>
+
+    <figure id="shandstr">
+      <media id="idp311040" alt=""><image src="../../media/shiftandstretchfn.png" mime-type="image/png"/></media>
+    </figure>
+
+    <para id="haar3">
+      which are illustrated in <link target-id="fnrep" strength="3"/> for
+      various <m:math><m:ci>k</m:ci></m:math> and
+      <m:math><m:ci>n</m:ci></m:math>.  <link target-id="haareq2" strength="3"/> makes clear the principle that incrementing
+      <m:math><m:ci>n</m:ci></m:math> by one shifts the pulse one
+      place to the right.  Observe from <link target-id="fnrep" strength="3"/> that
+      <m:math>
+	<m:set>
+	  <m:bvar>
+	    <m:apply>
+	      <m:ci type="fn"><m:msub>
+		  <m:mi>φ</m:mi>
+		  <m:mrow>
+		    <m:mi>k</m:mi>
+		    <m:mo>,</m:mo>
+		    <m:mi>n</m:mi>
+		  </m:mrow>
+		</m:msub></m:ci>
+	      <m:ci>t</m:ci>
+	    </m:apply>
+	  </m:bvar>
+	  <m:condition>
+	    <m:apply>
+	      <m:in/>
+	      <m:ci>n</m:ci>
+	      <m:integers/>
+	    </m:apply>
+	  </m:condition>
+	</m:set>
+      </m:math>
+      is orthonormal for each <m:math><m:ci>k</m:ci></m:math> (<foreign>i.e.</foreign>,
+      along each row of figures).
+    </para>
+
+    <figure id="fnrep">
+      <media id="idp6770304" alt=""><image src="../../media/haarscalingfn.png" mime-type="image/png"/></media>
+    </figure>
+
+  </content>
+</document>

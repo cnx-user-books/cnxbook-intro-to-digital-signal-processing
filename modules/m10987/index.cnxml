@@ -1,0 +1,1401 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>2D DFT</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>fc32babe-5225-4d8d-8a7f-fdb9a9d91255</md:uuid>
+</metadata>
+
+  <content>
+    <section id="sec1">
+      <title>2D DFT</title>
+      
+      <!-- add link to image restoration below -->
+
+      <para id="p1">
+	To perform image restoration (and many other useful image
+	processing algorithms) in a computer, we need a Fourier
+	Transform (FT) that is discrete and two-dimensional.
+
+	<equation id="eq1">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">F</m:ci>
+		<m:ci>k</m:ci>
+		<m:ci>l</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#evaluateat"/>
+		<m:condition>
+		  <m:apply>
+		    <m:eq/>
+		    <m:ci>u</m:ci>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+			<m:ci>k</m:ci>
+		      </m:apply>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:condition>
+		<m:condition>
+		  <m:apply>
+		    <m:eq/>
+		    <m:ci>v</m:ci>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+			<m:ci>l</m:ci>
+		      </m:apply>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:condition>
+		<m:apply>
+		  <m:ci type="fn">F</m:ci>
+		  <m:ci>u</m:ci>
+		  <m:ci>v</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+	
+	for 
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci>k</m:ci>
+	    <m:set>
+	      <m:cn>0</m:cn>
+	      <m:ci>…</m:ci>
+	      <m:apply>
+		<m:minus/>
+		<m:ci>N</m:ci>
+		<m:cn>1</m:cn>
+	      </m:apply>
+	    </m:set>
+	  </m:apply>
+	</m:math> and 
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci>l</m:ci>
+	    <m:set>
+	      <m:cn>0</m:cn>
+	      <m:ci>…</m:ci>
+	      <m:apply>
+		<m:minus/>
+		<m:ci>N</m:ci>
+		<m:cn>1</m:cn>
+	      </m:apply>
+	    </m:set>
+	  </m:apply>
+	</m:math>.
+	
+	<equation id="eq2">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">F</m:ci>
+		<m:ci>u</m:ci>
+		<m:ci>v</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:domainofapplication>
+		  <m:ci>m</m:ci>
+		</m:domainofapplication>
+		<m:apply>
+		  <m:sum/>
+		  <m:domainofapplication>
+		    <m:ci>n</m:ci>
+		  </m:domainofapplication>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">f</m:ci>
+		      <m:ci>m</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:minus/>
+			<m:apply>
+			  <m:times/>
+			  <m:imaginaryi/>
+			  <m:ci>u</m:ci>
+			  <m:ci>m</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:minus/>
+			<m:apply>
+			  <m:times/>
+			  <m:imaginaryi/>
+			  <m:ci>v</m:ci>
+			  <m:ci>m</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	<equation id="eq3">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">F</m:ci>
+		<m:ci>k</m:ci>
+		<m:ci>l</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar><m:ci>m</m:ci></m:bvar>
+		<m:uplimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:cn>0</m:cn>
+		</m:lowlimit>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar><m:ci>n</m:ci></m:bvar>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:cn>0</m:cn>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">f</m:ci>
+		      <m:ci>m</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:minus/>
+			  <m:imaginaryi/>
+			</m:apply>
+			<m:apply>
+			  <m:divide/>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>2</m:cn>
+			    <m:pi/>
+			    <m:ci>k</m:ci>
+			    <m:ci>m</m:ci>
+			  </m:apply>
+			  <m:ci>N</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:minus/>
+			  <m:imaginaryi/>
+			</m:apply>
+			<m:apply>
+			  <m:divide/>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>2</m:cn>
+			    <m:pi/>
+			    <m:ci>l</m:ci>
+			    <m:ci>n</m:ci>
+			  </m:apply>
+			  <m:ci>N</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+	
+	where the above equation (<link target-id="eq3" strength="3"/>)
+	has finite support for an
+	<m:math><m:ci>N</m:ci></m:math>x<m:math><m:ci>N</m:ci></m:math>
+	image.
+      </para>
+      
+      <section id="sec2">
+	<title>Inverse 2D DFT</title>
+	<para id="s2_p1">
+	  As with our regular fourier transforms, the 2D DFT also has
+	  an inverse transform that allows us to reconstruct an image
+	  as a weighted combination of complex sinusoidal basis
+	  functions. 
+	  
+	  <equation id="eq4">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">f</m:ci>
+		  <m:ci>m</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:cn>1</m:cn>
+		    <m:apply>
+		      <m:power/>
+		      <m:ci>N</m:ci>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:sum/>
+		    <m:bvar><m:ci>k</m:ci></m:bvar>
+		    <m:uplimit>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>N</m:ci>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		    </m:uplimit>
+		    <m:lowlimit>
+		      <m:cn>0</m:cn>
+		    </m:lowlimit>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar><m:ci>l</m:ci></m:bvar>
+		      <m:uplimit>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>N</m:ci>
+			  <m:cn>1</m:cn>
+			</m:apply>
+		      </m:uplimit>
+		      <m:lowlimit>
+			<m:cn>0</m:cn>
+		      </m:lowlimit>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">F</m:ci>
+			  <m:ci>k</m:ci>
+			  <m:ci>l</m:ci>
+			</m:apply>
+			<m:apply>
+			  <m:exp/>
+			  <m:apply>
+			    <m:divide/>
+			    <m:apply>
+			      <m:times/>
+			      <m:imaginaryi/>
+			      <m:cn>2</m:cn>
+			      <m:pi/>
+			      <m:ci>k</m:ci>
+			      <m:ci>m</m:ci>
+			    </m:apply>
+			    <m:ci>N</m:ci>
+			  </m:apply>
+			</m:apply>
+			<m:apply>
+			  <m:exp/>
+			  <m:apply>
+			    <m:divide/>
+			    <m:apply>
+			      <m:times/>
+			      <m:imaginaryi/>
+			      <m:cn>2</m:cn>
+			      <m:pi/>
+			      <m:ci>l</m:ci>
+			      <m:ci>n</m:ci>
+			    </m:apply>
+			    <m:ci>N</m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+	</para>
+
+	<example id="eg2">
+	  <title>Periodic Extensions</title>
+	  <figure id="fig1">
+	    <media id="idm1319824" alt=""><image src="../../media/per_ext.png" mime-type="image/png"/></media>
+	    <caption>
+	      Illustrate the periodic extension of images.
+	    </caption>
+	  </figure>  
+	</example>
+	
+      </section>
+    </section>
+
+    
+    <section id="sec3">
+      <title>2D DFT and Convolution</title>
+      <para id="s3_p1">
+	The regular 2D convolution equation is 
+
+	<equation id="eq5">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">g</m:ci>
+		<m:ci>m</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar><m:ci>k</m:ci></m:bvar>
+		<m:uplimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:cn>0</m:cn>
+		</m:lowlimit>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar><m:ci>l</m:ci></m:bvar>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:cn>0</m:cn>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">f</m:ci>
+		      <m:ci>k</m:ci>
+		      <m:ci>l</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">h</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>m</m:ci>
+			<m:ci>k</m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>n</m:ci>
+			<m:ci>l</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+      </para>
+
+      <example id="eg3">
+	<para id="eg3_p1">
+	  Below we go through the steps of convolving two
+	  two-dimensional arrays.  You can think of
+	  <m:math><m:ci>f</m:ci></m:math> as representing an image and
+	  <m:math><m:ci>h</m:ci></m:math> represents a PSF, where 
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">h</m:ci>
+		<m:ci>m</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:cn>0</m:cn>
+	    </m:apply>
+	  </m:math> for 
+	  <m:math>
+	    <m:apply>
+	      <m:gt/>
+	      <m:apply>
+		<m:and/>
+		<m:ci>m</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:cn>1</m:cn>
+	    </m:apply>
+	  </m:math> and 
+	  <m:math>
+	    <m:apply>
+	      <m:lt/>
+	      <m:apply>
+		<m:and/>
+		<m:ci>m</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:cn>0</m:cn>
+	    </m:apply>
+	  </m:math>.
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>h</m:ci>
+	      <m:matrix>
+		<m:matrixrow>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">h</m:ci>
+		    <m:cn>0</m:cn>
+		    <m:cn>0</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">h</m:ci>
+		    <m:cn>0</m:cn>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:matrixrow>
+		<m:matrixrow>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">h</m:ci>
+		    <m:cn>1</m:cn>
+		    <m:cn>0</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">h</m:ci>
+		    <m:cn>1</m:cn>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:matrixrow>
+	      </m:matrix>
+	    </m:apply>
+	  </m:math>
+	  
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:ci>f</m:ci>
+	      <m:matrix>
+		<m:matrixrow>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">f</m:ci>
+		    <m:cn>0</m:cn>
+		    <m:cn>0</m:cn>
+		  </m:apply>
+		  <m:ci>…</m:ci>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">f</m:ci>
+		    <m:cn>0</m:cn>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:apply>
+		</m:matrixrow>
+		<m:matrixrow>
+		  <m:ci>⋮</m:ci>
+		  <m:ci>⋱</m:ci>
+		  <m:ci>⋮</m:ci>
+		</m:matrixrow>
+		<m:matrixrow>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">f</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		    <m:cn>0</m:cn>
+		  </m:apply>
+		  <m:ci>…</m:ci>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">f</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:apply>
+		</m:matrixrow>
+	      </m:matrix>
+	    </m:apply>
+	  </m:math>
+
+	  Step 1 (Flip <m:math><m:ci>h</m:ci></m:math>):
+
+	  <equation id="eq6">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">h</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>m</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:matrix>
+		  <m:matrixrow>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">h</m:ci>
+		      <m:cn>1</m:cn>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">h</m:ci>
+		      <m:cn>1</m:cn>
+		      <m:cn>0</m:cn>
+		    </m:apply>
+		    <m:cn>0</m:cn>
+		  </m:matrixrow>
+		  <m:matrixrow>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">h</m:ci>
+		      <m:cn>0</m:cn>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">h</m:ci>
+		      <m:cn>0</m:cn>
+		      <m:cn>0</m:cn>
+		    </m:apply>
+		    <m:cn>0</m:cn>
+		  </m:matrixrow>
+		  <m:matrixrow>
+		    <m:cn>0</m:cn>
+		    <m:cn>0</m:cn>
+		    <m:cn>0</m:cn>
+		  </m:matrixrow>
+		</m:matrix>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+
+	  Step 2 (Convolve):  
+
+	  <equation id="eq7">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">g</m:ci>
+		  <m:cn>0</m:cn>
+		  <m:cn>0</m:cn>
+		</m:apply>
+		<m:apply>
+		  <m:times/>	
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">h</m:ci>
+		    <m:cn>0</m:cn>
+		    <m:cn>0</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">f</m:ci>
+		    <m:cn>0</m:cn>
+		    <m:cn>0</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+
+	  We use the standard 2D convolution equation (<link target-id="eq5" strength="3"/>) to find the first element of
+	  our convolved image.  In order to better understand what is
+	  happening, we can think of this visually.  The basic idea is
+	  to take
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">h</m:ci>
+	      <m:apply>
+		<m:minus/>
+		<m:ci>m</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:minus/>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> and place it "on top" of 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">f</m:ci>
+	      <m:ci>k</m:ci>
+	      <m:ci>l</m:ci>
+	    </m:apply>
+	  </m:math>, so that just the bottom-right element, 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">h</m:ci>
+	      <m:cn>0</m:cn>
+	      <m:cn>0</m:cn>
+	    </m:apply>
+	  </m:math> of 
+	  
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">h</m:ci>
+	      <m:apply>
+		<m:minus/>
+		<m:ci>m</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:minus/>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> overlaps with the top-left element, 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">f</m:ci>
+	      <m:cn>0</m:cn>
+	      <m:cn>0</m:cn>
+	    </m:apply>
+	  </m:math>, of 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">f</m:ci>
+	      <m:ci>k</m:ci>
+	      <m:ci>l</m:ci>
+	    </m:apply>
+	  </m:math>.  Then, to get the next element of our convolved
+	  image, we slide the flipped matrix, 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">h</m:ci>
+	      <m:apply>
+		<m:minus/>
+		<m:ci>m</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:minus/>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>, over one element to the right and get the
+	  following result:
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">g</m:ci>
+		<m:cn>0</m:cn>
+		<m:cn>1</m:cn>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">h</m:ci>
+		    <m:cn>0</m:cn>
+		    <m:cn>0</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">f</m:ci>
+		    <m:cn>0</m:cn>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">h</m:ci>
+		    <m:cn>0</m:cn>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">f</m:ci>
+		    <m:cn>0</m:cn>
+		    <m:cn>0</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	  
+	  We continue in this fashion to find all of the elements of
+	  our convolved image, 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">g</m:ci>
+	      <m:ci>m</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math>.  Using the above method we define the general
+	  formula to find a particular element of 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">g</m:ci>
+	      <m:ci>m</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math> as:
+
+	  <equation id="eq9">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">g</m:ci>
+		  <m:ci>m</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:plus/>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">h</m:ci>
+		      <m:cn>0</m:cn>
+		      <m:cn>0</m:cn>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">f</m:ci>
+		      <m:ci>m</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">h</m:ci>
+		      <m:cn>0</m:cn>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">f</m:ci>
+		      <m:ci>m</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>n</m:ci>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">h</m:ci>
+		      <m:cn>1</m:cn>
+		      <m:cn>0</m:cn>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">f</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>m</m:ci>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">h</m:ci>
+		      <m:cn>1</m:cn>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">f</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>m</m:ci>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>n</m:ci>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+
+	</para>
+      </example>
+
+      <section id="sub1">
+        <title>Circular Convolution</title>
+	
+	<exercise id="exer1">
+	  <problem id="idm8696416">
+	    <para id="prob_1">
+	      What does 
+	      <m:math>
+		<m:apply>
+		  <m:times/>	
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">H</m:ci>
+		    <m:ci>k</m:ci>
+		    <m:ci>l</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">F</m:ci>
+		    <m:ci>k</m:ci>
+		    <m:ci>l</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:math>
+	      produce?
+	    </para>
+	  </problem>
+	  <solution id="idp1026528">
+	    <para id="sol_1">
+	      2D Circular Convolution
+
+	      <equation id="eq10">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>	
+		      <m:ci type="fn" class="discrete">
+			<m:mover accent="true">
+			  <m:mi>g</m:mi>
+			  <m:mo>~</m:mo>
+			</m:mover>
+		      </m:ci>
+		      <m:ci>m</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn">IDFT</m:ci>
+		      <m:apply>
+			<m:times/>	
+			<m:apply>
+			  <m:ci type="fn" class="discrete">H</m:ci>
+			  <m:ci>k</m:ci>
+			  <m:ci>l</m:ci>
+			</m:apply>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">F</m:ci>
+			  <m:ci>k</m:ci>
+			  <m:ci>l</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		    <m:ci>circular convolution in 2D</m:ci>
+		  </m:apply>
+		</m:math>
+	      </equation>
+	    </para>
+	  </solution> 
+	</exercise>
+
+	<para id="p1_sub1">
+	  Due to periodic extension by DFT (<link target-id="fig2" strength="3"/>):
+	</para>
+
+	<figure id="fig2">
+	  <media id="idp1613248" alt=""><image src="../../media/dft_extension.png" mime-type="image/png"/></media>
+	</figure>  
+
+	<para id="p2_sub1">
+	  Based on the above solution, we will let
+
+	  <equation id="eq11">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>	
+		  <m:ci type="fn" class="discrete">
+		    <m:mover accent="true">
+		      <m:mi>g</m:mi>
+		      <m:mo>~</m:mo>
+		    </m:mover>
+		  </m:ci>
+		  <m:ci>m</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">IDFT</m:ci>
+		  <m:apply>
+		    <m:times/>	
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">H</m:ci>
+		      <m:ci>k</m:ci>
+		      <m:ci>l</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">F</m:ci>
+		      <m:ci>k</m:ci>
+		      <m:ci>l</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+
+	  Using this equation, we can calculate the value for each
+	  position on our final image,
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">
+		<m:mover accent="true">
+		  <m:mi>g</m:mi>
+		  <m:mo>~</m:mo>
+		</m:mover>
+	      </m:ci>
+	      <m:ci>m</m:ci>	
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math>.  For example, due to the periodic extension of
+	  the images, when circular convolution is applied we will
+	  observe a <term>wrap-around</term> effect.
+
+	  <equation id="eq12">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>	
+		  <m:ci type="fn" class="discrete">
+		    <m:mover accent="true">
+		      <m:mi>g</m:mi>
+		      <m:mo>~</m:mo>
+		    </m:mover>
+		  </m:ci>
+		  <m:cn>0</m:cn>
+		  <m:cn>0</m:cn>
+		</m:apply>
+		<m:apply>
+		  <m:plus/>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">h</m:ci>
+		      <m:cn>0</m:cn>
+		      <m:cn>0</m:cn>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">f</m:ci>
+		      <m:cn>0</m:cn>
+		      <m:cn>0</m:cn>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">h</m:ci>
+		      <m:cn>1</m:cn>
+		      <m:cn>0</m:cn>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">f</m:ci>
+		      <m:apply>
+		  	<m:minus/>
+			<m:ci>N</m:ci>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		      <m:cn>0</m:cn>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">h</m:ci>
+		      <m:cn>0</m:cn>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">f</m:ci>
+		      <m:cn>0</m:cn>
+		      <m:apply>
+		  	<m:minus/>
+			<m:ci>N</m:ci>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">h</m:ci>
+		      <m:cn>1</m:cn>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">f</m:ci>
+		      <m:apply>
+		  	<m:minus/>
+			<m:ci>N</m:ci>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		      <m:apply>
+		  	<m:minus/>
+			<m:ci>N</m:ci>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+	  
+	  Where the last three terms in <link target-id="eq12" strength="3"/> are a result of the wrap-around effect caused
+	  by the presence of the images copies located all around it.
+	</para>
+      </section>    
+
+      <section id="sub2">
+	<title>Zero Padding</title>
+	<para id="p1_sub2">
+	  If the support of <m:math><m:ci>h</m:ci></m:math> is
+	  <m:math><m:ci>M</m:ci></m:math>x<m:math><m:ci>M</m:ci></m:math>
+	  and <m:math><m:ci>f</m:ci></m:math> is
+	  <m:math><m:ci>N</m:ci></m:math>x<m:math><m:ci>N</m:ci></m:math>,
+	  then we zero pad <m:math><m:ci>f</m:ci></m:math> and
+	  <m:math><m:ci>h</m:ci></m:math> to 
+	  <m:math>
+	    <m:apply>
+	      <m:plus/>
+	      <m:ci>M</m:ci>
+	      <m:apply>
+		<m:minus/>
+		<m:ci>N</m:ci>
+		<m:cn>1</m:cn>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> x 
+	  <m:math>
+	    <m:apply>
+	      <m:plus/>
+	      <m:ci>M</m:ci>
+	      <m:apply>
+		<m:minus/>
+		<m:ci>N</m:ci>
+		<m:cn>1</m:cn>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> (see <link target-id="fig3" strength="3"/>).
+	</para>
+
+	<figure id="fig3">
+	  <media id="idm1804784" alt=""><image src="../../media/zero_pad.png" mime-type="image/png"/></media>
+	</figure>  
+
+	<para id="p2_sub2">
+	  <note type="note" id="idp1375904">Circular Convolution = Regular Convolution
+	  </note>
+	</para>
+      </section>
+
+      <section id="sub3">
+	<title>Computing the 2D DFT</title>
+
+	<para id="p1_sub3">
+	  <equation id="eq13">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">F</m:ci>
+		  <m:ci>k</m:ci>
+		  <m:ci>l</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar><m:ci>m</m:ci></m:bvar>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:cn>0</m:cn>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:sum/>
+		    <m:bvar><m:ci>n</m:ci></m:bvar>
+		    <m:uplimit>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>N</m:ci>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		    </m:uplimit>
+		    <m:lowlimit>
+		      <m:cn>0</m:cn>
+		    </m:lowlimit>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:ci type="fn" class="discrete">f</m:ci>
+			<m:ci>m</m:ci>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:exp/>
+			<m:apply>
+			  <m:times/>
+			  <m:apply>
+			    <m:minus/>
+			    <m:imaginaryi/>
+			  </m:apply>
+			  <m:apply>
+			    <m:divide/>
+			    <m:apply>
+			      <m:times/>
+			      <m:cn>2</m:cn>
+			      <m:pi/>
+			      <m:ci>k</m:ci>
+			      <m:ci>m</m:ci>
+			    </m:apply>
+			    <m:ci>N</m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		      <m:apply>
+			<m:exp/>
+			<m:apply>
+			  <m:times/>
+			  <m:apply>
+			    <m:minus/>
+			    <m:imaginaryi/>
+			  </m:apply>
+			  <m:apply>
+			    <m:divide/>
+			    <m:apply>
+			      <m:times/>
+			      <m:cn>2</m:cn>
+			      <m:pi/>
+			      <m:ci>l</m:ci>
+			      <m:ci>n</m:ci>
+			    </m:apply>
+			    <m:ci>N</m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+
+	  where in the above equation, 
+	  
+	  <m:math>
+	    <m:apply>
+	      <m:sum/>
+	      <m:bvar><m:ci>n</m:ci></m:bvar>
+	      <m:uplimit>
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>N</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+	      </m:uplimit>
+	      <m:lowlimit>
+		<m:cn>0</m:cn>
+	      </m:lowlimit>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">f</m:ci>
+		  <m:ci>m</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:minus/>
+		      <m:imaginaryi/>
+		    </m:apply>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+			<m:ci>l</m:ci>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	  is simply a 1D DFT over <m:math><m:ci>n</m:ci></m:math>.
+	  This means that we will take the 1D FFT of each row; if we
+	  have <m:math><m:ci>N</m:ci></m:math> rows, then it will
+	  require 
+	  <m:math>
+	    <m:apply>
+	      <m:times/>
+	      <m:ci>N</m:ci>
+	      <m:apply>
+		<m:log/>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> operations per row.  We can rewrite this as 
+
+	  <equation id="eq14">
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">F</m:ci>
+		  <m:ci>k</m:ci>
+		  <m:ci>l</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar><m:ci>m</m:ci></m:bvar>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:cn>0</m:cn>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+	<!-- Prime does denote other -->
+		      <m:ci type="fn" class="discrete"><m:msup>
+			  <m:mi>f</m:mi>
+			  <m:mo>′</m:mo>
+			</m:msup></m:ci>
+		      <m:ci>m</m:ci>
+		      <m:ci>l</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:minus/>
+			  <m:imaginaryi/>
+			</m:apply>
+			<m:apply>
+			  <m:divide/>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>2</m:cn>
+			    <m:pi/>
+			    <m:ci>k</m:ci>
+			    <m:ci>m</m:ci>
+			  </m:apply>
+			  <m:ci>N</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </equation>
+
+	  where now we take the 1D FFT of each column, which means
+	  that if we have <m:math><m:ci>N</m:ci></m:math> columns,
+	  then it requires	  
+	  <m:math>
+	    <m:apply>
+	      <m:times/>
+	      <m:ci>N</m:ci>
+	      <m:apply>
+		<m:log/>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:math> operations per column. 
+
+	  <note type="note" id="idp1567728">
+	    Therefore the overall complexity of a 2D FFT is
+	    
+	    <m:math display="block">
+	      <m:apply>
+		<m:ci type="fn">O</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:power/>
+		    <m:ci>N</m:ci>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		  <m:apply>
+		    <m:log/>
+		    <m:ci>N</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	    
+	    where 
+	    <m:math>
+	      <m:apply>
+		<m:power/>
+		<m:ci>N</m:ci>
+		<m:cn>2</m:cn>
+	      </m:apply>
+	    </m:math> equals the number of pixels in the image.
+	  </note>
+	</para>
+      </section>
+
+    </section>
+
+  </content>
+</document>

@@ -1,0 +1,1168 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  
+  <title>Images: 2D signals</title>
+  
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>4d6ed81c-01e8-4ab4-aad2-145bf7e4a3ea</md:uuid>
+</metadata>
+
+  <content>    
+    <section id="sec1">
+      <title>Image Processing</title>      
+
+      <figure id="figure1">
+	<media id="idm6220656" alt=""><image src="../../media/figure1-aeb4.png" mime-type="image/png"/></media>
+	<caption>Images are 2D functions 
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">f</m:ci>
+	      <m:ci>x</m:ci>
+	      <m:ci>y</m:ci>
+	    </m:apply>
+	  </m:math></caption>
+      </figure>
+
+      <para id="sec1para1">
+      </para>
+    </section>
+    
+    <section id="sec2">
+      <title>Linear Shift Invariant Systems</title>
+
+      <figure id="figure2">
+	<media id="idp6726304" alt=""><image src="../../media/figure2-aeb4.png" mime-type="image/png"/></media>
+      </figure>
+
+      <para id="sec2para1">
+	<m:math><m:ci>H</m:ci></m:math> is LSI if:
+
+	<list id="list1a" list-type="enumerated">
+	  <item>
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn">H</m:ci>
+		  <m:apply>
+		    <m:plus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci><m:msub>
+			  <m:mi>α</m:mi>
+			  <m:mn>1</m:mn>
+			</m:msub></m:ci>
+		      <m:apply>
+			<m:ci type="fn">
+			  <m:msub><m:mi>f</m:mi><m:mn>1</m:mn></m:msub>
+			</m:ci>
+			<m:ci>x</m:ci>
+			<m:ci>y</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>
+			<m:msub><m:mi>α</m:mi><m:mn>2</m:mn></m:msub>
+		      </m:ci>
+		      <m:apply>
+			<m:ci type="fn">
+			  <m:msub><m:mi>f</m:mi><m:mn>2</m:mn></m:msub>
+			</m:ci>
+			<m:ci>x</m:ci>
+			<m:ci>y</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:plus/>
+		  <m:apply>
+		    <m:ci type="fn">H</m:ci>
+		    <m:apply>
+		      <m:ci type="fn">
+			<m:msub><m:mi>f</m:mi><m:mn>1</m:mn></m:msub>
+		      </m:ci>
+		      <m:ci>x</m:ci>
+		      <m:ci>y</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn">H</m:ci>
+		    <m:apply>
+		      <m:ci type="fn">
+			<m:msub><m:mi>f</m:mi><m:mn>2</m:mn></m:msub>
+		      </m:ci>
+		      <m:ci>x</m:ci>
+		      <m:ci>y</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+
+	    for all images 
+	    <m:math>
+	      <m:ci><m:msub><m:mi>f</m:mi><m:mn>1</m:mn></m:msub></m:ci>
+	    </m:math>, 
+	    <m:math>
+	      <m:ci><m:msub><m:mi>f</m:mi><m:mn>2</m:mn></m:msub></m:ci>
+	    </m:math> and scalar.
+	  </item>
+
+	  <item>
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn">H</m:ci>
+		  <m:apply>
+		    <m:ci type="fn">f</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>x</m:ci>
+		      <m:ci>
+			<m:msub><m:mi>x</m:mi><m:mn>0</m:mn></m:msub>
+		      </m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>y</m:ci>
+		      <m:ci>
+			<m:msub><m:mi>y</m:mi><m:mn>0</m:mn></m:msub>
+		      </m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">g</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>x</m:ci>
+		    <m:ci>
+		      <m:msub><m:mi>x</m:mi><m:mn>0</m:mn></m:msub>
+		    </m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>y</m:ci>
+		    <m:ci>
+		      <m:msub><m:mi>y</m:mi><m:mn>0</m:mn></m:msub>
+		    </m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </item>
+	</list>
+
+
+	LSI systems are expressed mathematically as 2D convolutions: 
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">g</m:ci>
+	      <m:ci>x</m:ci>
+	      <m:ci>y</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:int/>
+	      <m:bvar><m:ci>β</m:ci></m:bvar>
+	      <m:uplimit>
+		<m:infinity/>
+	      </m:uplimit>
+	      <m:lowlimit>
+		<m:apply>
+		  <m:minus/>
+		  <m:infinity/>
+		</m:apply>
+	      </m:lowlimit>
+	      <m:apply>
+		<m:int/>
+		<m:bvar><m:ci>α</m:ci></m:bvar>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn">h</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>x</m:ci>
+		      <m:ci>α</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>y</m:ci>
+		      <m:ci>β</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn">f</m:ci>
+		    <m:ci>α</m:ci>
+		    <m:ci>β</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	where 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">h</m:ci>
+	    <m:ci>x</m:ci>
+	    <m:ci>y</m:ci>
+	  </m:apply>
+	</m:math> is the 2D impulse response (also called the
+	<term>point spread function</term>).
+      </para>
+    </section>
+
+    <section id="sec3">
+      <title>2D Fourier Analysis</title>      
+      <para id="sec3para1">
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">ℱ</m:ci>
+	      <m:ci>u</m:ci>
+	      <m:ci>v</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:int/>
+	      <m:bvar><m:ci>y</m:ci></m:bvar>
+	      <m:uplimit>
+		<m:infinity/>
+	      </m:uplimit>
+	      <m:lowlimit>
+		<m:apply>
+		  <m:minus/>
+		  <m:infinity/>
+		</m:apply>
+	      </m:lowlimit>
+	      <m:apply>
+		<m:int/>
+		<m:bvar><m:ci>x</m:ci></m:bvar>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn">f</m:ci>
+		    <m:ci>x</m:ci>
+		    <m:ci>y</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:exp/>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:ci>u</m:ci>
+			<m:ci>x</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:exp/>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:ci>v</m:ci>
+			<m:ci>y</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	where <m:math><m:mo>ℱ</m:mo></m:math> is the 2D FT
+	and <m:math><m:ci>u</m:ci></m:math> and
+	<m:math><m:ci>v</m:ci></m:math> are frequency variables in
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">x</m:ci>
+	    <m:ci>u</m:ci>
+	  </m:apply>
+	</m:math> and 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">y</m:ci>
+	    <m:ci>v</m:ci>
+	  </m:apply>
+	</m:math>.
+      </para>
+
+      <para id="sec3para2">
+	2D complex exponentials are <link document="m10500" strength="2">eigenfunctions</link> for 2D LSI systems:
+
+	<equation id="eqn1">
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:int/>
+		<m:bvar><m:ci>β</m:ci></m:bvar>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:apply>
+		  <m:int/>
+		  <m:bvar><m:ci>α</m:ci></m:bvar>
+		  <m:uplimit>
+		    <m:infinity/>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:infinity/>
+		    </m:apply>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn">h</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>x</m:ci>
+			<m:ci>α</m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>y</m:ci>
+			<m:ci>β</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:ci>
+			  <m:msub><m:mi>u</m:mi><m:mn>0</m:mn></m:msub>
+			</m:ci>
+			<m:ci>α</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:ci>
+			  <m:msub><m:mi>v</m:mi><m:mn>0</m:mn></m:msub>
+			</m:ci>
+			<m:ci>β</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+
+	      <m:apply>
+		<m:int/>
+		<m:bvar>
+		  <m:ci>
+		    <m:msup><m:mi>β</m:mi><m:mo>′</m:mo></m:msup>
+		  </m:ci>
+		</m:bvar>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:apply>
+		  <m:int/>
+		  <m:bvar>
+		    <m:ci>
+		      <m:msup><m:mi>α</m:mi><m:mo>′</m:mo></m:msup>
+		    </m:ci>
+		  </m:bvar>
+		  <m:uplimit>
+		    <m:infinity/>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:infinity/>
+		    </m:apply>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn">h</m:ci>
+		      <m:ci><m:msup>
+			  <m:mi>α</m:mi>
+			  <m:mo>′</m:mo>
+			</m:msup></m:ci>
+		      <m:ci><m:msup>
+			  <m:mi>β</m:mi>
+			  <m:mo>′</m:mo>
+			</m:msup></m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:ci>
+			  <m:msub><m:mi>u</m:mi><m:mn>0</m:mn></m:msub>
+			</m:ci>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>x</m:ci>
+			  <m:ci><m:msup>
+			      <m:mi>α</m:mi>
+			      <m:mo>′</m:mo>
+			    </m:msup></m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:ci>
+			  <m:msub><m:mi>v</m:mi><m:mn>0</m:mn></m:msub>
+			</m:ci>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>y</m:ci>
+			  <m:ci><m:msup>
+			      <m:mi>β</m:mi>
+			      <m:mo>′</m:mo>
+			    </m:msup></m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:ci>
+		      <m:msub><m:mi>u</m:mi><m:mn>0</m:mn></m:msub>
+		    </m:ci>
+		    <m:ci>x</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:ci>
+		      <m:msub><m:mi>v</m:mi><m:mn>0</m:mn></m:msub>
+		    </m:ci>
+		    <m:ci>y</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:int/>
+		  <m:bvar>
+		    <m:ci>
+		      <m:msup><m:mi>β</m:mi><m:mo>′</m:mo></m:msup>
+		    </m:ci>
+		  </m:bvar>
+		  <m:uplimit>
+		    <m:infinity/>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:infinity/>
+		    </m:apply>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:int/>
+		    <m:bvar>
+		      <m:ci><m:msup>
+			  <m:mi>α</m:mi>
+			  <m:mo>′</m:mo>
+			</m:msup></m:ci>
+		    </m:bvar>
+		    <m:uplimit>
+		      <m:infinity/>
+		    </m:uplimit>
+		    <m:lowlimit>
+		      <m:apply>
+			<m:minus/>
+			<m:infinity/>
+		      </m:apply>
+		    </m:lowlimit>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:ci type="fn">h</m:ci>
+			<m:ci><m:msup>
+			    <m:mi>α</m:mi>
+			    <m:mo>′</m:mo>
+			  </m:msup></m:ci>
+			<m:ci><m:msup>
+			    <m:mi>β</m:mi>
+			    <m:mo>′</m:mo>
+			  </m:msup></m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:exp/>
+			<m:apply>
+			  <m:minus/>
+			  <m:apply>
+			    <m:times/>
+			    <m:imaginaryi/>
+			    <m:ci><m:msub>
+				<m:mi>u</m:mi>
+				<m:mn>0</m:mn>
+			      </m:msub></m:ci>
+			    <m:ci><m:msup>
+				<m:mi>α</m:mi>
+				<m:mo>′</m:mo>
+			      </m:msup></m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		      <m:apply>
+			<m:exp/>
+			<m:apply>
+			  <m:minus/>
+			  <m:apply>
+			    <m:times/>
+			    <m:imaginaryi/>
+			    <m:ci><m:msub>
+				<m:mi>v</m:mi>
+				<m:mn>0</m:mn>
+			      </m:msub></m:ci>
+			    <m:ci><m:msup>
+				<m:mi>β</m:mi>
+				<m:mo>′</m:mo>
+			      </m:msup></m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+	
+	where 
+	
+	<m:math display="block">
+	  <m:apply>
+	    <m:equivalent/>
+	    <m:apply>
+	      <m:int/>
+	      <m:bvar>
+		<m:ci>
+		  <m:msup><m:mi>β</m:mi><m:mo>′</m:mo></m:msup>
+		</m:ci>
+	      </m:bvar>
+	      <m:uplimit>
+		<m:infinity/>
+	      </m:uplimit>
+	      <m:lowlimit>
+		<m:apply>
+		  <m:minus/>
+		  <m:infinity/>
+		</m:apply>
+	      </m:lowlimit>
+	      <m:apply>
+		<m:int/>
+		<m:bvar>
+		  <m:ci>
+		    <m:msup><m:mi>α</m:mi><m:mo>′</m:mo></m:msup>
+		  </m:ci>
+		</m:bvar>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn">h</m:ci>
+		    <m:ci>
+		      <m:msup><m:mi>α</m:mi><m:mo>′</m:mo></m:msup>
+		    </m:ci>
+		    <m:ci>
+		      <m:msup><m:mi>β</m:mi><m:mo>′</m:mo></m:msup>
+		    </m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:exp/>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:ci>
+			  <m:msub><m:mi>u</m:mi><m:mn>0</m:mn></m:msub>
+			</m:ci>
+			<m:ci><m:msup>
+			    <m:mi>α</m:mi>
+			    <m:mo>′</m:mo>
+			  </m:msup></m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:exp/>
+		    <m:apply>
+		      <m:minus/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:ci>
+			  <m:msub><m:mi>v</m:mi><m:mn>0</m:mn></m:msub>
+			</m:ci>
+			<m:ci><m:msup>
+			    <m:mi>β</m:mi>
+			    <m:mo>′</m:mo>
+			  </m:msup></m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	    <m:apply>
+	      <m:ci type="fn">H</m:ci>
+	      <m:ci>
+		<m:msub><m:mi>u</m:mi><m:mn>0</m:mn></m:msub>
+	      </m:ci>
+	      <m:ci>
+		<m:msub><m:mi>v</m:mi><m:mn>0</m:mn></m:msub>
+	      </m:ci>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">H</m:ci>
+	    <m:ci>
+	      <m:msub><m:mi>u</m:mi><m:mn>0</m:mn></m:msub>
+	    </m:ci>
+	    <m:ci>
+	      <m:msub><m:mi>v</m:mi><m:mn>0</m:mn></m:msub>
+	    </m:ci>
+	  </m:apply>
+	</m:math> is the 2D Fourier transform of 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">h</m:ci>
+	    <m:ci>x</m:ci>
+	    <m:ci>y</m:ci>
+	  </m:apply>
+	</m:math> evaluated at frequencies 
+	
+	<m:math> 
+	  <m:ci>
+	    <m:msub><m:mi>u</m:mi><m:mn>0</m:mn></m:msub>
+	  </m:ci>
+	</m:math> and 
+	<m:math> 
+	  <m:ci>
+	    <m:msub><m:mi>v</m:mi><m:mn>0</m:mn></m:msub>
+	  </m:ci>
+	</m:math>.
+      </para>
+
+      <figure id="figure3">
+	<media id="idp3768848" alt=""><image src="../../media/figure3.png" mime-type="image/png"/></media>
+      </figure>
+
+      <para id="sec3para3">
+	<equation id="eqn2">
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">g</m:ci>
+		<m:ci>x</m:ci>
+		<m:ci>y</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#convolve"/>
+		<m:apply>
+		  <m:ci type="fn">h</m:ci>
+		  <m:ci>x</m:ci>
+		  <m:ci>y</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">f</m:ci>
+		  <m:ci>x</m:ci>
+		  <m:ci>y</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:int/>
+		<m:bvar><m:ci>β</m:ci></m:bvar>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:apply>
+		  <m:int/>
+		  <m:bvar><m:ci>α</m:ci></m:bvar>
+		  <m:uplimit>
+		    <m:infinity/>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:infinity/>
+		    </m:apply>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn">h</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>x</m:ci>
+			<m:ci>α</m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>y</m:ci>
+			<m:ci>β</m:ci>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn">f</m:ci>
+		      <m:ci>α</m:ci>
+		      <m:ci>β</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">G</m:ci>
+	      <m:ci>u</m:ci>
+	      <m:ci>v</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:times/>
+	      <m:apply>
+		<m:ci type="fn">H</m:ci>
+		<m:ci>u</m:ci>
+		<m:ci>v</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn">ℱ</m:ci>
+		<m:ci>u</m:ci>
+		<m:ci>v</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	<equation id="inv_eq">
+	  <title>Inverse 2D FT</title>
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">g</m:ci>
+		<m:ci>x</m:ci>
+		<m:ci>y</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:cn>1</m:cn>
+		  <m:apply>
+		    <m:power/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		    <m:cn>2</m:cn>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:int/>
+		  <m:bvar><m:ci>v</m:ci></m:bvar>
+		  <m:uplimit>
+		    <m:infinity/>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:infinity/>
+		    </m:apply>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:int/>
+		    <m:bvar><m:ci>u</m:ci></m:bvar>
+		    <m:uplimit>
+		      <m:infinity/>
+		    </m:uplimit>
+		    <m:lowlimit>
+		      <m:apply>
+			<m:minus/>
+			<m:infinity/>
+		      </m:apply>
+		    </m:lowlimit>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:ci type="fn">G</m:ci>
+			<m:ci>u</m:ci>
+			<m:ci>v</m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:exp/>
+			<m:apply>
+			  <m:times/>
+			  <m:imaginaryi/>
+			  <m:ci>u</m:ci>
+			  <m:ci>x</m:ci>
+			</m:apply>
+		      </m:apply>
+		      <m:apply>
+			<m:exp/>
+			<m:apply>
+			  <m:times/>
+			  <m:imaginaryi/>
+			  <m:ci>v</m:ci>
+			  <m:ci>y</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	<!-- The above equation is the inverse 2D FT.  -->
+      </para>
+    </section>
+
+    
+    <section id="sec4">
+      <title>2D Sampling Theory</title>
+
+      <figure id="figure4">
+	<media id="idp643504" alt=""><image src="../../media/figure4.png" mime-type="image/png"/></media>
+        <caption>Think of the image as a 2D surface.</caption>
+      </figure>
+
+      <para id="sec4para1">
+	We can <emphasis>sample</emphasis> the height of the surface
+	using a 2D impulse array.
+      </para>
+
+      <figure id="figure5">
+	<media id="idp1491312" alt=""><image src="../../media/figure5.png" mime-type="image/png"/></media>
+        <caption>Impulses spaced 
+	  <m:math>
+	    <m:apply>
+	      <m:ci><m:mo>Δ</m:mo></m:ci>
+	      <m:ci>x</m:ci>
+	    </m:apply>
+	  </m:math> apart in the horizontal direction and 
+	  <m:math>
+	    <m:apply>
+	      <m:ci><m:mo>Δ</m:mo></m:ci>
+	      <m:ci>y</m:ci>
+	    </m:apply>
+	  </m:math> in the vertical</caption>
+      </figure>
+
+      <para id="sec4para2">
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">
+		<m:msub><m:mi>f</m:mi><m:mi>s</m:mi></m:msub>
+	      </m:ci>
+	      <m:ci>x</m:ci>
+	      <m:ci>y</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:times/>
+	      <m:apply>
+		<m:ci type="fn">S</m:ci>
+		<m:ci>x</m:ci>
+		<m:ci>y</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn">f</m:ci>
+		<m:ci>x</m:ci>
+		<m:ci>y</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	where 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">
+	      <m:msub><m:mi>f</m:mi><m:mi>s</m:mi></m:msub>
+	    </m:ci>
+	    <m:ci>x</m:ci>
+	    <m:ci>y</m:ci>
+	  </m:apply> 
+	</m:math> is sampled image in frequency
+      </para>
+
+      <para id="sec4para3">
+	2D FT of 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">s</m:ci>
+	    <m:ci>x</m:ci>
+	    <m:ci>y</m:ci>	    
+	  </m:apply>
+	</m:math> is a 2D impulse array in frequency 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">S</m:ci>
+	    <m:ci>u</m:ci>
+	    <m:ci>v</m:ci>
+	  </m:apply>
+	</m:math>
+      </para>
+
+      <figure id="figure6">
+	<media id="idp3018512" alt=""><image src="../../media/figure6.png" mime-type="image/png"/></media>
+      </figure>
+
+      <para id="sec4para4">
+
+	<m:math display="block">
+	  <m:mtext>multiplication in time ⇔ convolution in
+	  frequency</m:mtext>
+	</m:math>
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">
+		<m:msub><m:mi>F</m:mi><m:mi>s</m:mi></m:msub>
+	      </m:ci>
+	      <m:ci>u</m:ci>
+	      <m:ci>v</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#convolve"/>
+	      <m:apply>
+		<m:ci type="fn">S</m:ci>
+		<m:ci>u</m:ci>
+		<m:ci>v</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn">ℱ</m:ci>
+		<m:ci>u</m:ci>
+		<m:ci>v</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+      </para>
+
+      <figure id="figure7">
+	<media id="idp1901216" alt=""><image src="../../media/figure7.png" mime-type="image/png"/></media>
+	<caption>
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn">ℱ</m:ci>
+	      <m:ci>u</m:ci>
+	      <m:ci>v</m:ci>
+	    </m:apply>
+	  </m:math> is bandlimited in both the horizontal and vertical
+	  directions.
+	</caption>
+      </figure>
+
+      <figure id="figure8">
+	<media id="idp1905856" alt=""><image src="../../media/figure8.png" mime-type="image/png"/></media>
+	<caption>
+	  periodically replicated in 
+	  <m:math>
+	    <m:mrow>
+	      <m:mo>(</m:mo>
+	      <m:mi>u</m:mi>
+	      <m:mo>,</m:mo>
+	      <m:mi>v</m:mi>
+	      <m:mo>)</m:mo>
+	    </m:mrow>
+	  </m:math> frequency plane
+	</caption>
+      </figure>
+
+    </section>
+    
+    <section id="sec5">
+      <title>Nyquist Theorem</title>
+      <para id="sec5para1">
+	Assume that 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">f</m:ci>
+	    <m:ci>x</m:ci>
+	    <m:ci>y</m:ci>
+	  </m:apply>
+	</m:math> is bandlimited to 
+	<m:math>
+	  <m:apply>
+	    <m:ci><m:mo>±</m:mo></m:ci>
+	    <m:ci>
+	      <m:msub><m:mi>B</m:mi><m:mi>x</m:mi></m:msub>
+	    </m:ci>
+	  </m:apply>
+	</m:math>, 
+	<m:math>
+	  <m:apply>
+	    <m:ci><m:mo>±</m:mo></m:ci>
+	    <m:ci>
+	      <m:msub><m:mi>B</m:mi><m:mi>y</m:mi></m:msub>
+	    </m:ci>
+	  </m:apply>
+	</m:math>: 
+      </para>
+
+      <figure id="figure9">
+	<media id="idm7173840" alt=""><image src="../../media/figure9.png" mime-type="image/png"/></media>
+      </figure>
+
+      <para id="sec5para2">
+	If we sample 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">f</m:ci>
+	    <m:ci>x</m:ci>
+	    <m:ci>y</m:ci>
+	  </m:apply>
+	</m:math> at spacings of 
+	<m:math>
+	  <m:apply>
+	    <m:lt/>
+	    <m:apply>
+	      <m:ci><m:mo>Δ</m:mo></m:ci>
+	      <m:ci>x</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:divide/>
+	      <m:pi/>
+	      <m:ci>
+		<m:msub><m:mi>B</m:mi><m:mi>x</m:mi></m:msub>
+	      </m:ci>
+	    </m:apply>
+	  </m:apply>
+	</m:math> and 
+	<m:math>
+	  <m:apply>
+	    <m:lt/>
+	    <m:apply>
+	      <m:ci><m:mo>Δ</m:mo></m:ci>
+	      <m:ci>y</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:divide/>
+	      <m:pi/>
+	      <m:ci>
+		<m:msub><m:mi>B</m:mi><m:mi>y</m:mi></m:msub>
+	      </m:ci>
+	    </m:apply>
+	  </m:apply>
+	</m:math>, then 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">f</m:ci>
+	    <m:ci>x</m:ci>
+	    <m:ci>y</m:ci>
+	  </m:apply>
+	</m:math> can be perfectly recovered from the samples by
+	lowpass filtering:
+      </para>
+
+      <figure id="figure10">
+	<media id="idp1265472" alt=""><image src="../../media/figure10.png" mime-type="image/png"/></media>
+	<caption>
+	  ideal lowpass filter, 1 inside rectangle, 0 outside
+	</caption>
+      </figure>
+      
+      <figure orient="horizontal" id="figure11">
+	<title>Aliasing in 2D</title>
+	<subfigure id="figure11-1">
+	  <media id="idp1269568" alt=""><image src="../../media/figure11-1.png" mime-type="image/png"/></media>
+	</subfigure>
+	<subfigure id="figure11-2">
+	  <media id="idp4508976" alt=""><image src="../../media/figure11-2.png" mime-type="image/png"/></media>
+	</subfigure>
+      </figure>
+
+    </section>
+    
+  </content>
+</document>

@@ -1,0 +1,1880 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Filtering with the DFT</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>425c428b-19a3-4e6f-9f72-93b7d0cfb502</md:uuid>
+</metadata>
+
+  <content>
+    <section id="intro">
+      <title>Introduction</title>
+      
+      <figure id="fig1">
+	<media id="idm7871856" alt=""><image src="../../media/sec11_fig1.png" mime-type="image/png"/></media>
+      </figure>
+
+      <para id="p1">
+	
+	<equation id="eq1">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">y</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#convolve"/> 
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">h</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar>
+		  <m:ci>k</m:ci>
+		</m:bvar>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">h</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>n</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	<equation id="eq2">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">Y</m:ci>
+		<m:ci>ω</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn">X</m:ci>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">H</m:ci>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	Assume that 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">H</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math> is specified.
+      </para>
+      
+      <exercise id="exer1">
+	<problem id="idp393584">
+	  <para id="prob_1">
+	    How can we implement
+	    <m:math>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn">X</m:ci>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">H</m:ci>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:math> in a computer?
+	  </para>
+	</problem>
+	<solution id="idp91568">
+	  <para id="sol_1">
+	    Discretize (sample) 
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn">X</m:ci>
+		<m:ci>ω</m:ci>
+	      </m:apply>
+	    </m:math> and 
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn">H</m:ci>
+		<m:ci>ω</m:ci>
+	      </m:apply>
+	    </m:math>.  In order to do this, we should take the DFTs
+	    of 
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">x</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:math> and 
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">h</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:math> 
+	    to get 
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">X</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	    </m:math> and 
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">X</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	    </m:math>.  Then we will compute 
+
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">
+		    <m:mover accent="true">
+		      <m:mi>y</m:mi>
+		      <m:mo>~</m:mo>
+		    </m:mover>
+		  </m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">IDFT</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">X</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">H</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	    
+	    Does 
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">
+		    <m:mover accent="true">
+		      <m:mi>y</m:mi>
+		      <m:mo>~</m:mo>
+		    </m:mover>
+		  </m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">y</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:math>?
+	    
+	  </para>
+	</solution>
+      </exercise>
+    
+      <para id="p2">
+	Recall that the DFT treats
+	<m:math><m:ci>N</m:ci></m:math>-point sequences as if they are
+	periodically extended (<link target-id="fig2" strength="3"/>):
+      </para>
+  
+      <figure id="fig2">
+	<media id="idp2965616" alt=""><image src="../../media/sec11_fig2.png" mime-type="image/png"/></media>
+      </figure>
+
+    </section>
+
+    <section id="sec2">
+      <title>Compute IDFT of Y[k]</title>
+      <para id="p1_s2">
+	
+	<equation id="eq3">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">
+		  <m:mover accent="true">
+		    <m:mi>y</m:mi>
+		    <m:mo>~</m:mo>
+		  </m:mover>
+		</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:cn>1</m:cn>
+		  <m:ci>N</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar>
+		    <m:ci>k</m:ci>
+		  </m:bvar>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>		      
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:cn>0</m:cn>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">Y</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+			<m:apply>
+			  <m:divide/>
+			  <m:ci>k</m:ci>
+			  <m:ci>N</m:ci>
+			</m:apply>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:cn>1</m:cn>
+		  <m:ci>N</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar>
+		    <m:ci>k</m:ci>
+		  </m:bvar>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>		      
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:cn>0</m:cn>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">X</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		     <m:apply>
+		      <m:ci type="fn" class="discrete">H</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+			<m:apply>
+			  <m:divide/>
+			  <m:ci>k</m:ci>
+			  <m:ci>N</m:ci>
+			</m:apply>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:cn>1</m:cn>
+		  <m:ci>N</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar>
+		    <m:ci>k</m:ci>
+		  </m:bvar>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>		      
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:cn>0</m:cn>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar>
+			<m:ci>m</m:ci>
+		      </m:bvar>
+		      <m:uplimit>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>N</m:ci>
+			  <m:cn>1</m:cn>
+			</m:apply>		      
+		      </m:uplimit>
+		      <m:lowlimit>
+			<m:cn>0</m:cn>
+		      </m:lowlimit>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">x</m:ci>
+			  <m:ci>m</m:ci>
+			</m:apply>
+			<m:apply>
+			  <m:exp/>
+			  <m:apply>
+			    <m:minus/>
+			    <m:apply>
+			      <m:times/>			  
+			      <m:imaginaryi/>
+			      <m:cn>2</m:cn>
+			      <m:pi/>
+			      <m:apply>
+				<m:divide/>
+				<m:ci>k</m:ci>
+				<m:ci>N</m:ci>
+			      </m:apply>
+			      <m:ci>m</m:ci>
+			    </m:apply>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">H</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+			<m:apply>
+			  <m:divide/>
+			  <m:ci>k</m:ci>
+			  <m:ci>N</m:ci>
+			</m:apply>
+			<m:ci>n</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+
+	       <m:apply>
+		<m:sum/>
+		<m:bvar>
+		  <m:ci>m</m:ci>
+		</m:bvar>
+		  <m:uplimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>		      
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:cn>0</m:cn>
+		</m:lowlimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:ci>m</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:cn>1</m:cn>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar>
+			<m:ci>k</m:ci>
+		      </m:bvar>
+		      <m:uplimit>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>N</m:ci>
+			  <m:cn>1</m:cn>
+			</m:apply>		      
+		      </m:uplimit>
+		      <m:lowlimit>
+			<m:cn>0</m:cn>
+		      </m:lowlimit>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">H</m:ci>
+			  <m:ci>k</m:ci>
+			</m:apply>
+			<m:apply>
+			  <m:exp/>
+			  <m:apply>
+			    <m:times/>			  
+			    <m:imaginaryi/>
+			    <m:cn>2</m:cn>
+			    <m:pi/>
+			    <m:apply>
+			      <m:divide/>
+			      <m:ci>k</m:ci>
+			      <m:ci>N</m:ci>
+			    </m:apply>
+			    <m:apply>
+			      <m:minus/>
+			      <m:ci>n</m:ci>
+			      <m:ci>m</m:ci>
+			    </m:apply>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      
+	      <m:apply>
+		<m:sum/>
+		<m:bvar>
+		  <m:ci>m</m:ci>
+		</m:bvar>
+		<m:uplimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>		      
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:cn>0</m:cn>
+		</m:lowlimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:ci>m</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">h</m:ci>
+		    <m:ci>
+		      <m:msub>
+			<m:mrow>
+			  <m:mo>((</m:mo>
+			  <m:mi>n</m:mi>
+			  <m:mo>−</m:mo>
+			  <m:mi>m</m:mi>
+			  <m:mo>))</m:mo>
+			</m:mrow>
+			<m:mi>N</m:mi>
+		      </m:msub>
+		    </m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	And the IDFT periodically extends 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn" class="discrete">h</m:ci>
+	    <m:ci>n</m:ci>
+	  </m:apply>
+	</m:math>:
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">
+		<m:mover accent="true">
+		  <m:mi>h</m:mi>
+		  <m:mo>~</m:mo>
+		</m:mover>
+	      </m:ci>
+	      <m:apply>
+		<m:minus/>
+		<m:ci>n</m:ci>
+		<m:ci>m</m:ci>
+	      </m:apply>
+	    </m:apply>	    
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">h</m:ci>
+	      <m:ci>
+		<m:msub>
+		  <m:mrow>
+		    <m:mo>((</m:mo>
+		    <m:mi>n</m:mi>
+		    <m:mo>−</m:mo>
+		    <m:mi>m</m:mi>
+		    <m:mo>))</m:mo>
+		  </m:mrow>
+		  <m:mi>N</m:mi>
+		</m:msub>
+	      </m:ci>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	This computes as shown in <link target-id="fig3" strength="3"/>: 
+      </para>
+
+      <figure id="fig3">
+	<media id="idp6519936" alt=""><image src="../../media/sec11_fig3.png" mime-type="image/png"/></media>
+      </figure>
+
+      <para id="p2_s1">
+	
+	<equation id="eq4">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">
+		  <m:mover accent="true">
+		    <m:mi>y</m:mi>
+		    <m:mo>~</m:mo>
+		  </m:mover>
+		</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>	    
+	      <m:apply>
+		<m:sum/>
+		<m:bvar>
+		  <m:ci>m</m:ci>
+		</m:bvar>
+		<m:uplimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>		      
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:cn>0</m:cn>
+		</m:lowlimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:ci>m</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">h</m:ci>
+		    <m:ci>
+		      <m:msub>
+			<m:mrow>
+			  <m:mo>((</m:mo>
+			  <m:mi>n</m:mi>
+			  <m:mo>−</m:mo>
+			  <m:mi>m</m:mi>
+			  <m:mo>))</m:mo>
+			</m:mrow>
+			<m:mi>N</m:mi>
+		      </m:msub>
+		    </m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	is called <term>circular convolution</term> and is denoted by
+	<link target-id="fig4" strength="3"/>.
+      </para>
+   
+      <figure id="fig4">
+	<media id="idp2124336" alt=""><image src="../../media/sec11_fig4.png" mime-type="image/png"/></media>
+	<caption>
+	  The above symbol for the circular convolution is for an
+	  <m:math><m:ci>N</m:ci></m:math>-periodic extension.
+	</caption>
+      </figure>
+   
+<!--
+	<m:math display='block'>
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type='fn' class='discrete'>
+		<m:mover accent='true'>
+		  <m:mi>y</m:mi>
+		  <m:mo>~</m:mo>
+		</m:mover>
+	      </m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>	 
+	    <m:apply>
+	      <m:apply>
+		<m:ci type='fn' class='discrete'>x</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      
+	      <m:apply>
+		<m:ci type='fn' class='discrete'>h</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+-->
+
+      <section id="sub1_s2">
+	<title>DFT Pair</title>
+	
+	<figure id="fig5">
+	  <media id="idp593936" alt=""><image src="../../media/sec11_fig5.png" mime-type="image/png"/></media>
+	</figure>
+
+	<para id="p1_s1s2">
+	  Note that in general:
+	</para>
+
+	<figure id="fig6">
+	  <media id="idp2528608" alt=""><image src="../../media/sec11_fig6.png" mime-type="image/png"/></media>
+	</figure>
+      </section>
+ 
+      <example id="eg1">
+	<title>Regular vs. Circular Convolution</title>
+	<para id="p1_eg1">
+	  To begin with, we are given the following two length-3
+	  signals:
+	  
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">x</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:set>
+		<m:cn>1</m:cn>
+		<m:cn>2</m:cn>
+		<m:cn>3</m:cn>
+	      </m:set>
+	    </m:apply>
+	  </m:math>
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">h</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:set>
+		<m:cn>1</m:cn>
+		<m:cn>0</m:cn>
+		<m:cn>2</m:cn>
+	      </m:set>
+	    </m:apply>
+	  </m:math>
+
+	  We can zero-pad these signals so that we have the following
+	  discrete sequences:
+
+	    <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">x</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:set>
+		<m:ci>…</m:ci>
+		<m:cn>0</m:cn>
+		<m:cn>1</m:cn>
+		<m:cn>2</m:cn>
+		<m:cn>3</m:cn>
+		<m:cn>0</m:cn>
+		<m:ci>…</m:ci>
+	      </m:set>
+	    </m:apply>
+	  </m:math>
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">h</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:set>
+		<m:ci>…</m:ci>
+		<m:cn>0</m:cn>
+		<m:cn>1</m:cn>
+		<m:cn>0</m:cn>
+		<m:cn>2</m:cn>
+		<m:cn>0</m:cn>
+		<m:ci>…</m:ci>
+	      </m:set>
+	    </m:apply>
+	  </m:math>
+
+	  where 
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">x</m:ci>
+		<m:cn>0</m:cn>
+	      </m:apply>
+	      <m:cn>1</m:cn>
+	    </m:apply>
+	  </m:math> and 
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">h</m:ci>
+		<m:cn>0</m:cn>
+	      </m:apply>
+	      <m:cn>1</m:cn>
+	    </m:apply>
+	  </m:math>.
+
+	  <list id="list1_eg1">
+	    <item>
+	      Regular Convolution:
+
+	      <equation id="eq5">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">y</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar>
+			<m:ci>m</m:ci>
+		      </m:bvar>
+		      <m:uplimit>
+			<m:cn>2</m:cn>
+		      </m:uplimit>
+		      <m:lowlimit>
+			<m:cn>0</m:cn>
+		      </m:lowlimit>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">x</m:ci>
+			  <m:ci>m</m:ci>
+			</m:apply>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">h</m:ci>
+			  <m:apply>
+			    <m:minus/>
+			    <m:ci>n</m:ci>
+			    <m:ci>m</m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </equation>
+
+	      Using the above convolution formula (refer to the
+	      link if you need a review of <link document="m10087" strength="3">convolution</link>), we can
+	      calculate the resulting value for 
+	      <m:math>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">y</m:ci>
+		  <m:cn>0</m:cn>
+		</m:apply>
+	      </m:math> to 
+	      <m:math>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">y</m:ci>
+		  <m:cn>4</m:cn>
+		</m:apply>
+	      </m:math>.  Recall that because we have two length-3
+	      signals, our convolved signal will be length-5.
+	      
+	      <list id="sublist1">
+		<item>
+		  <m:math>
+		    <m:apply>
+		      <m:eq/>
+		      <m:ci>n</m:ci>
+		      <m:cn>0</m:cn>
+		    </m:apply>
+		  </m:math>
+
+		  <m:math display="block">
+		    <m:set>
+		      <m:ci>…</m:ci>
+		      <m:cn>0</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>1</m:cn>
+		      <m:cn>2</m:cn>
+		      <m:cn>3</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:ci>…</m:ci>
+		    </m:set>
+		  </m:math>
+		  <m:math display="block">
+		    <m:set>
+		      <m:ci>…</m:ci>
+		      <m:cn>0</m:cn>
+		      <m:cn>2</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>1</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>0</m:cn>			
+		      <m:ci>…</m:ci>
+		    </m:set>
+		  </m:math>
+
+		  <equation id="eq6">
+		    <m:math>
+		      <m:apply>
+			<m:eq/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">y</m:ci>
+			  <m:cn>0</m:cn>
+			</m:apply>
+			<m:apply>
+			  <m:plus/>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>1</m:cn>
+			    <m:cn>1</m:cn>
+			  </m:apply>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>2</m:cn>
+			    <m:cn>0</m:cn>
+			  </m:apply>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>3</m:cn>
+			    <m:cn>0</m:cn>
+			  </m:apply>
+			</m:apply>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		    </m:math>
+		  </equation>
+		</item>
+
+		<item>
+		  <m:math>
+		    <m:apply>
+		      <m:eq/>
+		      <m:ci>n</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:math>
+
+		  <m:math display="block">
+		    <m:set>
+		      <m:ci>…</m:ci>
+		      <m:cn>0</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>1</m:cn>
+		      <m:cn>2</m:cn>
+		      <m:cn>3</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:ci>…</m:ci>
+		    </m:set>
+		  </m:math>
+		  <m:math display="block">
+		    <m:set>
+		      <m:ci>…</m:ci>
+		      <m:cn>0</m:cn>
+		      <m:cn>2</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>1</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>0</m:cn>			
+		      <m:ci>…</m:ci>
+		    </m:set>
+		  </m:math>
+
+		  <equation id="eq7">
+		    <m:math>
+		      <m:apply>
+			<m:eq/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">y</m:ci>
+			  <m:cn>1</m:cn>
+			</m:apply>
+			<m:apply>
+			  <m:plus/>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>1</m:cn>
+			    <m:cn>0</m:cn>
+			  </m:apply>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>2</m:cn>
+			    <m:cn>1</m:cn>
+			  </m:apply>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>3</m:cn>
+			    <m:cn>0</m:cn>
+			  </m:apply>
+			</m:apply>
+			<m:cn>2</m:cn>
+		      </m:apply>
+		    </m:math>
+		  </equation>
+		</item>
+
+		<item>
+		  <m:math>
+		    <m:apply>
+		      <m:eq/>
+		      <m:ci>n</m:ci>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		  </m:math>
+
+		  <m:math display="block">
+		    <m:set>
+		      <m:ci>…</m:ci>
+		      <m:cn>0</m:cn>
+		      <m:cn>1</m:cn>
+		      <m:cn>2</m:cn>
+		      <m:cn>3</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:ci>…</m:ci>
+		    </m:set>
+		  </m:math>
+		  <m:math display="block">
+		    <m:set>
+		      <m:ci>…</m:ci>
+		      <m:cn>0</m:cn>
+		      <m:cn>2</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>1</m:cn>
+		      <m:cn>0</m:cn>			
+		      <m:ci>…</m:ci>
+		    </m:set>
+		  </m:math>
+
+		  <equation id="eq8">
+		    <m:math>
+		      <m:apply>
+			<m:eq/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">y</m:ci>
+			  <m:cn>2</m:cn>
+			</m:apply>
+			<m:apply>
+			  <m:plus/>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>1</m:cn>
+			    <m:cn>2</m:cn>
+			  </m:apply>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>2</m:cn>
+			    <m:cn>0</m:cn>
+			  </m:apply>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>3</m:cn>
+			    <m:cn>1</m:cn>
+			  </m:apply>
+			</m:apply>
+			<m:cn>5</m:cn>
+		      </m:apply>
+		    </m:math>
+		  </equation>
+		</item>
+
+		<item>
+		  <m:math>
+		    <m:apply>
+		      <m:eq/>
+		      <m:ci>n</m:ci>
+		      <m:cn>3</m:cn>
+		    </m:apply>
+		  </m:math>
+
+		  <equation id="eq9">
+		    <m:math>
+		      <m:apply>
+			<m:eq/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">y</m:ci>
+			  <m:cn>3</m:cn>
+			</m:apply>
+			<m:cn>4</m:cn>
+		      </m:apply>
+		    </m:math>
+		  </equation>
+		</item>
+		
+		<item>
+		  <m:math>
+		    <m:apply>
+		      <m:eq/>
+		      <m:ci>n</m:ci>
+		      <m:cn>4</m:cn>
+		    </m:apply>
+		  </m:math>
+
+		  <equation id="eq10">
+		    <m:math>
+		      <m:apply>
+			<m:eq/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">y</m:ci>
+			  <m:cn>4</m:cn>
+			</m:apply>
+			<m:cn>6</m:cn>
+		      </m:apply>
+		    </m:math>
+		  </equation>
+		</item>
+	      </list>
+	    </item>
+	  </list>
+	</para>    
+
+	<figure id="fig7">
+	  <title>Regular Convolution Result</title>
+	  <media id="idm6408896" alt=""><image src="../../media/sec11_fig7.png" mime-type="image/png"/></media>
+	  <caption>
+	    Result is finite duration, not periodic!
+	  </caption>
+	</figure>
+
+	<para id="p2_cc">
+	  <list id="list2_p2cc">
+	    <item>
+	      Circular Convolution:
+
+	       <equation id="eq11">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">
+			<m:mover accent="true">
+			  <m:mi>y</m:mi>
+			  <m:mo>~</m:mo>
+			</m:mover>
+		      </m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar>
+			<m:ci>m</m:ci>
+		      </m:bvar>
+		      <m:uplimit>
+			<m:cn>2</m:cn>
+		      </m:uplimit>
+		      <m:lowlimit>
+			<m:cn>0</m:cn>
+		      </m:lowlimit>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">x</m:ci>
+			  <m:ci>m</m:ci>
+			</m:apply>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">h</m:ci>
+			  <m:ci><m:msub>
+			      <m:mrow>
+				<m:mo>((</m:mo>
+				<m:mi>n</m:mi>
+				<m:mo>−</m:mo>
+				<m:mi>m</m:mi>
+				<m:mo>))</m:mo>
+			      </m:mrow>
+			      <m:mi>N</m:mi>
+			    </m:msub></m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </equation>
+
+	      And now with circular convolution our 
+	      <m:math>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">h</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:math> changes and becomes a periodically extended
+	      signal:
+	      
+	      <equation id="eq12">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">h</m:ci>
+		       <m:ci><m:msub>
+			  <m:mrow>
+			    <m:mo>((</m:mo>
+			    <m:mi>n</m:mi>
+			    <m:mo>))</m:mo>
+			  </m:mrow>
+			  <m:mi>N</m:mi>
+			</m:msub></m:ci>
+		    </m:apply>
+		    <m:set>
+		      <m:ci>…</m:ci>
+		      <m:cn>1</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>2</m:cn>
+		      <m:cn>1</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>2</m:cn>
+		      <m:cn>1</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>2</m:cn>
+		      <m:ci>…</m:ci>
+		    </m:set>
+		  </m:apply>
+		</m:math>
+	      </equation>
+
+
+	      <list id="sublist2">
+		<item>
+		  <m:math>
+		    <m:apply>
+		      <m:eq/>
+		      <m:ci>n</m:ci>
+		      <m:cn>0</m:cn>
+		    </m:apply>
+		  </m:math>
+
+		  <m:math display="block">
+		    <m:set>
+		      <m:ci>…</m:ci>
+		      <m:cn>0</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>1</m:cn>
+		      <m:cn>2</m:cn>
+		      <m:cn>3</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:ci>…</m:ci>
+		    </m:set>
+		  </m:math>
+		  <m:math display="block">
+		    <m:set>
+		      <m:ci>…</m:ci>
+		      <m:cn>1</m:cn>
+		      <m:cn>2</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>1</m:cn>
+		      <m:cn>2</m:cn>	
+		      <m:cn>0</m:cn>
+		      <m:cn>1</m:cn>
+		      <m:ci>…</m:ci>
+		    </m:set>
+		  </m:math>
+
+		  <equation id="eq13">
+		    <m:math>
+		      <m:apply>
+			<m:eq/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">
+			    <m:mover accent="true">
+			      <m:mi>y</m:mi>
+			      <m:mo>~</m:mo>
+			    </m:mover>
+			  </m:ci>
+			  <m:cn>0</m:cn>
+			</m:apply>
+			<m:apply>
+			  <m:plus/>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>1</m:cn>
+			    <m:cn>1</m:cn>
+			  </m:apply>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>2</m:cn>
+			    <m:cn>2</m:cn>
+			  </m:apply>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>3</m:cn>
+			    <m:cn>0</m:cn>
+			  </m:apply>
+			</m:apply>
+			<m:cn>5</m:cn>
+		      </m:apply>
+		    </m:math>
+		  </equation>
+		</item>
+
+		<item>
+		  <m:math>
+		    <m:apply>
+		      <m:eq/>
+		      <m:ci>n</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:math>
+
+		  <m:math display="block">
+		    <m:set>
+		      <m:ci>…</m:ci>
+		      <m:cn>0</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>1</m:cn>
+		      <m:cn>2</m:cn>
+		      <m:cn>3</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:ci>…</m:ci>
+		    </m:set>
+		  </m:math>
+		  <m:math display="block">
+		    <m:set>
+		      <m:ci>…</m:ci>
+		      <m:cn>0</m:cn>
+		      <m:cn>1</m:cn>
+		      <m:cn>2</m:cn>
+		      <m:cn>0</m:cn>
+		      <m:cn>1</m:cn>
+		      <m:cn>2</m:cn>	
+		      <m:cn>0</m:cn>
+		      <m:ci>…</m:ci>
+		    </m:set>
+		  </m:math>
+
+		  <equation id="eq14">
+		    <m:math>
+		      <m:apply>
+			<m:eq/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">
+			    <m:mover accent="true">
+			      <m:mi>y</m:mi>
+			      <m:mo>~</m:mo>
+			    </m:mover>
+			  </m:ci>
+			  <m:cn>1</m:cn>
+			</m:apply>
+			<m:apply>
+			  <m:plus/>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>1</m:cn>
+			    <m:cn>1</m:cn>
+			  </m:apply>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>2</m:cn>
+			    <m:cn>1</m:cn>
+			  </m:apply>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>3</m:cn>
+			    <m:cn>2</m:cn>
+			  </m:apply>
+			</m:apply>
+			<m:cn>8</m:cn>
+		      </m:apply>
+		    </m:math>
+		  </equation>
+		</item>
+
+		<item>
+		  <m:math>
+		    <m:apply>
+		      <m:eq/>
+		      <m:ci>n</m:ci>
+		      <m:cn>2</m:cn>
+		    </m:apply>
+		  </m:math>
+
+		  <equation id="eq15">
+		    <m:math>
+		      <m:apply>
+			<m:eq/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">
+			    <m:mover accent="true">
+			      <m:mi>y</m:mi>
+			      <m:mo>~</m:mo>
+			    </m:mover>
+			  </m:ci>
+			  <m:cn>2</m:cn>
+			</m:apply>
+			<m:cn>5</m:cn>
+		      </m:apply>
+		    </m:math>
+		  </equation>
+		</item>
+
+		<item>
+		  <m:math>
+		    <m:apply>
+		      <m:eq/>
+		      <m:ci>n</m:ci>
+		      <m:cn>3</m:cn>
+		    </m:apply>
+		  </m:math>
+
+		  <equation id="eq16">
+		    <m:math>
+		      <m:apply>
+			<m:eq/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">
+			    <m:mover accent="true">
+			      <m:mi>y</m:mi>
+			      <m:mo>~</m:mo>
+			    </m:mover>
+			  </m:ci>
+			  <m:cn>3</m:cn>
+			</m:apply>
+			<m:cn>5</m:cn>
+		      </m:apply>
+		    </m:math>
+		  </equation>
+		</item>
+
+		<item>
+		  <m:math>
+		    <m:apply>
+		      <m:eq/>
+		      <m:ci>n</m:ci>
+		      <m:cn>4</m:cn>
+		    </m:apply>
+		  </m:math>
+
+		  <equation id="eq17">
+		    <m:math>
+		      <m:apply>
+			<m:eq/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">
+			    <m:mover accent="true">
+			      <m:mi>y</m:mi>
+			      <m:mo>~</m:mo>
+			    </m:mover>
+			  </m:ci>
+			  <m:cn>4</m:cn>
+			</m:apply>
+			<m:cn>8</m:cn>
+		      </m:apply>
+		    </m:math>
+		  </equation>
+		</item>		
+	      </list>
+	    </item>
+	  </list>
+	</para>
+
+	<figure id="fig8">
+	  <title>Circular Convolution Result</title>
+	  <media id="idm7292576" alt=""><image src="../../media/sec11_fig8.png" mime-type="image/png"/></media>
+	  <caption>
+	    Result is 3-periodic.
+	  </caption>
+	</figure>
+	
+	<para id="p3_eg1">
+	  <link target-id="fig9" strength="3"/> illustrates the
+	  relationship between circular convolution and regular
+	  convolution using the previous two figures:
+	</para>
+	
+	<figure id="fig9">
+	  <title>Circular Convolution from Regular</title>
+	  <media id="idp1029104" alt=""><image src="../../media/sec11_fig9.png" mime-type="image/png"/></media>
+	  <caption>
+	    The left plot (the circular convolution results) has a
+	    "wrap-around" effect due to periodic extension.
+	  </caption>
+	</figure>
+
+      </example>
+
+      <section id="sub2">
+	<title>Regular Convolution from Periodic Convolution</title>
+	<para id="p1_sub2">
+	  <list id="list3" list-type="enumerated">
+	    <item>
+	      "Zero-pad" 
+	      <m:math>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:math> and 
+	      <m:math>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">h</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:math> to avoid the overlap (wrap-around) effect.  We
+	      will zero-pad the two signals to a length-5 signal (5
+	      being the duration of the regular convolution result):
+	      
+	      <m:math display="block">
+		<m:apply>
+		  <m:eq/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		  <m:set>
+		    <m:cn>1</m:cn>
+		    <m:cn>2</m:cn>
+		    <m:cn>3</m:cn>
+		    <m:cn>0</m:cn>
+		    <m:cn>0</m:cn>
+		  </m:set>
+		</m:apply>
+	      </m:math>
+
+	      <m:math display="block">
+		<m:apply>
+		  <m:eq/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">h</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		  <m:set>
+		    <m:cn>1</m:cn>
+		    <m:cn>0</m:cn>
+		    <m:cn>2</m:cn>
+		    <m:cn>0</m:cn>
+		    <m:cn>0</m:cn>
+		  </m:set>
+		</m:apply>
+	      </m:math>	      
+	    </item>
+
+	    <item>
+	      Now take the DFTs of the zero-padded signals:
+
+	      <equation id="eq18">
+		<m:math>
+		  <m:apply>
+		    <m:eq/>		    
+		    <m:apply>
+		      <m:ci type="fn" class="discrete">
+			<m:mover accent="true">
+			  <m:mi>y</m:mi>
+			  <m:mo>~</m:mo>
+			</m:mover>
+		      </m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:divide/>
+			<m:cn>1</m:cn>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:apply>
+			<m:sum/>
+			<m:bvar>
+			  <m:ci>k</m:ci>
+			</m:bvar>
+			<m:uplimit>
+			  <m:cn>4</m:cn>
+			</m:uplimit>
+			<m:lowlimit>
+			  <m:cn>0</m:cn>
+			</m:lowlimit>
+			<m:apply>
+			  <m:times/>
+			  <m:apply>
+			    <m:ci type="fn" class="discrete">X</m:ci>
+			    <m:ci>k</m:ci>
+			  </m:apply>
+			   <m:apply>
+			    <m:ci type="fn" class="discrete">H</m:ci>
+			    <m:ci>k</m:ci>
+			  </m:apply>
+			  <m:apply>
+			    <m:exp/>
+			    <m:apply>
+			      <m:times/>
+			      <m:imaginaryi/>
+			      <m:cn>2</m:cn>
+			      <m:pi/>
+			      <m:apply>
+				<m:divide/>
+				<m:ci>k</m:ci>
+				<m:cn>5</m:cn>
+			      </m:apply>
+			      <m:ci>n</m:ci>
+			    </m:apply>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		    
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar>
+			<m:ci>m</m:ci>
+		      </m:bvar>
+		      <m:uplimit>
+			<m:cn>4</m:cn>
+		      </m:uplimit>
+		      <m:lowlimit>
+			<m:cn>0</m:cn>
+		      </m:lowlimit>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">x</m:ci>
+			  <m:ci>m</m:ci>
+			</m:apply>
+			<m:apply>
+			  <m:ci type="fn" class="discrete">h</m:ci>
+			  <m:ci>
+			    <m:msub>
+			      <m:mrow>
+				<m:mo>((</m:mo>
+				<m:mi>n</m:mi>
+				<m:mo>−</m:mo>
+				<m:mi>m</m:mi>
+				<m:mo>))</m:mo>
+			      </m:mrow>
+			      <m:mn>5</m:mn>
+			    </m:msub>
+			  </m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </equation>
+	    </item>
+	  </list>	
+	  
+	  Now we can plot this result (<link target-id="fig10" strength="3"/>):
+	</para>
+
+	<figure id="fig10">
+	  <media id="idm7017072" alt=""><image src="../../media/no_image.png" mime-type="image/png"/></media>
+	  <caption>
+	    The sequence from 0 to 4 (the underlined part of the
+	    sequence) is the regular convolution result.  From this
+	    illustration we can see that it is 5-periodic!
+	  </caption>
+	</figure>
+	
+	<para id="p2_sub2">
+	  <note type="General Result" id="idm6126080"><label>General Result</label>
+	    We can compute the regular convolution result of a
+	    convolution of an <m:math><m:ci>M</m:ci></m:math>-point
+	    signal
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">x</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:math> with an <m:math><m:ci>N</m:ci></m:math>-point
+	    signal
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">h</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:math> by padding each signal with zeros to obtain two
+	    
+	    <m:math>
+	      <m:apply>
+		<m:minus/>
+		<m:apply>
+		  <m:plus/>
+		  <m:ci>M</m:ci>
+		  <m:ci>N</m:ci>
+		</m:apply>
+		<m:cn>1</m:cn>
+	      </m:apply>
+	    </m:math> length sequences and computing the circular
+	    convolution (or equivalently computing the IDFT of 
+	    <m:math>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">H</m:ci>
+		  <m:ci>k</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">X</m:ci>
+		  <m:ci>k</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:math>, the product of the DFTs of the zero-padded
+	    signals) (<link target-id="fig11" strength="3"/>). 
+	  </note>
+	</para>
+
+	<figure id="fig11">
+	  <media id="idp2013968" alt=""><image src="../../media/sec11_fig11.png" mime-type="image/png"/></media>
+	  <caption>
+	    Note that the lower two images are simply the top images
+	    that have been zero-padded.
+	  </caption>
+	</figure>
+      </section>
+    </section>
+
+    <section id="sec3">
+      <title>DSP System</title>
+
+      <figure id="fig12">
+	<media id="idp2584224" alt=""><image src="../../media/no_image.png" mime-type="image/png"/></media>
+	<caption>
+	  The system has a length <m:math><m:ci>N</m:ci></m:math>
+	  impulse response,
+	  <m:math>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">h</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	  </m:math>
+	</caption>
+      </figure>
+      
+      <para id="p1_sec3">
+	<list id="list_final" list-type="enumerated">
+	  <item>
+	    Sample finite duration continuous-time input 
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn">x</m:ci>
+		<m:ci>t</m:ci>
+	      </m:apply>
+	    </m:math> 
+	    to get 
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">x</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:math> 
+	    where 
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:ci>n</m:ci>
+		<m:set>
+		  <m:cn>0</m:cn>
+		  <m:ci>…</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>M</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:set>
+	      </m:apply>
+	    </m:math>.
+	  </item>
+
+	  <item>
+	    Zero-pad 
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">x</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:math> and  
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">h</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:math> to length 
+	    <m:math>
+	      <m:apply>
+		<m:minus/>
+		<m:apply>
+		  <m:plus/>
+		  <m:ci>M</m:ci>
+		  <m:ci>N</m:ci>
+		</m:apply>
+		<m:cn>1</m:cn>
+	      </m:apply>
+	    </m:math>.
+	  </item>
+
+	  <item>
+	    Compute DFTs 
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">X</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	    </m:math> and 
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">H</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	    </m:math> 
+	  </item>
+
+	  <item>
+	    Compute IDFTs of 
+	    <m:math>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">X</m:ci>
+		  <m:ci>k</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">H</m:ci>
+		  <m:ci>k</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:math> 
+
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">y</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">
+		    <m:mover accent="true">
+		      <m:mi>y</m:mi>
+		      <m:mo>~</m:mo>
+		    </m:mover>
+		  </m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:math> 
+	    
+	    where 
+	    <m:math>
+	      <m:apply>
+		<m:eq/>
+		<m:ci>n</m:ci>
+		<m:set>
+		  <m:cn>0</m:cn>
+		  <m:ci>…</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:plus/>
+		      <m:ci>M</m:ci>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:set>
+	      </m:apply>
+	    </m:math>.
+	  </item>
+
+	  <item>
+	    Reconstruct
+	    <m:math>
+	      <m:apply>
+		<m:ci type="fn">y</m:ci>
+		<m:ci>t</m:ci>
+	      </m:apply>
+	    </m:math> 
+	  </item>
+	</list>
+
+      </para>
+
+    </section>
+
+  </content>
+  
+</document>

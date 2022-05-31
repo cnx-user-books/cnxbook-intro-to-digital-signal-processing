@@ -1,0 +1,698 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Sampling CT Signals: A Frequency Domain Perspective</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>85ea480b-8c82-4a1f-87be-eaa148a887fa</md:uuid>
+</metadata>
+
+  <content>
+    <section id="sec1">
+      <title>Understanding Sampling in the Frequency Domain</title>
+      <para id="p1_sec1">
+	We want to relate 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">
+	      <m:msub>
+		<m:mi>x</m:mi>
+		<m:mi>c</m:mi>
+	      </m:msub>
+	    </m:ci>
+	    <m:ci>t</m:ci>
+	  </m:apply>
+	</m:math> directly to 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn" class="discrete">x</m:ci>
+	    <m:ci>n</m:ci>
+	  </m:apply>
+	</m:math>.  Compute the CTFT of 
+	
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">
+		<m:msub>
+		  <m:mi>x</m:mi>
+		  <m:mi>s</m:mi>
+		</m:msub>
+	      </m:ci>
+	      <m:ci>t</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:sum/>
+	      <m:bvar>
+		<m:ci>n</m:ci>
+	      </m:bvar>
+	      <m:uplimit>
+		<m:infinity/>
+	      </m:uplimit>
+	      <m:lowlimit>
+		<m:apply>
+		  <m:minus/>
+		  <m:infinity/>
+		</m:apply>
+	      </m:lowlimit>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn">
+		    <m:msub>
+		      <m:mi>x</m:mi>
+		      <m:mi>c</m:mi>
+		    </m:msub>
+		  </m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:ci>n</m:ci>
+		    <m:ci>T</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">δ</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>t</m:ci>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>n</m:ci>
+		      <m:ci>T</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+	
+	<equation id="eq1">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">
+		  <m:msub>
+		    <m:mi>X</m:mi>
+		    <m:mi>s</m:mi>
+		  </m:msub>
+		</m:ci>
+		<m:ci>Ω</m:ci>
+	      </m:apply>
+	      
+	      <m:apply>
+		<m:int/>
+		<m:bvar>
+		  <m:ci>t</m:ci>
+		</m:bvar>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+
+		  <m:apply>
+		    <m:sum/>  
+		    <m:bvar>
+		      <m:ci>n</m:ci>
+		    </m:bvar>
+		    <m:uplimit>
+		      <m:infinity/>
+		    </m:uplimit>
+		    <m:lowlimit>
+		      <m:apply>
+			<m:minus/>
+			<m:infinity/>
+		      </m:apply>
+		    </m:lowlimit>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:ci type="fn">
+			  <m:msub>
+			    <m:mi>x</m:mi>
+			    <m:mi>c</m:mi>
+			  </m:msub>
+			</m:ci>
+			<m:apply>
+			  <m:times/>
+			  <m:ci>n</m:ci>
+			  <m:ci>T</m:ci>
+			</m:apply>
+		      </m:apply>
+		      <m:apply>
+			<m:ci type="fn">δ</m:ci>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>t</m:ci>
+			  <m:apply>
+			    <m:times/>
+			    <m:ci>n</m:ci>
+			    <m:ci>T</m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:exp/>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:minus/>
+			<m:imaginaryi/>
+		      </m:apply>
+		      <m:ci>Ω</m:ci>
+		      <m:ci>t</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+
+	      <m:apply>
+		<m:sum/>  
+		<m:bvar>
+		  <m:ci>n</m:ci>
+		</m:bvar>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn">
+		      <m:msub>
+			<m:mi>x</m:mi>
+			<m:mi>c</m:mi>
+		      </m:msub>
+		    </m:ci>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>n</m:ci>
+		      <m:ci>T</m:ci>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:int/>
+		    <m:bvar>
+		      <m:ci>t</m:ci>
+		    </m:bvar>
+		    <m:lowlimit>
+		      <m:apply>
+			<m:minus/>
+			<m:infinity/>
+		      </m:apply>
+		    </m:lowlimit>
+		    <m:uplimit>
+		      <m:infinity/>
+		    </m:uplimit>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:ci type="fn">δ</m:ci>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>t</m:ci>
+			  <m:apply>
+			    <m:times/>
+			    <m:ci>n</m:ci>
+			    <m:ci>T</m:ci>
+			  </m:apply>
+			</m:apply>
+		      </m:apply>
+		      <m:apply>
+			<m:exp/>
+			<m:apply>
+			  <m:times/>
+			  <m:apply>
+			    <m:minus/>
+			    <m:imaginaryi/>
+			  </m:apply>
+			  <m:ci>Ω</m:ci>
+			  <m:ci>t</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+
+	      <m:apply>
+		<m:sum/>  
+		<m:bvar>
+		  <m:ci>n</m:ci>
+		</m:bvar>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:exp/>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:minus/>
+			<m:imaginaryi/>
+		      </m:apply>
+		      <m:ci>Ω</m:ci>
+		      <m:ci>n</m:ci>
+		      <m:ci>T</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+
+	      <m:apply>
+		<m:sum/>  
+		<m:bvar>
+		  <m:ci>n</m:ci>
+		</m:bvar>
+		<m:uplimit>
+		  <m:infinity/>
+		</m:uplimit>
+		<m:lowlimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:infinity/>
+		  </m:apply>
+		</m:lowlimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">x</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:exp/>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:minus/>
+			<m:imaginaryi/>
+		      </m:apply>
+		      <m:ci>ω</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      
+	      <m:apply>
+		<m:ci type="fn">X</m:ci>
+		<m:ci>ω</m:ci>
+	      </m:apply>
+
+	    </m:apply>
+	  </m:math>
+	</equation>
+	
+	where 
+	<m:math>
+	  <m:apply>
+	    <m:equivalent/>
+	    <m:ci>ω</m:ci>
+	    <m:apply>
+	      <m:times/>
+	      <m:ci>Ω</m:ci>
+	      <m:ci>T</m:ci>
+	    </m:apply>
+	  </m:apply>
+	</m:math> and 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">X</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math> is the DTFT of 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn" class="discrete">x</m:ci>
+	    <m:ci>n</m:ci>
+	  </m:apply>
+	</m:math>.
+	
+	<note type="Recall" id="idm2204480"><label>Recall</label>
+	  
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">
+		  <m:msub>
+		    <m:mi>X</m:mi>
+		    <m:mi>s</m:mi>
+		  </m:msub>
+		</m:ci>
+		<m:ci>Ω</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:cn>1</m:cn>
+		  <m:ci>T</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:sum/>  
+		  <m:bvar>
+		    <m:ci>k</m:ci>
+		  </m:bvar>
+		  <m:uplimit>
+		    <m:infinity/>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:infinity/>
+		    </m:apply>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:ci type="fn">
+		      <m:msub>
+			<m:mi>X</m:mi>
+			<m:mi>c</m:mi>
+		      </m:msub>
+		    </m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>Ω</m:ci>
+		      <m:apply>
+			<m:times/>
+			<m:ci>k</m:ci>
+			<m:ci><m:msub>
+			    <m:mi>Ω</m:mi>
+			    <m:mi>s</m:mi>
+			  </m:msub></m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	</note>
+
+	<equation id="eq2">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">X</m:ci>
+		<m:ci>ω</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:cn>1</m:cn>
+		  <m:ci>T</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:sum/>  
+		  <m:bvar>
+		    <m:ci>k</m:ci>
+		  </m:bvar>
+		  <m:uplimit>
+		    <m:infinity/>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:infinity/>
+		    </m:apply>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:ci type="fn">
+		      <m:msub>
+			<m:mi>X</m:mi>
+			<m:mi>c</m:mi>
+		      </m:msub>
+		    </m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>Ω</m:ci>
+		      <m:apply>
+			<m:times/>
+			<m:ci>k</m:ci>
+			<m:ci><m:msub>
+			    <m:mi>Ω</m:mi>
+			    <m:mi>s</m:mi>
+			  </m:msub></m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:cn>1</m:cn>
+		  <m:ci>T</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:sum/>  
+		  <m:bvar>
+		    <m:ci>k</m:ci>
+		  </m:bvar>
+		  <m:uplimit>
+		    <m:infinity/>
+		  </m:uplimit>
+		  <m:lowlimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:infinity/>
+		    </m:apply>
+		  </m:lowlimit>
+		  <m:apply>
+		    <m:ci type="fn">
+		      <m:msub>
+			<m:mi>X</m:mi>
+			<m:mi>c</m:mi>
+		      </m:msub>
+		    </m:ci>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>ω</m:ci>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			  <m:ci>k</m:ci>
+			</m:apply>
+		      </m:apply>
+		      <m:ci>T</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+	
+	where this last part is 
+	<m:math>
+	  <m:apply>
+	    <m:times/>
+	    <m:cn>2</m:cn>
+	    <m:pi/>
+	  </m:apply>
+	</m:math>-periodic.
+      </para>
+      
+      <section id="sub1">
+	<title>Sampling</title>
+	
+	<figure id="fig1">
+	  <media id="idm167136" alt=""><image src="../../media/sec10_fig1.png" mime-type="image/png"/></media>
+	</figure>
+	
+      </section>
+      
+      <example id="eg1">
+	<title>Speech</title>
+	<para id="p1_eg1">
+	  Speech is intelligible if bandlimited by a CT lowpass filter
+	  to the band ±4 kHz.  We can sample speech as slowly as _____?
+	</para>
+
+	<figure id="fig2">
+	  <media id="idm1035488" alt=""><image src="../../media/sec10_fig2.png" mime-type="image/png"/></media>
+	</figure>
+	
+	<figure id="fig3">
+	  <media id="idm1313440" alt=""><image src="../../media/sec10_fig3.png" mime-type="image/png"/></media>
+	  <caption>
+	    Note that there is no mention of 
+	    <m:math><m:ci>T</m:ci></m:math> or 
+	    <m:math>
+	      <m:ci><m:msub>
+		  <m:mi>Ω</m:mi>
+		  <m:mi>s</m:mi>
+		</m:msub></m:ci>
+	    </m:math>!
+	  </caption>		  
+	</figure>
+
+      </example>
+    </section>
+
+    <section id="sec2">
+      <title>Relating x[n] to sampled x(t)</title>
+      <para id="p1_s2">
+	Recall the following equality:
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">
+		<m:msub>
+		  <m:mi>x</m:mi>
+		  <m:mi>s</m:mi>
+		</m:msub>
+	      </m:ci>
+	      <m:ci>t</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:sum/>
+	      <m:bvar>
+		<m:ci>n</m:ci>
+	      </m:bvar>
+	      <m:domainofapplication>
+		<m:ci>n</m:ci>
+	      </m:domainofapplication>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn">x</m:ci>
+		  <m:apply>
+		    <m:times/>
+		    <m:ci>n</m:ci>
+		    <m:ci>T</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">δ</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>t</m:ci>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>n</m:ci>
+		      <m:ci>T</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+	
+      </para>
+      
+      <figure id="fig4">
+	<media id="idm2535600" alt=""><image src="../../media/sec10_fig4.png" mime-type="image/png"/></media>
+      </figure>
+      
+      <para id="p2_s2">
+	Recall the CTFT relation:
+
+	<equation id="eq3">
+	  <m:math>
+	    <m:apply>
+	      <m:ci><m:mo>↔</m:mo></m:ci>
+	      <m:apply>
+		<m:ci type="fn">x</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:ci>α</m:ci>
+		  <m:ci>t</m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:divide/>
+		  <m:cn>1</m:cn>
+		  <m:ci>α</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">X</m:ci>
+		  <m:apply>
+		    <m:divide/>
+		    <m:ci>Ω</m:ci>
+		    <m:ci>α</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	where <m:math><m:ci>α</m:ci></m:math> is a scaling of
+	time and 
+	<m:math>
+	  <m:apply>
+	    <m:divide/>
+	    <m:cn>1</m:cn>
+	    <m:ci>α</m:ci>
+	  </m:apply>
+	</m:math> is a scaling in frequency.
+
+	<equation id="eq4">
+	  <m:math>
+	    <m:apply>
+	      <m:equivalent/>
+	      <m:apply>
+		<m:ci type="fn">
+		  <m:msub>
+		    <m:mi>X</m:mi>
+		    <m:mi>s</m:mi>
+		  </m:msub>
+		</m:ci>
+		<m:ci>Ω</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:ci type="fn">X</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:ci>Ω</m:ci>
+		  <m:ci>T</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+      </para>
+
+    </section>
+
+  </content>  
+</document>

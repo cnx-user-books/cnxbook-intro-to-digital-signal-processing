@@ -1,0 +1,173 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Image Restoration Basics</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>c71a2b40-c423-49f1-87a4-bbc3e98741b3</md:uuid>
+</metadata>
+
+  
+  
+  <content>
+    <section id="sec1">
+      <title>Image Restoration</title>
+      	
+	<!-- FIGURE HERE -->
+      
+      <para id="p1">
+	In many applications (<foreign>e.g.</foreign>, satellite
+	imaging, medical imaging, astronomical imaging, poor-quality
+	family portraits) the imaging system introduces a slight
+	distortion.  Often images are slightly blurred and image
+	restoration aims at <term>deblurring</term> the image.
+      </para>
+
+      <para id="p2">
+	The blurring can usually be modeled as an LSI system with a
+	given PSF 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn" class="discrete">h</m:ci>
+	    <m:ci>m</m:ci>
+	    <m:ci>n</m:ci>
+	  </m:apply>
+	</m:math>.
+      </para>
+
+      <figure id="fig2">
+	<media id="idp1248240" alt=""><image src="../../media/FT.png" mime-type="image/png"/></media>
+	<caption>
+	  Fourier Transform (FT) relationship between the two
+	  functions.
+	</caption>
+      </figure>
+      
+      <para id="p3">
+	The observed image is 
+
+	<equation id="eq1">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn" class="discrete">g</m:ci>
+		<m:ci>m</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#convolve"/> 
+		<m:apply>
+		  <m:ci type="fn" class="discrete">h</m:ci>
+		  <m:ci>m</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">f</m:ci>
+		  <m:ci>m</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	<equation id="eq2">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">G</m:ci>
+		<m:ci>u</m:ci>
+		<m:ci>v</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn">H</m:ci>
+		  <m:ci>u</m:ci>
+		  <m:ci>v</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">F</m:ci>
+		  <m:ci>u</m:ci>
+		  <m:ci>v</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	<equation id="eq3">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">F</m:ci>
+		<m:ci>u</m:ci>
+		<m:ci>v</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:divide/>
+		<m:apply>
+		  <m:ci type="fn">G</m:ci>
+		  <m:ci>u</m:ci>
+		  <m:ci>v</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">H</m:ci>
+		  <m:ci>u</m:ci>
+		  <m:ci>v</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+      </para>
+
+      <example id="eg1">
+	<title>Image Blurring</title>
+	<para id="eg1_p1">
+	  Above we showed the equations for representing the common
+	  model for blurring an image.  In <link target-id="fig3" strength="3"/> we have an original image and a PSF function
+	  that we wish to apply to the image in order to model a basic
+	  blurred image.
+	</para>
+	
+	<figure orient="horizontal" id="fig3">
+	  <subfigure id="subfig1">
+	    <media id="idp1117984" alt=""><image src="../../media/camera.png" mime-type="image/png"/></media>
+	  </subfigure>
+	  <subfigure id="subfig2">
+	    <media id="idm1783296" alt=""><image src="../../media/psf.png" mime-type="image/png"/></media>
+	  </subfigure>
+	</figure>
+
+	<para id="eg1_p2">
+	  Once we apply the PSF to the original image, we receive our
+	  blurred image that is shown in <link target-id="fig4" strength="3"/>:
+	</para>
+
+	<figure id="fig4">
+	    <media id="idp1534640" alt=""><image src="../../media/cam_blur.png" mime-type="image/png"/></media>
+	</figure>
+      </example>
+
+      <section id="sub1">
+	<title>Frequency Domain Analysis</title>
+	<para id="p1_sub1">
+	  <link target-id="eg1" strength="3"/> looks at the original
+	  images in its typical form; however, it is often useful to
+	  look at our images and PSF in the frequency domain.  In
+	  <link target-id="fig5" strength="3"/>, we take another look at
+	  the image blurring example above and look at how the images
+	  and results would appear in the frequency domain if we
+	  applied the fourier transforms.
+	  </para>
+
+	<figure id="fig5">
+	    <media id="idm153520" alt=""><image src="../../media/cam_freq.png" mime-type="image/png"/></media>
+	</figure>
+
+	</section>
+
+    </section>
+
+  </content>
+</document>

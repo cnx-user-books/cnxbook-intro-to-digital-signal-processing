@@ -1,0 +1,98 @@
+<col:collection xmlns="http://cnx.rice.edu/collxml" xmlns:md="http://cnx.rice.edu/mdml" xmlns:col="http://cnx.rice.edu/collxml" xml:lang="en">
+  <metadata xmlns:md="http://cnx.rice.edu/mdml" mdml-version="0.5">
+    <md:content-id>col10203</md:content-id>
+    <md:title>Intro to Digital Signal Processing</md:title>
+    <md:language>en</md:language>
+    <md:license url="http://creativecommons.org/licenses/by/1.0">Creative Commons Attribution License</md:license>
+    <md:uuid>d69acf50-dfd8-43f9-b591-5011742df59c</md:uuid>
+<md:slug>intro-to-digital-signal-processing</md:slug>
+</metadata>
+  <col:content>
+    <col:subcollection>
+      <md:title>DSP Systems I</md:title>
+      <col:content>
+        <col:module document="m10972"/>
+        <col:module document="m10973"/>
+        <col:module document="m10987"/>
+        <col:module document="m10961"/>
+        <col:module document="m10962"/>
+        <col:module document="m10963"/>
+        <col:module document="m10964"/>
+        <col:module document="m10992"/>
+        <col:module document="m10993"/>
+        <col:module document="m10994"/>
+        <col:module document="m11022"/>
+        <col:module document="m11044"/>
+        <col:module document="m0051"/>
+        <col:module document="m0039"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Random Signals</md:title>
+      <col:content>
+        <col:module document="m10649"/>
+        <col:module document="m10235"/>
+        <col:module document="m10989"/>
+        <col:module document="m10684"/>
+        <col:module document="m10656"/>
+        <col:module document="m10673"/>
+        <col:module document="m10676"/>
+        <col:module document="m10686"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Filter Design I (Z-Transform)</md:title>
+      <col:content>
+        <col:module document="m10595"/>
+        <col:module document="m10549"/>
+        <col:module document="m10119"/>
+        <col:module document="m10112"/>
+        <col:module document="m10593"/>
+        <col:module document="m10596"/>
+        <col:module document="m10622"/>
+        <col:module document="m10556"/>
+        <col:module document="m10700"/>
+        <col:module document="m10548"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Filter Design II</md:title>
+      <col:content>
+        <col:module document="m1057"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Filter Design III</md:title>
+      <col:content>
+        <col:module document="m10705"/>
+        <col:module document="m10706"/>
+        <col:module document="m10701"/>
+        <col:module document="m10704"/>
+        <col:module document="m10707"/>
+        <col:module document="m10917"/>
+        <col:module document="m10918"/>
+        <col:module document="m10914"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Wiener Filter Design</md:title>
+      <col:content/>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Adaptive Filtering</md:title>
+      <col:content>
+        <col:module document="m10481"/>
+      </col:content>
+    </col:subcollection>
+    <col:subcollection>
+      <md:title>Wavelets and Filterbanks</md:title>
+      <col:content>
+        <col:module document="m10764"/>
+        <col:module document="m10957"/>
+        <col:module document="m10418"/>
+        <col:module document="m10436"/>
+        <col:module document="m10437"/>
+      </col:content>
+    </col:subcollection>
+  </col:content>
+</col:collection>

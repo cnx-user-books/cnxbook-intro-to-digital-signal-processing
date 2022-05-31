@@ -1,0 +1,1182 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  
+  <title>DFT as a Matrix Operation</title>
+  
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>5fc52e9a-faa5-49b8-99f4-27058876538b</md:uuid>
+</metadata>
+
+  <content>   
+    <section id="sec1">
+      <title>Matrix Review</title>
+      
+      <para id="para0">
+	Recall: 
+	
+	<list id="list1">
+	  <item>
+	    Vectors in 
+	    <m:math>
+	      <m:apply>
+		<m:power/>
+		<m:reals/>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	    </m:math>: 
+
+	    <m:math display="block">
+	      <m:apply>
+		<m:forall/>
+		<m:bvar>
+		  <m:ci>
+		    <m:msub><m:mi>x</m:mi><m:mi>i</m:mi></m:msub>
+		  </m:ci>
+		</m:bvar>
+		<m:condition>
+		  <m:apply>
+		    <m:in/>
+		    <m:ci>
+		      <m:msub><m:mi>x</m:mi><m:mi>i</m:mi></m:msub>
+		    </m:ci>
+		    <m:reals/>
+		  </m:apply>
+		</m:condition>
+		<m:apply>
+		  <m:eq/>
+		  <m:ci type="vector">x</m:ci>
+		  <m:matrix>
+		    <m:matrixrow>
+		      <m:ci>
+			<m:msub><m:mi>x</m:mi><m:mn>0</m:mn></m:msub>
+		      </m:ci>
+		    </m:matrixrow>
+		    <m:matrixrow>
+		      <m:ci>
+			<m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub>
+		      </m:ci>
+		    </m:matrixrow>
+		    <m:matrixrow>
+		      <m:ci>…</m:ci>
+		    </m:matrixrow>
+		    <m:matrixrow>
+		      <m:ci>
+			<m:msub><m:mi>x</m:mi>
+			  <m:mrow>
+			    <m:mi>N</m:mi>
+			    <m:mo>-</m:mo>
+			    <m:mn>1</m:mn>
+			  </m:mrow>
+			</m:msub>
+		      </m:ci>
+		    </m:matrixrow>
+		  </m:matrix>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </item>
+
+	  <item>
+	    Vectors in 
+	    <m:math>
+	      <m:apply>
+		<m:power/>
+		<m:complexes/>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	    </m:math>: 
+
+	    <m:math display="block">
+	      <m:apply>
+		<m:forall/>
+		<m:bvar>
+		  <m:ci>
+		    <m:msub><m:mi>x</m:mi><m:mi>i</m:mi></m:msub>
+		  </m:ci>
+		</m:bvar>
+		<m:condition>
+		  <m:apply>
+		    <m:in/>
+		    <m:ci>
+		      <m:msub><m:mi>x</m:mi><m:mi>i</m:mi></m:msub>
+		    </m:ci>
+		    <m:complexes/>
+		  </m:apply>
+		</m:condition>
+		<m:apply>
+		  <m:eq/>
+		  <m:ci type="vector">x</m:ci>
+		  <m:matrix>
+		    <m:matrixrow>
+		      <m:ci>
+			<m:msub><m:mi>x</m:mi><m:mn>0</m:mn></m:msub>
+		      </m:ci>
+		    </m:matrixrow>
+		    <m:matrixrow>
+		      <m:ci>
+			<m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub>
+		      </m:ci>
+		    </m:matrixrow>
+		    <m:matrixrow>
+		      <m:ci>…</m:ci>
+		    </m:matrixrow>
+		    <m:matrixrow>
+		      <m:ci>
+			<m:msub><m:mi>x</m:mi>
+			  <m:mrow>
+			    <m:mi>N</m:mi>
+			    <m:mo>-</m:mo>
+			    <m:mn>1</m:mn>
+			  </m:mrow>
+			</m:msub>
+		      </m:ci>
+		    </m:matrixrow>
+		  </m:matrix>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </item>
+	  
+	  <item>
+	    Transposition: 
+	    
+	    <list id="list2" list-type="enumerated">
+	      <item>
+		transpose:
+		
+		<m:math display="block">
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:transpose/>
+		      <m:ci type="vector">x</m:ci>
+		    </m:apply>
+		    <m:matrix>
+		      <m:matrixrow>
+			<m:ci>
+			  <m:msub><m:mi>x</m:mi><m:mn>0</m:mn></m:msub>
+			</m:ci>
+			<m:ci>
+			  <m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub>
+			</m:ci>
+			<m:ci>…</m:ci>
+			<m:ci>
+			  <m:msub><m:mi>x</m:mi>
+			    <m:mrow>
+			      <m:mi>N</m:mi>
+			      <m:mo>-</m:mo>
+			      <m:mn>1</m:mn>
+			    </m:mrow>
+			  </m:msub>
+			</m:ci>
+		      </m:matrixrow>
+		    </m:matrix>
+		  </m:apply>
+		</m:math>
+	      </item>
+
+	      <item>
+		conjugate:
+
+		<m:math display="block">
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#adjoint"/>
+		      <m:ci type="vector">x</m:ci>
+		    </m:apply>
+		    <m:matrix>
+		      <m:matrixrow>
+			<m:apply>
+			  <m:conjugate/>
+			  <m:ci>
+			    <m:msub><m:mi>x</m:mi><m:mn>0</m:mn></m:msub>
+			  </m:ci>
+			</m:apply>
+			<m:apply>
+			  <m:conjugate/>
+			  <m:ci>
+			    <m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub>
+			  </m:ci>
+			</m:apply>
+			<m:ci>…</m:ci>
+			<m:apply>
+			  <m:conjugate/>
+			  <m:ci>
+			    <m:msub><m:mi>x</m:mi>
+			      <m:mrow>
+				<m:mi>N</m:mi>
+				<m:mo>-</m:mo>
+				<m:mn>1</m:mn>
+			      </m:mrow>
+			    </m:msub>
+			  </m:ci>
+			</m:apply>
+		      </m:matrixrow>
+		    </m:matrix>
+		  </m:apply>
+		</m:math>
+	      </item>
+	    </list>
+	  </item>
+	  
+	  <item>
+	    <link document="m10755" strength="3">Inner product</link>: 
+	    
+	    <list id="list3" list-type="enumerated">
+	      <item>
+		real: 
+		<m:math display="block">
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:transpose/>
+			<m:ci type="vector">x</m:ci>
+		      </m:apply>
+		      <m:ci type="vector">y</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar><m:ci>i</m:ci></m:bvar>
+		      <m:lowlimit>
+			<m:cn>0</m:cn>
+		      </m:lowlimit>
+		      <m:uplimit>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>N</m:ci>
+			  <m:cn>1</m:cn>
+			</m:apply>
+		      </m:uplimit>
+		      <m:apply>
+			<m:times/>
+			<m:ci>
+			  <m:msub><m:mi>x</m:mi><m:mi>i</m:mi></m:msub>
+			</m:ci>
+			<m:ci>
+			  <m:msub><m:mi>y</m:mi><m:mi>i</m:mi></m:msub>
+			</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </item>
+
+	      <item>
+		complex: 
+
+		<m:math display="block">
+		  <m:apply>
+		    <m:eq/>
+		    <m:apply>
+		      <m:times/>
+		      <m:apply>
+			<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#adjoint"/>
+			<m:ci type="vector">x</m:ci>
+		      </m:apply>
+		      <m:ci type="vector">y</m:ci>
+		    </m:apply>
+		    <m:apply>
+		      <m:sum/>
+		      <m:bvar><m:ci>i</m:ci></m:bvar>
+		      <m:lowlimit>
+			<m:cn>0</m:cn>
+		      </m:lowlimit>
+		      <m:uplimit>
+			<m:apply>
+			  <m:minus/>
+			  <m:ci>N</m:ci>
+			  <m:cn>1</m:cn>
+			</m:apply>
+		      </m:uplimit>
+		      <m:apply>
+			<m:times/>
+			<m:apply>
+			  <m:conjugate/>
+			  <m:ci>
+			    <m:msub><m:mi>x</m:mi><m:mi>n</m:mi></m:msub>
+			  </m:ci>
+			</m:apply>
+			<m:ci>
+			  <m:msub><m:mi>y</m:mi><m:mi>n</m:mi></m:msub>
+			</m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:math>
+	      </item>
+	    </list>
+	  </item>
+
+	  <item>
+	    Matrix Multiplication: 
+
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:times/>
+		  <m:ci type="matrix">A</m:ci>
+		  <m:ci type="vector">x</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:matrix>
+		    <m:matrixrow>
+		      <m:ci><m:msub>
+			  <m:mi>a</m:mi>
+			  <m:mrow>
+			    <m:mn>0</m:mn>
+			    <m:mn>0</m:mn>
+			  </m:mrow>
+			</m:msub></m:ci>
+		      <m:ci><m:msub>
+			  <m:mi>a</m:mi>
+			  <m:mrow>
+			    <m:mn>0</m:mn>
+			    <m:mn>1</m:mn>
+			  </m:mrow>
+			</m:msub></m:ci>
+		      <m:ci>…</m:ci>
+		      <m:ci>
+			<m:msub><m:mi>a</m:mi>
+			  <m:mrow>
+			    <m:mn>0</m:mn>
+			    <m:mo>,</m:mo>
+			    <m:mrow>
+			      <m:mi>N</m:mi>
+			      <m:mo>-</m:mo>
+			      <m:mn>1</m:mn>
+			    </m:mrow>
+			  </m:mrow>
+			</m:msub>
+		      </m:ci>
+		    </m:matrixrow>
+		    <m:matrixrow>
+		      <m:ci><m:msub>
+			  <m:mi>a</m:mi>
+			  <m:mrow>
+			    <m:mn>1</m:mn>
+			    <m:mn>0</m:mn>
+			  </m:mrow>
+			</m:msub></m:ci>
+		      <m:ci><m:msub>
+			  <m:mi>a</m:mi>
+			  <m:mrow>
+			    <m:mn>1</m:mn>
+			    <m:mn>1</m:mn>
+			  </m:mrow>
+			</m:msub></m:ci>
+		      <m:ci>…</m:ci>
+		      <m:ci>
+			<m:msub><m:mi>a</m:mi>
+			  <m:mrow>
+			    <m:mn>1</m:mn>
+			    <m:mo>,</m:mo>
+			    <m:mrow>
+			      <m:mi>N</m:mi>
+			      <m:mo>-</m:mo>
+			      <m:mn>1</m:mn>
+			    </m:mrow>
+			  </m:mrow>
+			</m:msub>
+		      </m:ci>
+		    </m:matrixrow>
+		    <m:matrixrow>
+		      <m:ci>⋮</m:ci>
+		      <m:ci>⋮</m:ci>
+		      <m:ci>…</m:ci>
+		      <m:ci>⋮</m:ci>
+		    </m:matrixrow>
+		    <m:matrixrow>
+		      <m:ci>
+			<m:msub><m:mi>a</m:mi>
+			  <m:mrow>
+			    <m:mrow>
+			      <m:mi>N</m:mi>
+			      <m:mo>-</m:mo>
+			      <m:mn>1</m:mn>
+			    </m:mrow>
+			    <m:mo>,</m:mo>
+			    <m:mn>0</m:mn>
+			  </m:mrow>
+			</m:msub>
+		      </m:ci>
+		      <m:ci>
+			<m:msub><m:mi>a</m:mi>
+			  <m:mrow>
+			    <m:mrow>
+			      <m:mi>N</m:mi>
+			      <m:mo>-</m:mo>
+			      <m:mn>1</m:mn>
+			    </m:mrow>
+			    <m:mo>,</m:mo>
+			    <m:mn>1</m:mn>
+			  </m:mrow>
+			</m:msub>
+		      </m:ci>
+		      <m:ci>…</m:ci>
+		      <m:ci>
+			<m:msub><m:mi>a</m:mi>
+			  <m:mrow>
+			    <m:mrow>
+			      <m:mi>N</m:mi>
+			      <m:mo>-</m:mo>
+			      <m:mn>1</m:mn>
+			    </m:mrow>
+			    <m:mo>,</m:mo>
+			    <m:mrow>
+			      <m:mi>N</m:mi>
+			      <m:mo>-</m:mo>
+			      <m:mn>1</m:mn>
+			    </m:mrow>
+			  </m:mrow>
+			</m:msub>
+		      </m:ci>
+		    </m:matrixrow>
+		  </m:matrix>
+		  <m:matrix>
+		    <m:matrixrow>
+		      <m:ci>
+			<m:msub><m:mi>x</m:mi><m:mn>0</m:mn></m:msub>
+		      </m:ci>
+		    </m:matrixrow>
+		    <m:matrixrow>
+		      <m:ci>
+			<m:msub><m:mi>x</m:mi><m:mn>1</m:mn></m:msub>
+		      </m:ci>
+		    </m:matrixrow>
+		    <m:matrixrow>
+		      <m:ci>…</m:ci>
+		    </m:matrixrow>
+		    <m:matrixrow>
+		      <m:ci>
+			<m:msub><m:mi>x</m:mi>
+			  <m:mrow>
+			    <m:mi>N</m:mi>
+			    <m:mo>-</m:mo>
+			    <m:mn>1</m:mn>
+			  </m:mrow>
+			</m:msub>
+		      </m:ci>
+		    </m:matrixrow>
+		  </m:matrix>
+		</m:apply>
+		<m:matrix>
+		  <m:matrixrow>
+		    <m:ci>
+		      <m:msub><m:mi>y</m:mi><m:mn>0</m:mn></m:msub>
+		    </m:ci>
+		  </m:matrixrow>
+		  <m:matrixrow>
+		    <m:ci>
+		      <m:msub><m:mi>y</m:mi><m:mn>1</m:mn></m:msub>
+		    </m:ci>
+		  </m:matrixrow>
+		  <m:matrixrow>
+		    <m:ci>…</m:ci>
+		  </m:matrixrow>
+		  <m:matrixrow>
+		    <m:ci>
+		      <m:msub><m:mi>y</m:mi>
+			<m:mrow>
+			  <m:mi>N</m:mi>
+			  <m:mo>-</m:mo>
+			  <m:mn>1</m:mn>
+			</m:mrow>
+		      </m:msub>
+		    </m:ci>
+		  </m:matrixrow>
+		</m:matrix>
+	      </m:apply>
+	    </m:math>
+
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:ci>
+		  <m:msub><m:mi>y</m:mi><m:mi>k</m:mi></m:msub>
+		</m:ci>
+		<m:apply>
+		  <m:sum/>
+		  <m:bvar><m:ci>n</m:ci></m:bvar>
+		  <m:lowlimit>
+		    <m:cn>0</m:cn>
+		  </m:lowlimit>
+		  <m:uplimit>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:uplimit>
+		  <m:apply>
+		    <m:times/>
+		    <m:ci>
+		      <m:msub><m:mi>a</m:mi>
+			<m:mrow>
+			  <m:mi>k</m:mi>
+			  <m:mo>⁢</m:mo>
+			  <m:mi>n</m:mi>
+			</m:mrow>
+		      </m:msub>
+		    </m:ci>
+		    <m:ci>
+		      <m:msub><m:mi>x</m:mi><m:mi>n</m:mi></m:msub>
+		    </m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+	  </item>
+
+	  <item>
+	    Matrix Transposition:
+
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:transpose/>
+		  <m:ci type="matrix">A</m:ci>
+		</m:apply>
+		<m:matrix>
+		  <m:matrixrow>
+		    <m:ci><m:msub>
+			<m:mi>a</m:mi>
+			<m:mrow>
+			  <m:mn>0</m:mn>
+			  <m:mn>0</m:mn>
+			</m:mrow>
+		      </m:msub></m:ci>
+		    <m:ci><m:msub>
+			<m:mi>a</m:mi>
+			<m:mrow>
+			  <m:mn>1</m:mn>
+			  <m:mn>0</m:mn>
+			</m:mrow>
+		      </m:msub></m:ci>
+		    <m:ci>…</m:ci>
+		    <m:ci>
+		      <m:msub><m:mi>a</m:mi>
+			<m:mrow>
+			  <m:mrow>
+			    <m:mi>N</m:mi>
+			    <m:mo>-</m:mo>
+			    <m:mn>1</m:mn>
+			  </m:mrow>
+			  <m:mo>,</m:mo>
+			  <m:mn>0</m:mn>
+			</m:mrow>
+		      </m:msub>
+		    </m:ci>
+		  </m:matrixrow>
+		  <m:matrixrow>
+		    <m:ci><m:msub>
+			<m:mi>a</m:mi>
+			<m:mrow>
+			  <m:mn>0</m:mn>
+			  <m:mn>1</m:mn>
+			</m:mrow>
+		      </m:msub></m:ci>
+		    <m:ci><m:msub>
+			<m:mi>a</m:mi>
+			<m:mrow>
+			  <m:mn>1</m:mn>
+			  <m:mn>1</m:mn>
+			</m:mrow>
+		      </m:msub></m:ci>
+		    <m:ci>…</m:ci>
+		    <m:ci>
+		      <m:msub><m:mi>a</m:mi>
+			<m:mrow>
+			  <m:mrow>
+			    <m:mi>N</m:mi>
+			    <m:mo>-</m:mo>
+			    <m:mn>1</m:mn>
+			  </m:mrow>
+			  <m:mo>,</m:mo>
+			  <m:mn>1</m:mn>
+			</m:mrow>
+		      </m:msub>
+		    </m:ci>
+		  </m:matrixrow>
+		  <m:matrixrow>
+		    <m:ci>⋮</m:ci>
+		    <m:ci>⋮</m:ci>
+		    <m:ci>…</m:ci>
+		    <m:ci>⋮</m:ci>
+		  </m:matrixrow>
+		  <m:matrixrow>
+		    <m:ci>
+		      <m:msub><m:mi>a</m:mi>
+			<m:mrow>
+			  <m:mn>0</m:mn>
+			  <m:mo>,</m:mo>
+			  <m:mrow>
+			    <m:mi>N</m:mi>
+			    <m:mo>-</m:mo>
+			    <m:mn>1</m:mn>
+			  </m:mrow>
+			</m:mrow>
+		      </m:msub>
+		    </m:ci>
+		    <m:ci>
+		      <m:msub><m:mi>a</m:mi>
+			<m:mrow>
+			  <m:mn>1</m:mn>
+			  <m:mo>,</m:mo>
+			  <m:mrow>
+			    <m:mi>N</m:mi>
+			    <m:mo>-</m:mo>
+			    <m:mn>1</m:mn>
+			  </m:mrow>
+			</m:mrow>
+		      </m:msub>
+		    </m:ci>
+		    <m:ci>…</m:ci>
+		    <m:ci>
+		      <m:msub><m:mi>a</m:mi>
+			<m:mrow>
+			  <m:mrow>
+			    <m:mi>N</m:mi>
+			    <m:mo>-</m:mo>
+			    <m:mn>1</m:mn>
+			  </m:mrow>
+			  <m:mo>,</m:mo>
+			  <m:mrow>
+			    <m:mi>N</m:mi>
+			    <m:mo>-</m:mo>
+			    <m:mn>1</m:mn>
+			  </m:mrow>
+			</m:mrow>
+		      </m:msub>
+		    </m:ci>
+		  </m:matrixrow>
+		</m:matrix>
+	      </m:apply>
+	    </m:math>
+
+	    Matrix transposition involved simply swapping the rows
+	    with columns.
+        
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#adjoint"/>
+		  <m:ci type="matrix">A</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:conjugate/>
+		  <m:apply>
+		    <m:transpose/>
+		    <m:ci type="matrix">A</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:math>
+
+	    The above equation is Hermitian transpose.
+
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:selector/>
+		  <m:apply>
+		    <m:transpose/>
+		    <m:ci type="vector">A</m:ci>
+		  </m:apply>
+		  <m:ci>k</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:selector/>
+		  <m:ci type="vector">A</m:ci>
+		  <m:ci>n</m:ci>
+		  <m:ci>k</m:ci>
+		</m:apply>		
+	      </m:apply>
+	    </m:math>
+
+	    <m:math display="block">
+	      <m:apply>
+		<m:eq/>
+		<m:apply>
+		  <m:selector/>
+		  <m:apply>
+		    <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#adjoint"/>
+		    <m:ci type="matrix">A</m:ci>
+		  </m:apply>
+		  <m:ci>k</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:selector/>
+		  <m:apply>
+		    <m:conjugate/>
+		    <m:ci type="vector">A</m:ci>
+		  </m:apply>
+		  <m:ci>n</m:ci>
+		  <m:ci>k</m:ci>
+		</m:apply>		
+	      </m:apply>
+	    </m:math>
+	    
+	  </item>
+	</list>
+      </para>
+    </section>
+
+    <section id="sec2">
+      <title>Representing DFT as Matrix Operation</title>
+
+      <para id="para2">
+	Now let's represent the <link document="m10249" strength="3">DFT</link> in vector-matrix notation.
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci type="vector">x</m:ci>
+	    <m:matrix>
+	      <m:matrixrow>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:cn>0</m:cn>
+		</m:apply>
+	      </m:matrixrow>
+	      <m:matrixrow>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+	      </m:matrixrow>
+	      <m:matrixrow>
+		<m:ci>…</m:ci>
+	      </m:matrixrow>
+	      <m:matrixrow>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:matrixrow>
+	    </m:matrix>
+	  </m:apply>
+	</m:math>
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci type="vector">X</m:ci>
+	    <m:apply>
+	      <m:in/>
+	      <m:matrix>
+		<m:matrixrow>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">X</m:ci>
+		    <m:cn>0</m:cn>
+		  </m:apply>
+		</m:matrixrow>
+		<m:matrixrow>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">X</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:matrixrow>
+		<m:matrixrow>
+		  <m:ci>…</m:ci>
+		</m:matrixrow>
+		<m:matrixrow>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">X</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>N</m:ci>
+		      <m:cn>1</m:cn>
+		    </m:apply>
+		  </m:apply>
+		</m:matrixrow>
+	      </m:matrix>
+	      <m:apply>
+		<m:power/>
+		<m:complexes/>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	Here <m:math><m:ci type="vector">x</m:ci></m:math> is the
+	vector of time samples and <m:math><m:ci type="vector">X</m:ci></m:math> is the vector of DFT
+	coefficients.  How are <m:math><m:ci type="vector">x</m:ci></m:math> and <m:math><m:ci type="vector">X</m:ci></m:math> related:
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">X</m:ci>
+	      <m:ci>k</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:sum/>
+	      <m:bvar><m:ci>n</m:ci></m:bvar>
+	      <m:lowlimit>
+		<m:cn>0</m:cn>
+	      </m:lowlimit>
+	      <m:uplimit>
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>N</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+	      </m:uplimit>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:minus/>
+		    <m:apply>
+		      <m:times/>
+		      <m:imaginaryi/>
+		      <m:apply>
+			<m:divide/>
+			<m:apply>
+			  <m:times/>
+			  <m:cn>2</m:cn>
+			  <m:pi/>
+			</m:apply>
+			<m:ci>N</m:ci>
+		      </m:apply>
+		      <m:ci>k</m:ci>
+		      <m:ci>n</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	where 
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci>
+	      <m:msub><m:mi>a</m:mi>
+		<m:mrow>
+		  <m:mi>k</m:mi>
+		  <m:mo>⁢</m:mo>
+		  <m:mi>n</m:mi>
+		</m:mrow>
+	      </m:msub>
+	    </m:ci>
+	    <m:apply>
+	      <m:power/>
+	      <m:apply>
+		<m:exp/>
+		<m:apply>
+		  <m:minus/>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:ci>k</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:apply>
+	    <m:apply>
+	      <m:power/>
+	      <m:ci>
+		<m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+	      </m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:ci>k</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	so 
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci type="vector">X</m:ci>
+	    <m:apply>
+	      <m:times/>
+	      <m:ci type="matrix">W</m:ci>
+	      <m:ci type="vector">x</m:ci>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	where <m:math><m:ci type="vector">X</m:ci></m:math> is the DFT
+	vector, <m:math><m:ci type="matrix">W</m:ci></m:math> is the
+	matrix and <m:math><m:ci type="vector">x</m:ci></m:math> the
+	time domain vector.
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:selector/>
+	      <m:ci type="matrix">W</m:ci>
+	      <m:ci>k</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:power/>
+	      <m:apply>
+		<m:exp/>
+		<m:apply>
+		  <m:minus/>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:apply>
+		      <m:divide/>
+		      <m:apply>
+			<m:times/>
+			<m:cn>2</m:cn>
+			<m:pi/>
+		      </m:apply>
+		      <m:ci>N</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:ci>k</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci type="vector">X</m:ci>
+	    <m:apply>
+	      <m:times/>
+	      <m:ci type="matrix">W</m:ci>
+	      <m:vector>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:cn>0</m:cn>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:cn>1</m:cn>
+		</m:apply>
+		<m:ci>…</m:ci>
+		<m:apply>
+		  <m:ci type="fn" class="discrete">x</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:apply>
+	      </m:vector>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+	
+	IDFT:
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn" class="discrete">x</m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:times/>
+	      <m:apply>
+		<m:divide/>
+		<m:cn>1</m:cn>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:sum/>
+		<m:bvar><m:ci>k</m:ci></m:bvar>
+		<m:lowlimit>
+		  <m:cn>0</m:cn>
+		</m:lowlimit>
+		<m:uplimit>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>N</m:ci>
+		    <m:cn>1</m:cn>
+		  </m:apply>
+		</m:uplimit>
+		<m:apply>
+		  <m:times/>
+		  <m:apply>
+		    <m:ci type="fn" class="discrete">X</m:ci>
+		    <m:ci>k</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:power/>
+		    <m:apply>
+		      <m:exp/>
+		      <m:apply>
+			<m:times/>
+			<m:imaginaryi/>
+			<m:apply>
+			  <m:divide/>
+			  <m:apply>
+			    <m:times/>
+			    <m:cn>2</m:cn>
+			    <m:pi/>
+			  </m:apply>
+			  <m:ci>N</m:ci>
+			</m:apply>
+		      </m:apply>
+		    </m:apply>
+		    <m:apply>
+		      <m:times/>
+		      <m:ci>n</m:ci>
+		      <m:ci>k</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	where 
+	
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:power/>
+	      <m:apply>
+		<m:exp/>
+		<m:apply>
+		  <m:times/>
+		  <m:imaginaryi/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:apply>
+		      <m:times/>
+		      <m:cn>2</m:cn>
+		      <m:pi/>
+		    </m:apply>
+		    <m:ci>N</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:ci>n</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	    </m:apply>
+	    <m:apply>
+	      <m:conjugate/>
+	      <m:apply>
+		<m:power/>
+		<m:ci>
+		  <m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+		</m:ci>
+		<m:apply>
+		  <m:times/>
+		  <m:ci>n</m:ci>
+		  <m:ci>k</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	<m:math>
+	  <m:apply>
+	    <m:conjugate/>
+	    <m:apply>
+	      <m:power/>
+	      <m:ci>
+		<m:msub><m:mi>W</m:mi><m:mi>N</m:mi></m:msub>
+	      </m:ci>
+	      <m:apply>
+		<m:times/>
+		<m:ci>n</m:ci>
+		<m:ci>k</m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math> is the matrix Hermitian transpose.  So, 
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci type="vector">x</m:ci>
+	    <m:apply>
+	      <m:times/>
+	      <m:apply>
+		<m:divide/>
+		<m:cn>1</m:cn>
+		<m:ci>N</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#adjoint"/>
+		<m:ci type="matrix">W</m:ci>
+	      </m:apply>
+	      <m:ci type="vector">X</m:ci>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	where <m:math><m:ci type="vector">x</m:ci></m:math> is the time
+	vector, 
+	<m:math>
+	  <m:apply>
+	    <m:times/>
+	    <m:apply>
+	      <m:divide/>
+	      <m:cn>1</m:cn>
+	      <m:ci>N</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:csymbol definitionURL="http://cnx.rice.edu/cd/cnxmath.ocd#adjoint"/>
+	      <m:ci type="matrix">W</m:ci>
+	    </m:apply>
+	  </m:apply>
+	</m:math> is the inverse DFT matrix, and <m:math><m:ci type="vector">X</m:ci></m:math> is the DFT vector.
+
+      </para>
+    </section>
+
+  </content>
+</document>

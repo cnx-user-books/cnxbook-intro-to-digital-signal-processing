@@ -1,0 +1,832 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Linear-Phase FIR Filters</title>
+  <metadata><md:content-id>undefined</md:content-id><md:title/><md:uuid>7735faa5-1260-44fe-a4ec-84165650eea3</md:uuid>
+</metadata>
+
+  <content>
+    <section id="amplresp">
+      <title>THE AMPLITUDE RESPONSE</title>
+      <para id="amplresppara">
+	If the real and imaginary parts of 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn"><m:msup>
+		<m:mi>H</m:mi>
+		<m:mi>f</m:mi>
+	      </m:msup></m:ci>
+	    <m:mi>ω</m:mi>
+	  </m:apply>
+	</m:math> are given by
+
+	<equation id="eqn1">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn"><m:msup>
+		    <m:mi>H</m:mi>
+		    <m:mi>f</m:mi>
+		  </m:msup></m:ci>
+		<m:mi>ω</m:mi>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:real/>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:imaginaryi/>
+		  <m:apply>
+		    <m:imaginary/>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	the magnitude and phase are defined as 
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:abs/>
+	      <m:apply>
+		<m:ci type="fn"><m:msup>
+		    <m:mi>H</m:mi>
+		    <m:mi>f</m:mi>
+		  </m:msup></m:ci>
+		<m:mi>ω</m:mi>
+	      </m:apply>
+	    </m:apply>
+	    <m:apply>
+	      <m:root/>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:power/>
+		  <m:apply>
+		    <m:real/>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		  <m:cn>2</m:cn>
+		</m:apply>
+		<m:apply>
+		  <m:power/>
+		  <m:apply>
+		    <m:imaginary/>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		  <m:cn>2</m:cn>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">p</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:arctan/>
+	      <m:apply>
+		<m:divide/>
+		<m:apply>
+		  <m:imaginary/>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:real/>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	so that
+
+	<equation id="eqn2">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn"><m:msup>
+		    <m:mi>H</m:mi>
+		    <m:mi>f</m:mi>
+		  </m:msup></m:ci>
+		<m:mi>ω</m:mi>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:abs/>
+		  <m:apply>
+		    <m:ci type="fn"><m:msup>
+			<m:mi>H</m:mi>
+			<m:mi>f</m:mi>
+		      </m:msup></m:ci>
+		    <m:mi>ω</m:mi>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:apply>
+		      <m:ci type="fn">p</m:ci>
+		      <m:ci>ω</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	With this definition, 
+	<m:math>
+	  <m:apply>
+	    <m:abs/>
+	    <m:apply>
+	      <m:ci type="fn"><m:msup>
+		  <m:mi>H</m:mi>
+		  <m:mi>f</m:mi>
+		</m:msup></m:ci>
+	      <m:mi>ω</m:mi>
+	    </m:apply>
+	  </m:apply>
+	</m:math> is never negative and 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">p</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math> is usually discontinuous, but it can be very helpful
+	to write
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn"><m:msup>
+		<m:mi>H</m:mi>
+		<m:mi>f</m:mi>
+	      </m:msup></m:ci>
+	    <m:mi>ω</m:mi>
+	  </m:apply>
+	</m:math> as 
+
+	<equation id="eqn3">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn"><m:msup>
+		    <m:mi>H</m:mi>
+		    <m:mi>f</m:mi>
+		  </m:msup></m:ci>
+		<m:mi>ω</m:mi>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn">A</m:ci>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:apply>
+		      <m:ci type="fn">θ</m:ci>
+		      <m:ci>ω</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	where 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">A</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math> can be positive and negative, and 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">θ</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math> continuous.  
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">A</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math> is called the <term>amplitude response</term>.
+	<link target-id="fig1" strength="3"/> illustrates the difference
+	between
+	<m:math>
+	  <m:apply>
+	    <m:abs/>
+	    <m:apply>
+	      <m:ci type="fn"><m:msup>
+		  <m:mi>H</m:mi>
+		  <m:mi>f</m:mi>
+		</m:msup></m:ci>
+	      <m:mi>ω</m:mi>
+	    </m:apply>
+	  </m:apply>
+	</m:math> and 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">A</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math>.
+      </para>
+
+      <figure id="fig1">
+	<media id="idm3297216" alt=""><image src="../../media/ma.png" mime-type="image/png"/></media>
+      </figure>
+
+      <para id="para2">
+	A linear-phase phase filter is one for which the continuous
+	phase
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">θ</m:ci>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math> is linear.
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn"><m:msup>
+		    <m:mi>H</m:mi>
+		    <m:mi>f</m:mi>
+		  </m:msup></m:ci>
+		<m:mi>ω</m:mi>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn">A</m:ci>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:apply>
+		      <m:ci type="fn">θ</m:ci>
+		      <m:ci>ω</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	with
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn">θ</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:plus/>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:minus/>
+		  <m:ci>M</m:ci>
+		</m:apply>
+		<m:ci>ω</m:ci>
+	      </m:apply>
+	      <m:ci>B</m:ci>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+
+	We assume in the following that the impulse response 
+	<m:math>
+	  <m:apply>
+	    <m:ci type="fn">h</m:ci>
+	    <m:ci>n</m:ci>
+	  </m:apply>
+	</m:math> is real-valued.
+      </para>
+    </section>
+
+    <section id="linphase">
+      <title>WHY LINEAR-PHASE?</title>
+      <para id="lp-para">
+	If a discrete-time cosine signal
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn"><m:msub>
+		  <m:mi>x</m:mi>
+		  <m:mn>1</m:mn>
+		</m:msub></m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:cos/>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:times/>
+		  <m:ci><m:msub>
+		    <m:mi>ω</m:mi>
+		      <m:mn>1</m:mn>
+		    </m:msub></m:ci>
+		  <m:ci>n</m:ci>
+		</m:apply>
+		<m:ci><m:msub>
+		    <m:mi>φ</m:mi>
+		    <m:mn>1</m:mn>
+		  </m:msub></m:ci>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+	is processed through a discrete-time filter with frequency
+	response
+
+	  <m:math display="block">
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn"><m:msup>
+		    <m:mi>H</m:mi>
+		    <m:mi>f</m:mi>
+		  </m:msup></m:ci>
+		<m:mi>ω</m:mi>
+	      </m:apply>
+	      <m:apply>
+		<m:times/>
+		<m:apply>
+		  <m:ci type="fn">A</m:ci>
+		  <m:ci>ω</m:ci>
+		</m:apply>
+		<m:apply>
+		  <m:exp/>
+		  <m:apply>
+		    <m:times/>
+		    <m:imaginaryi/>
+		    <m:apply>
+		      <m:ci type="fn">θ</m:ci>
+		      <m:ci>ω</m:ci>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+
+	then the output signal is given by
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn"><m:msub>
+		  <m:mi>y</m:mi>
+		  <m:mn>1</m:mn>
+		</m:msub></m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:times/>
+	      <m:apply>
+		<m:ci type="fn">A</m:ci>
+		<m:ci><m:msub>
+		    <m:mi>ω</m:mi>
+		    <m:mn>1</m:mn>
+		  </m:msub></m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:cos/>
+		<m:apply>
+		  <m:plus/>
+		  <m:apply>
+		    <m:times/>
+		    <m:ci><m:msub>
+			<m:mi>ω</m:mi>
+			<m:mn>1</m:mn>
+		      </m:msub></m:ci>
+		      <m:ci>n</m:ci>
+		  </m:apply>
+		  <m:ci><m:msub>
+		      <m:mi>φ</m:mi>
+		      <m:mn>1</m:mn>
+		    </m:msub></m:ci>
+		  <m:apply>
+		    <m:ci type="fn">θ</m:ci>
+		    <m:ci><m:msub>
+			<m:mi>ω</m:mi>
+			<m:mn>1</m:mn>
+		      </m:msub></m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+	or
+	<m:math display="block">
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:ci type="fn"><m:msub>
+		  <m:mi>y</m:mi>
+		  <m:mn>1</m:mn>
+		</m:msub></m:ci>
+	      <m:ci>n</m:ci>
+	    </m:apply>
+	    <m:apply>
+	      <m:times/>
+	      <m:apply>
+		<m:ci type="fn">A</m:ci>
+		<m:ci><m:msub>
+		    <m:mi>ω</m:mi>
+		    <m:mn>1</m:mn>
+		  </m:msub></m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:cos/>
+		<m:apply>
+		  <m:plus/>
+		  <m:apply>
+		    <m:times/>
+		    <m:ci><m:msub>
+			<m:mi>ω</m:mi>
+			<m:mn>1</m:mn>
+		      </m:msub></m:ci>
+		    <m:apply>
+		      <m:plus/>
+		      <m:ci>n</m:ci>
+		      <m:apply>
+			<m:divide/>
+			<m:apply>
+			  <m:ci type="fn">θ</m:ci>
+			  <m:ci><m:msub>
+			      <m:mi>ω</m:mi>
+			      <m:mn>1</m:mn>
+			    </m:msub></m:ci>
+			</m:apply>
+			<m:ci><m:msub>
+			    <m:mi>ω</m:mi>
+			    <m:mn>1</m:mn>
+			  </m:msub></m:ci>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		  <m:ci><m:msub>
+		      <m:mi>φ</m:mi>
+		      <m:mn>1</m:mn>
+		    </m:msub></m:ci>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:apply>
+	</m:math>
+	The LTI system has the effect of scaling the cosine signal and
+	delaying it by
+	<m:math>
+	  <m:apply>
+	    <m:divide/>
+	    <m:apply>
+	      <m:ci type="fn">θ</m:ci>
+	      <m:ci><m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>1</m:mn>
+		</m:msub></m:ci>
+	    </m:apply>
+	    <m:ci><m:msub>
+		<m:mi>ω</m:mi>
+		<m:mn>1</m:mn>
+	      </m:msub></m:ci>
+	  </m:apply>
+	</m:math>.
+      </para>
+
+      <exercise id="ex1">
+	<problem id="idm75440">
+	  <para id="probpara1">
+	    When does the system delay cosine signals with different
+	    frequencies by the same amount?
+	  </para>
+	</problem>
+	<solution id="idm1232400">
+	  <list id="soln">
+	    <item><m:math>
+		<m:apply>
+		  <m:eq/>
+		  <m:apply>
+		    <m:divide/>
+		    <m:apply>
+		      <m:ci type="fn">θ</m:ci>
+		      <m:ci>ω</m:ci>
+		    </m:apply>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		  <m:ci>constant</m:ci>
+		</m:apply>
+	      </m:math></item>
+	    <item><m:math>
+		<m:apply>
+		  <m:eq/>
+		  <m:apply>
+		    <m:ci type="fn">θ</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:ci>K</m:ci>
+		    <m:ci>ω</m:ci>
+		  </m:apply>
+		</m:apply>
+	      </m:math></item>
+	    <item>The phase is linear.</item>
+	  </list>
+	</solution>
+      </exercise>
+
+      <para id="para3">
+	The function 
+	<m:math>
+	  <m:apply>
+	    <m:divide/>
+	    <m:apply>
+	      <m:ci type="fn">θ</m:ci>
+	      <m:ci>ω</m:ci>
+	    </m:apply>
+	    <m:ci>ω</m:ci>
+	  </m:apply>
+	</m:math> is called the <term>phase delay</term>.  A linear
+	phase filter therefore has constant phase delay.
+      </para>
+    </section>
+
+    <section id="linphase-ex">
+      <title>WHY LINEAR-PHASE: EXAMPLE</title>
+      <para id="lp-ex1">
+	Consider a discrete-time filter described by the difference
+	equation
+	<equation id="eqn4">
+	  <m:math>
+	    <m:apply>
+	      <m:eq/>
+	      <m:apply>
+		<m:ci type="fn">y</m:ci>
+		<m:ci>n</m:ci>
+	      </m:apply>
+	      <m:apply>
+		<m:plus/>
+		<m:apply>
+		  <m:times/>
+		  <m:cn>-0.1821</m:cn>
+		  <m:apply>
+		    <m:ci type="fn">x</m:ci>
+		    <m:ci>n</m:ci>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:minus/>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>0.7865</m:cn>
+		    <m:apply>
+		      <m:ci type="fn">x</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>n</m:ci>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>0.6804</m:cn>
+		    <m:apply>
+		      <m:ci type="fn">x</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>n</m:ci>
+			<m:cn>2</m:cn>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:ci type="fn">x</m:ci>
+		  <m:apply>
+		    <m:minus/>
+		    <m:ci>n</m:ci>
+		    <m:cn>3</m:cn>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:minus/>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>0.6804</m:cn>
+		    <m:apply>
+		      <m:ci type="fn">y</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>n</m:ci>
+			<m:cn>1</m:cn>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		  <m:apply>
+		    <m:times/>
+		    <m:cn>0.7865</m:cn>
+		    <m:apply>
+		      <m:ci type="fn">y</m:ci>
+		      <m:apply>
+			<m:minus/>
+			<m:ci>n</m:ci>
+			<m:cn>2</m:cn>
+		      </m:apply>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+		<m:apply>
+		  <m:times/>
+		  <m:cn>0.1821</m:cn>
+		  <m:apply>
+		    <m:ci type="fn">y</m:ci>
+		    <m:apply>
+		      <m:minus/>
+		      <m:ci>n</m:ci>
+		      <m:cn>3</m:cn>
+		    </m:apply>
+		  </m:apply>
+		</m:apply>
+	      </m:apply>
+	    </m:apply>
+	  </m:math>
+	</equation>
+
+	When 
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci><m:msub>
+		<m:mi>ω</m:mi>
+		<m:mn>1</m:mn>
+	      </m:msub></m:ci>
+	    <m:apply>
+	      <m:times/>
+	      <m:cn>0.31</m:cn>
+	      <m:pi/>
+	    </m:apply>
+	  </m:apply>
+	</m:math>, then the delay is
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:divide/>
+	      <m:apply>
+		<m:minus/>
+		<m:divide/>
+		<m:apply>
+		  <m:ci type="fn">θ</m:ci>
+		  <m:ci><m:msub>
+		      <m:mi>ω</m:mi>
+		      <m:mn>1</m:mn>
+		    </m:msub></m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:ci><m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>1</m:mn>
+		</m:msub></m:ci>
+	    </m:apply>
+	    <m:cn>2.45</m:cn>
+	  </m:apply>
+	</m:math>.  The delay is illustrated in <link target-id="fig2" strength="3"/>:
+      </para>
+
+      <figure id="fig2">
+	<media id="idm10038608" alt=""><image src="../../media/lin1.png" mime-type="image/png"/></media>
+      </figure>
+
+      <para id="lp-ex2">
+	Notice that the delay is fractional --- the discrete-time
+	samples are not exactly reproduced in the output.
+
+	The fractional delay can be interpreted in this case as a
+	delay of the underlying continuous-time cosine signal.
+      </para>
+    </section>
+
+    <section id="linphase2">
+      <title>WHY LINEAR-PHASE: EXAMPLE (2)</title>
+      <para id="lp-ex2.1">
+	Consider the same system given on the previous slide, but let
+	us change the frequency of the cosine signal.
+      </para>
+
+      <para id="lp-ex2.2">
+	When 
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:ci><m:msub>
+		<m:mi>ω</m:mi>
+		<m:mn>2</m:mn>
+	      </m:msub></m:ci>
+	    <m:apply>
+	      <m:times/>
+	      <m:cn>0.47</m:cn>
+	      <m:pi/>
+	    </m:apply>
+	  </m:apply>
+	</m:math>, then the delay is
+	<m:math>
+	  <m:apply>
+	    <m:eq/>
+	    <m:apply>
+	      <m:divide/>
+	      <m:apply>
+		<m:minus/>
+		<m:divide/>
+		<m:apply>
+		  <m:ci type="fn">θ</m:ci>
+		  <m:ci><m:msub>
+		      <m:mi>ω</m:mi>
+		      <m:mn>2</m:mn>
+		    </m:msub></m:ci>
+		</m:apply>
+	      </m:apply>
+	      <m:ci><m:msub>
+		  <m:mi>ω</m:mi>
+		  <m:mn>2</m:mn>
+		</m:msub></m:ci>
+	    </m:apply>
+	    <m:cn>0.14</m:cn>
+	  </m:apply>
+	</m:math>.
+      </para>
+
+      <figure id="fig3">
+	<media id="idm603616" alt=""><image src="../../media/lin2.png" mime-type="image/png"/></media>
+      </figure>
+
+      <para id="lp-ex2.3">
+	<note type="note" id="idm2552448">
+	For this example, the delay depends on the frequency, because
+	this system does not have linear phase.
+	</note>
+      </para>
+    </section>
+
+    <section id="lp-more">
+      <title>WHY LINEAR-PHASE: MORE</title>
+      <para id="lp-more1">
+	From the previous slides, we see that a filter will delay
+	different frequency components of a signal by the same amount
+	if the filter has linear phase (constant phase delay).
+      </para>
+
+      <para id="lp-more2">
+	In addition, when a narrow band signal (as in AM modulation)
+	goes through a filter, the envelop will be delayed by the
+	<term>group delay</term> or <term>envelop delay</term> of the
+	filter.  The amount by which the envelop is delayed is
+	independent of the carrier frequency only if the filter has
+	linear phase.
+      </para>
+
+      <para id="lp-more3">
+	Also, in applications like image processing, filters with
+	non-linear phase can introduce artifacts that are visually
+	annoying.
+      </para>
+    </section>
+  </content>
+  
+</document>
